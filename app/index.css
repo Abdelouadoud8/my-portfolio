@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/* Tailwind css configuration */
+@theme {
+  --color-primary: #252525;
+  --color-secondary: #5b63f6;
+  --color-secondary-light: #d9e6ed;
+  --color-white: #ffffff;
+  --color-gray-1: #333333;
+  --color-gray-2: #4f4f4f;
+  --color-gray-3: #828282;
+  --color-gray-4: #bdbdbd;
+  --color-gray-5: #e0e0e0;
+  --color-gray-6: #f2f2f2;
+
+  --shadow-top-light: 0 -4px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* Remove or adjust this if you don't want dark mode changes */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff; /* still white */
+    --foreground: #171717; /* optional - dark text */
+  }
+
+  html {
+    color-scheme: light; /* forces light scheme rendering */
+  }
+}
+
+:root {
+  --background: #fff;
+}
