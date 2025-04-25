@@ -1,68 +1,55 @@
 "use client";
 
-import Image from "next/image";
+import { IconGithub } from "./icons/icon-github";
+import { IconEmail } from "./icons/icon-email";
+import { IconInstagram } from "./icons/icon-instagram";
+import { IconLinkedin } from "./icons/icon-linkedin";
 
 export default function Footer() {
   const thisYear = new Date();
-  const iconHeight = 24;
-  const socialIconsStyle = "md:w-[20px] md:h-[20px]";
+
+  const socialLinks = [
+    {
+      href: "https://www.instagram.com/abdelouadoud.8/",
+      icon: IconInstagram,
+      title: "Instagram",
+    },
+    {
+      href: "https://www.linkedin.com/in/abdelouadoud-mahdaoui/",
+      icon: IconLinkedin,
+      title: "LinkedIn",
+    },
+    {
+      href: "https://github.com/Abdelouadoud8",
+      icon: IconGithub,
+      title: "GitHub",
+    },
+    {
+      href: "mailto:abdelouadoud.mahdaoui@gmail.com",
+      icon: IconEmail,
+      title: "Email",
+    },
+  ];
 
   return (
     <footer className="fixed bottom-0 w-full bg-white px-12 py-6 flex flex-col md:flex-row justify-between items-center z-40 text-sm text-primary shadow-top-light">
       <p className="text-center md:text-left">
-        © {thisYear.getFullYear()} Mahdaoui Abdelouadoud | Designer & Web
-        Developer
+        © {thisYear.getFullYear()} Mahdaoui Abdelouadoud | Web Developer & UI/UX
+        Designer
       </p>
 
-      <div className="flex gap-6 mt-4 md:mt-0 items-center">
-        <a
-          href="https://www.instagram.com/abdelouadoud.8/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Image
-            src="/social-media/instagram.svg"
-            alt="Instagram"
-            width={iconHeight}
-            height={iconHeight}
-            className={socialIconsStyle}
-          />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/abdelouadoud-mahdaoui/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Image
-            src="/social-media/linkedin.svg"
-            alt="LinkedIn"
-            width={iconHeight}
-            height={iconHeight}
-            className={socialIconsStyle}
-          />
-        </a>
-        <a
-          href="https://github.com/Abdelouadoud8"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Image
-            src="/social-media/github.svg"
-            alt="GitHub"
-            width={iconHeight}
-            height={iconHeight}
-            className={socialIconsStyle}
-          />
-        </a>
-        <a href="mailto:abdelouadoud.mahdaoui@gmail.com">
-          <Image
-            src="/social-media/gmail.svg"
-            alt="Gmail"
-            width={iconHeight}
-            height={iconHeight}
-            className={socialIconsStyle}
-          />
-        </a>
+      <div className="flex gap-4 mt-4 md:mt-0 items-center">
+        {socialLinks.map(({ href, icon: Icon, title }) => (
+          <a
+            key={title}
+            href={href}
+            target={href.startsWith("http") ? "_blank" : undefined}
+            rel={href.startsWith("http") ? "noreferrer" : undefined}
+            title={title}
+          >
+            <Icon width={20} height={20} />
+          </a>
+        ))}
       </div>
     </footer>
   );

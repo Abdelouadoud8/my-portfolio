@@ -16,7 +16,7 @@ export default function Header() {
   return (
     <div className="px-16 py-8 flex flex-row justify-between items-center bg-white">
       <Link href="/">
-        <h1 className="text-2xl font-semibold">Abdelouadoud.8</h1>
+        <h1 className="text-3xl font-semibold">Abdelouadoud8</h1>
       </Link>
 
       <nav className="flex flex-row gap-6">
