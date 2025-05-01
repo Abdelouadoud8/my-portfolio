@@ -1,18 +1,7 @@
+import { TopicType } from "@/data/types";
 import React from "react";
 
-export type TopicProps = {
-  title: string;
-  elements: {
-    id: string;
-    title: string;
-    description: string;
-    dates?: string;
-    link?: string;
-  }[];
-  className?: string;
-};
-
-export default function Topic({ title, elements, className }: TopicProps) {
+export default function Topic({ title, elements, className }: TopicType) {
   return (
     <div className={className}>
       <h1 className="text-sm uppercase font-semibold tracking-wide">{title}</h1>

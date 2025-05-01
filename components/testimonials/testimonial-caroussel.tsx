@@ -1,17 +1,8 @@
 import React, { useState } from "react";
 import { testimonials } from "@/data/testimonials";
-import { LeftArrow } from "@/components/icons/arrow-left";
-import { RightArrow } from "@/components/icons/arrow-right";
+import { IconLeftArrow } from "@/components/icons/icon-arrow-left";
+import { IconRightArrow } from "@/components/icons/icon-arrow-right";
 import CarousselImage from "./caroussel-image";
-
-export type Testimonial = {
-  id: string;
-  imageUrl: string;
-  title: string;
-  description: string;
-  fullname: string;
-  occupation: string;
-};
 
 export default function TestimonialCaroussel() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -52,7 +43,9 @@ export default function TestimonialCaroussel() {
             aria-label="Previous testimonial"
             className="cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-transform duration-150"
           >
-            <LeftArrow color={currentIndex === 0 ? "#BDBDBD" : "#252525"} />
+            <IconLeftArrow
+              className={`text-${currentIndex === 0 ? "gray-4" : "primary"}`}
+            />
           </button>
           <button
             onClick={nextTestimonial}
@@ -60,10 +53,10 @@ export default function TestimonialCaroussel() {
             aria-label="Next testimonial"
             className="cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-transform duration-150"
           >
-            <RightArrow
-              color={
-                currentIndex === testimonials.length - 1 ? "#BDBDBD" : "#252525"
-              }
+            <IconRightArrow
+              className={`text-${
+                currentIndex === testimonials.length - 1 ? "gray-4" : "primary"
+              }`}
             />
           </button>
         </div>

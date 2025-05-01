@@ -16,7 +16,9 @@ export default function Header() {
   return (
     <div className="px-16 py-8 flex flex-row justify-between items-center bg-white">
       <Link href="/">
-        <h1 className="text-3xl font-semibold">Abdelouadoud8</h1>
+        <h1 className="text-neutral-100 text-3xl font-semibold">
+          Abdelouadoud8
+        </h1>
       </Link>
 
       <nav className="flex flex-row gap-6">
@@ -26,7 +28,9 @@ export default function Header() {
             <Link key={item.href} href={item.href}>
               <p
                 className={`text-sm uppercase font-semibold ${
-                  isActive ? "text-primary" : "text-gray-5 hover:text-gray-2"
+                  isActive
+                    ? "text-black"
+                    : "text-neutral-30 hover:text-neutral-70"
                 }`}
               >
                 {item.title}

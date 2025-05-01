@@ -3,17 +3,46 @@
 /* Tailwind css configuration */
 @theme {
   --color-primary: #252525;
-  --color-secondary: #5b63f6;
+
   --color-secondary-light: #d5e6fb;
   --color-secondary-medium: #acccf8;
   --color-secondary-dark: #3f46cb;
   --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-neutral-100: #312e43;
+  --color-neutral-90: #464356;
+  --color-neutral-80: #5a5869;
+  --color-neutral-70: #6f6d7b;
+  --color-neutral-60: #83828e;
+  --color-neutral-50: #9897a1;
+  --color-neutral-40: #a5a5aa;
+  --color-neutral-30: #c1c0c7;
+  --color-neutral-20: #d6d5d9;
+  --color-neutral-10: #eaeaec;
+  --color-neutral-5: #f5f9fa;
+
+  --color-primary: #e63946;
+  --color-primary-900: #6c000a;
+  --color-primary-800: #8e0018;
+  --color-primary-700: #af0027;
+  --color-primary-600: #ce2538;
+  --color-primary-500: #eb424b;
+  --color-primary-400: #ff5d61;
+  --color-primary-300: #ff7979;
+  --color-primary-200: #ff9692;
+  --color-primary-100: #ffb4ae;
+  --color-primary-50: #ffd3cb;
+
   --color-gray-1: #333333;
   --color-gray-2: #4f4f4f;
   --color-gray-3: #828282;
   --color-gray-4: #bdbdbd;
   --color-gray-5: #e0e0e0;
   --color-gray-6: #f2f2f2;
+
+  --color-momyz: #ba005d;
+  --color-hoskadev: #7469f6;
 
   --shadow-top-light: 0 -4px 3px rgba(0, 0, 0, 0.03);
 }
