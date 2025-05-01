@@ -1,4 +1,6 @@
-export const IconInstagram = ({ height, width }) => {
+import { IconProps } from "./arrow-right";
+
+export const IconInstagram = ({ height, width }: IconProps) => {
   return (
     <svg
       width={width}

@@ -25,7 +25,7 @@ export default function Header() {
           return (
             <Link key={item.href} href={item.href}>
               <p
-                className={`text-base uppercase font-semibold ${
+                className={`text-sm uppercase font-semibold ${
                   isActive ? "text-primary" : "text-gray-5 hover:text-gray-2"
                 }`}
               >

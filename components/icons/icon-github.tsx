@@ -1,4 +1,6 @@
-export const IconGithub = ({ height, width }) => {
+import { IconProps } from "./arrow-right";
+
+export const IconGithub = ({ height, width }: IconProps) => {
   return (
     <svg
       width={width}

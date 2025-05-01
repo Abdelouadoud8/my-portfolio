@@ -32,8 +32,8 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="fixed bottom-0 w-full bg-white px-12 py-6 flex flex-col md:flex-row justify-between items-center z-40 text-sm text-primary shadow-top-light">
-      <p className="text-center md:text-left">
+    <footer className="fixed bottom-0 w-full bg-white px-10 py-4 lg:py-5  flex flex-col md:flex-row justify-between items-center z-40 text-sm text-primary shadow-top-light">
+      <p className="text-center text-xs md:text-sm md:text-left">
         © {thisYear.getFullYear()} Mahdaoui Abdelouadoud | Web Developer & UI/UX
         Designer
       </p>

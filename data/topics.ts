@@ -1,20 +1,29 @@
-export const topics = [
+import { TopicProps } from "@/components/about/topic";
+
+export const topics: TopicProps[] = [
   {
     title: "education",
     elements: [
       {
-        title: "Master 2 in Software Architectures, September 2023 - Present",
-        description: "University of Montpellier - Montpellier, France",
+        id: "1",
+        title: "University of Montpellier, France",
+        description: "Master 2 in Software Architectures",
+        dates: "September 2023 - June 2024",
+        link: "https://www.umontpellier.fr",
       },
       {
+        id: "2",
         title:
-          "Computer science engineer & Master 2, September 2018 - June 2023",
-        description:
-          "Higher national school of computer science Sidi Bel Abbes (ESI-SBA) - Sidi Bel Abbés, Algeria",
+          "Higher national school of computer science Sidi Bel Abbes (ESI-SBA), Algeria",
+        description: "Computer science engineer degree",
+        dates: "September 2018 - June 2023",
+        link: "https://www.esi-sba.dz",
       },
       {
-        title: "Baccalaureate science - June 2018",
-        description: "Technicum Ahmed Zabana - Blida, Algeria",
+        id: "3",
+        title: "Technicum Ahmed Zabana, Algeria",
+        description: "Baccalaureate science",
+        dates: "June 2018",
       },
     ],
   },
@@ -22,21 +31,40 @@ export const topics = [
     title: "experience",
     elements: [
       {
-        title: "Internship, March - August 2023",
-        description:
-          "(LIRMM) Laboratoire d'informatique, de robotique et de microélectronique - Montpellier, France",
+        id: "1",
+        title: "Atos",
+        description: "Fullstack Web Developer",
+        dates: "February 2024 - Present",
+        link: "https://atos.net/en/",
       },
       {
-        title: "Junior UI/UX designer, July 2022 - Present",
-        description: "Lasting Dynamics - Las Palmas, Spain",
+        id: "2",
+        title: "Alwasaet",
+        description: "Product Designer ",
+        dates: "September 2023 - February 2024",
+        link: "https://alwasaet.com",
       },
       {
-        title: "Junior UI/UX designer, January - Juin 2022",
-        description: "Hoskadev - Algiers, Algeria",
+        id: "3",
+        title:
+          "Laboratoire d'informatique, de robotique et de microélectronique (LIRMM)",
+        description: "Software Engineer Intern",
+        dates: "April - August 2023",
+        link: "https://www.lirmm.fr",
       },
       {
-        title: "Internship, September - November 2021",
-        description: "Coft Conseil - Algiers, Algeria",
+        id: "4",
+        title: "Lasting Dynamics",
+        description: "Junior UX/UI Designer",
+        dates: "May 2022 - April 2023",
+        link: "https://www.lastingdynamics.com",
+      },
+      {
+        id: "5",
+        title: "Hoskadev",
+        description: "Junior UX/UI Designer",
+        dates: "January - June 2022",
+        link: "https://hoskadev.com/en/",
       },
     ],
   },
@@ -44,13 +72,14 @@ export const topics = [
     title: "skills",
     elements: [
       {
+        id: "1",
         title: "Design",
-        description:
-          "Branding + Identity, UI/UX, Art Direction, Motion Design, Concept Development, Typography, Design Thinking, Design Research, Creative Strategy.",
+        description: "Branding + Identity UI/UX, Design Thinking.",
       },
       {
+        id: "2",
         title: "Development",
-        description: "Web front-end development, Oriented solution.",
+        description: "Full-Stack Web Development, Oriented solution.",
       },
     ],
   },
@@ -58,28 +87,31 @@ export const topics = [
     title: "technical skills",
     elements: [
       {
+        id: "1",
         title: "Design",
-        description:
-          "Figma, Adobe XD, Sketch, Photoshop, Illustrator, InDesign.",
+        description: "Figma, Adobe XD, Sketch, Photoshop.",
       },
       {
+        id: "2",
         title: "Programming languages",
-        description:
-          "JavaScript, TypeScript, Node.js, Java, PHP, Ruby, HTML5, CSS3, Sass, Pascal.",
+        description: "JavaScript, TypeScript, Node.js, Java.",
       },
       {
-        title: "Frameworks & Technologies",
+        id: "3",
+        title: "Web Development",
         description:
-          "ReactJs, VueJs, Angular, ExpressJs, SpringBoot, Git & Github, Redux toolkit, Ruby on Rails, MySQL, Oracle, Docker, Bootstrap.",
+          "ReactJs, NextJs, Node.js, ExpressJs Redux & RTK, Springboot, HTML5, CSS3, Sass, Tailwind CSS, Prisma.",
       },
       {
+        id: "4",
+        title: "Technologies & Tools",
+        description:
+          "Docker, Git & Github, Jenkins, Nginx, Postman, Jira, Trello, LaTeX, MS-Office.",
+      },
+      {
+        id: "5",
         title: "Modeling & Concepts",
-        description:
-          "Design Patterns, UML Modelization, Microservices architectures.",
-      },
-      {
-        title: "Office automation",
-        description: "Microsoft Office, LaTeX",
+        description: "Design Patterns, POO, SOA, REST API, Microservices, UML.",
       },
     ],
   },
@@ -87,8 +119,10 @@ export const topics = [
     title: "certificates",
     elements: [
       {
-        title: "TCF-SO (Level C1) - October 2022",
-        description: "French Cultural Center - Campus france",
+        id: "1",
+        title: "French Cultural Center - Campus france",
+        description: "TCF-SO (Level C1)",
+        dates: "October 2022",
       },
     ],
   },
