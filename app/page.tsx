@@ -1,8 +1,9 @@
 "use client";
 
-import ClientsCarousel from "@/components/home/clients-caroussel";
+import ClientsCarousel from "@/components/home/clients";
 import Heading from "@/components/home/heading";
 import Projects from "@/components/home/projects";
+import SectionHeader from "@/components/section-header";
 import TestimonialCaroussel from "@/components/testimonials/testimonial-caroussel";
 
 export default function Home() {
@@ -10,12 +11,12 @@ export default function Home() {
     <div className="flex flex-col gap-32">
       <Heading />
       <Projects />
+      <ClientsCarousel />
       <div className="mb-32 flex flex-col items-center text-center md:text-left gap-5">
-        <h1 className="text-3xl font-semibold">My clients</h1>
-        <ClientsCarousel />
-      </div>
-      <div className="mb-32 flex flex-col items-center text-center md:text-left gap-5">
-        <h1 className="text-3xl font-semibold">Testimonials</h1>
+        <SectionHeader
+          subtitle="Testimonials"
+          title="Trusted by brands all over the world"
+        />
         <TestimonialCaroussel />
       </div>
     </div>

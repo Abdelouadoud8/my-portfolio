@@ -5,7 +5,7 @@ import { topics } from "@/data/topics";
 import React from "react";
 
 export default function About() {
-  const divider = <div className="w-full h-[2px] bg-secondary-light my-16" />;
+  const divider = <div className="w-full h-[2px] bg-neutral-10 my-16" />;
 
   return (
     <div>

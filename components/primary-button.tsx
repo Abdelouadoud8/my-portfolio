@@ -22,7 +22,7 @@ export default function PrimaryButton({
   type = "button",
 }: PrimaryButtonProps) {
   const baseStyle =
-    "px-6 py-3 bg-secondary text-white hover:bg-secondary-dark cursor-pointer transition";
+    "px-6 py-3 bg-primary text-white hover:bg-primary-600 focus:bg-primary-800 cursor-pointer transition";
 
   if (link) {
     return (

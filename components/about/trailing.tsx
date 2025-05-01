@@ -17,13 +17,13 @@ export default function Trailing() {
   return (
     <div className="flex flex-col md:flex-row justify-between gap-8 md:mb-20 mb-36">
       <div className="flex flex-col gap-2">
-        <h1 className="text-xl font-semibold">Social links</h1>
+        <h1 className="text-neutral-100 text-xl font-semibold">Social links</h1>
         <div className="flex flex-col gap-1">
           <ul className="flex flex-col gap-1">
             {socialLinks.map(({ title, href }) => (
               <li key={title}>
                 <a
-                  className="text-base text-gray-4 font-semibold hover:text-secondary hover:underline"
+                  className="text-base text-neutral-40 font-semibold hover:text-primary hover:underline"
                   href={href}
                   target="_blank"
                   rel="noreferrer"
@@ -36,11 +36,11 @@ export default function Trailing() {
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <h1 className="text-xl font-semibold">Reach out</h1>
+        <h1 className="text-neutral-100 text-xl font-semibold">Reach out</h1>
         <ul className="flex flex-col gap-1">
           {contacts.map((item) => (
             <li
-              className="text-base text-gray-4 font-semibold hover:text-secondary transition"
+              className="text-base text-neutral-40 font-semibold hover:text-primary transition"
               key={item}
             >
               {item}

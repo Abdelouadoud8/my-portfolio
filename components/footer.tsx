@@ -32,7 +32,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="fixed bottom-0 w-full bg-white px-10 py-4 lg:py-5  flex flex-col md:flex-row justify-between items-center z-40 text-sm text-primary shadow-top-light">
+    <footer className="fixed bottom-0 w-full bg-white px-10 py-4 lg:py-5  flex flex-col md:flex-row justify-between items-center z-40 text-sm text-neutral-100 shadow-top-light">
       <p className="text-center text-xs md:text-sm md:text-left">
         © {thisYear.getFullYear()} Mahdaoui Abdelouadoud | Web Developer & UI/UX
         Designer
@@ -47,7 +47,7 @@ export default function Footer() {
             rel={href.startsWith("http") ? "noreferrer" : undefined}
             title={title}
           >
-            <Icon width={20} height={20} className="text-primary" />
+            <Icon width={20} height={20} className="text-neutral-100" />
           </a>
         ))}
       </div>

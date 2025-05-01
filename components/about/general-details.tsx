@@ -13,16 +13,16 @@ function GeneralDetails() {
       </div>
       <div className="mt-6 flex flex-col gap-[1.5rem]">
         <p className="text-3xl sm:text-4xl">👋</p>
-        <span className="text-3xl sm:text-4xl font-bold text-gray-5">
+        <span className="text-3xl sm:text-4xl font-bold text-neutral-10">
           Mahdaoui Abdelouadoud
         </span>
-        <p className="text-lg leading-[2rem] text-gray-1 font-medium ">
+        <p className="text-lg leading-[2rem] text-neutral-100 font-medium ">
           I am Ouadoud! A passionate Software Engineer who is always eager to
           learn about different development languages, responsive frameworks,
           databases, and best code practices. I’m also a UI/UX designer focused
           on building brands and digital experiences.
         </p>
-        <p className="text-sm leading-[2rem] font-light text-gray-3">
+        <p className="text-sm leading-[2rem] font-light text-neutral-50">
           As a specialist in bridging brand identity through the fusion of Web
           Development and UX/UI, I craft innovative and impactful design
           solutions for the modern era. <br /> Beyond work, I find joy in
