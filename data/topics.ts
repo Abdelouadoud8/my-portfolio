@@ -1,6 +1,6 @@
-import { TopicProps } from "@/components/about/topic";
+import { TopicType } from "./types";
 
-export const topics: TopicProps[] = [
+export const topics: TopicType[] = [
   {
     title: "education",
     elements: [

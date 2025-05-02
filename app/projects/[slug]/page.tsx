@@ -1,15 +1,25 @@
-import Topic from "@/components/about/topic";
-import ProjectHeader from "@/components/project/project-header";
 import { projects } from "@/data/projects";
-import React from "react";
+import ProjectHeader from "@/components/project/project-header";
 import Image from "next/image";
-import ProjectSection from "@/components/project/project-section";
 import Quote from "@/components/project/quote";
 import Projects from "@/components/home/projects";
 import SectionHeader from "@/components/section-header";
+import ProjectSection from "@/components/project/project-section";
+import Topic from "@/components/about/topic";
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = projects.find((project) => project.slug === params.slug);
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateStaticParams() {
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
+}
+
+export default async function ProjectPage({ params }: Props) {
+  const parameters = await params;
+  const project = projects.find((p) => p.slug === parameters.slug);
 
   if (!project) return <div>Project not found</div>;
 
@@ -21,6 +31,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
         role={project.role}
         description={project.description}
       />
+
       <Image
         src={project.coverUrl}
         alt={`${project.title} cover`}
@@ -28,35 +39,35 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
         height={1080}
         className="object-cover w-full"
       />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {project.topics.map((topic) => {
-          return (
-            <Topic
-              title={topic.title}
-              content={topic.content}
-              key={topic.title}
-            />
-          );
-        })}
-      </div>
-      {project.sections.map(({ id, title, subtitle, description, images }) => {
-        return (
-          <ProjectSection
-            id={id}
-            title={title}
-            subtitle={subtitle}
-            description={description}
-            images={images}
-            key={id}
+        {project.topics.map((topic) => (
+          <Topic
+            key={topic.title}
+            title={topic.title}
+            content={topic.content}
           />
-        );
-      })}
+        ))}
+      </div>
+
+      {project.sections.map(({ id, title, subtitle, description, images }) => (
+        <ProjectSection
+          key={id}
+          id={id}
+          title={title}
+          subtitle={subtitle}
+          description={description}
+          images={images}
+        />
+      ))}
+
       {project.quote && (
         <Quote
-          description={project.quote?.description}
-          author={project.quote?.author}
+          description={project.quote.description}
+          author={project.quote.author}
         />
       )}
+
       <SectionHeader title="Check more of my projects" subtitle="Projects" />
       <Projects />
     </div>

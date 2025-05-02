@@ -1,7 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { IconMenu } from "./icons/icon-menu";
+import { IconClose } from "./icons/icon-close";
 
 const navItems = [
   { title: "Work", href: "/" },
@@ -12,33 +14,73 @@ const navItems = [
 
 export default function Header() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="px-16 py-8 flex flex-row justify-between items-center bg-white">
-      <Link href="/">
-        <h1 className="text-neutral-100 text-3xl font-semibold">
-          Abdelouadoud8
-        </h1>
-      </Link>
+    <header className="bg-white px-6 py-6 md:px-16 md:py-8">
+      <div className="flex justify-between items-center">
+        <Link href="/">
+          <h1 className="text-neutral-100 text-2xl md:text-3xl font-semibold">
+            Abdelouadoud8
+          </h1>
+        </Link>
 
-      <nav className="flex flex-row gap-6">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href;
-          return (
-            <Link key={item.href} href={item.href}>
-              <p
-                className={`text-sm uppercase font-semibold ${
-                  isActive
-                    ? "text-black"
-                    : "text-neutral-30 hover:text-neutral-70"
-                }`}
+        <button
+          className="md:hidden text-neutral-100"
+          onClick={() => setMenuOpen((prev) => !prev)}
+        >
+          {menuOpen ? (
+            <IconClose className="w-6 h-6" />
+          ) : (
+            <IconMenu className="w-6 h-6" />
+          )}
+        </button>
+
+        <nav className="hidden md:flex flex-row gap-6">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link key={item.href} href={item.href}>
+                <p
+                  className={`text-sm uppercase font-semibold ${
+                    isActive
+                      ? "text-black"
+                      : "text-neutral-30 hover:text-neutral-70"
+                  }`}
+                >
+                  {item.title}
+                </p>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+
+      {/* Mobile nav dropdown */}
+      {menuOpen && (
+        <nav className="mt-4 flex flex-col gap-4 md:hidden">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
               >
-                {item.title}
-              </p>
-            </Link>
-          );
-        })}
-      </nav>
-    </div>
+                <p
+                  className={`text-sm uppercase font-semibold ${
+                    isActive
+                      ? "text-black"
+                      : "text-neutral-30 hover:text-neutral-70"
+                  }`}
+                >
+                  {item.title}
+                </p>
+              </Link>
+            );
+          })}
+        </nav>
+      )}
+    </header>
   );
 }

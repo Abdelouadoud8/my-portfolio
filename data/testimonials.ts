@@ -3,7 +3,7 @@ import { Testimonial } from "./types";
 export const testimonials: Testimonial[] = [
   {
     id: "1",
-    imageUrl: "https://randomuser.me/api/portraits/women/44.jpg",
+    imageUrl: "/mypicture.jpeg",
     title:
       "Abdelouadoud never ceases to amaze me with his creativity and ideas out of the box",
     description:
@@ -13,7 +13,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "2",
-    imageUrl: "https://randomuser.me/api/portraits/men/32.jpg",
+    imageUrl: "/mypicture.jpeg",
     title:
       "Abdelouadoud truly impressed us with his talent, precision, and dedication from day one",
     description:
@@ -23,7 +23,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "3",
-    imageUrl: "https://randomuser.me/api/portraits/women/68.jpg",
+    imageUrl: "/mypicture.jpeg",
     title:
       "Reliable, resourceful, and creative — a rare combination that truly elevated our project",
     description:
@@ -33,7 +33,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "4",
-    imageUrl: "https://randomuser.me/api/portraits/men/77.jpg",
+    imageUrl: "/mypicture.jpeg",
     title:
       "A forward-thinking approach that exceeded our expectations and delivered real business value",
     description:
@@ -43,7 +43,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "5",
-    imageUrl: "https://randomuser.me/api/portraits/women/21.jpg",
+    imageUrl: "/mypicture.jpeg",
     title:
       "A seamless, inspiring experience that turned our ideas into a bold, functional digital product",
     description:

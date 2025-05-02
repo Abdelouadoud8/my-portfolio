@@ -9,7 +9,7 @@ export const SpartifyLogo = ({ width = 127, height = 54 }: IconProps) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_987_320)">
+      <g clipPath="url(#clip0_987_320)">
         <mask
           id="mask0_987_320"
           maskUnits="userSpaceOnUse"
@@ -25,8 +25,8 @@ export const SpartifyLogo = ({ width = 127, height = 54 }: IconProps) => {
         </mask>
         <g mask="url(#mask0_987_320)">
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M31.8851 22.6676L47.1384 13.8709L39.5117 9.46592L31.8984 5.07425L24.2717 0.66925L16.6467 5.07425L9.03341 9.46592L1.40674 13.8709V22.6676L9.03341 27.0726L16.6467 31.4776L31.8984 22.6676L39.5117 27.0726L31.8851 22.6676Z"
             fill="#855AEA"
           />
@@ -46,8 +46,8 @@ export const SpartifyLogo = ({ width = 127, height = 54 }: IconProps) => {
         </mask>
         <g mask="url(#mask1_987_320)">
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M16.6467 31.4776L1.40674 40.2743L9.03341 44.6659L16.6467 49.0693L24.2717 53.4743L31.8851 49.0693L39.5117 44.6659L47.1384 40.2743V31.4643L39.5117 27.0726L31.8984 22.6676L16.6467 31.4776Z"
             fill="#452492"
           />
@@ -67,8 +67,8 @@ export const SpartifyLogo = ({ width = 127, height = 54 }: IconProps) => {
         </mask>
         <g mask="url(#mask2_987_320)">
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M31.8984 22.6676L9.03341 9.46593L1.40674 13.8709V22.6676L16.6467 31.4643L39.5117 44.6659L47.1384 40.2743V31.4643L31.8984 22.6676Z"
             fill="#6341B3"
           />
