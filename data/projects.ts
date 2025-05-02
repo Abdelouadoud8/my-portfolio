@@ -8,7 +8,7 @@ export const projects: Project[] = [
     subtitle: "Control your medical life & health from your home",
     description:
       "Medicol is a mobile application dedicated to all users that want to control their medical life including their medical folders, appointments with doctors, access to all pharmacies and also a space for exchange with doctors and people. If you are a dad or a mom, Medicol allows you to follow your son's vaccination and the follow-up with his doctor",
-    cover: "/img/projects/medicol/1.png",
+    coverUrl: "/img/projects/medicol/1.png",
     slug: "medicol",
     topics: [
       { title: "Date", content: "May - Juin 2021" },
@@ -47,15 +47,11 @@ export const projects: Project[] = [
         subtitle: "What does the UI kit includes?",
         description:
           "The UI kit includes 6 main parts organized -welcome and authentification-, -Doctors, appointments & pharmacies-, -Medical folder-, -chat-, -BLog & discussion space-, -Fitness & body-, all parts are high organized and consistent by providing various choices with quality design.",
-        images: [
-          "/img/projects/medicol/7.png",
-          "/img/projects/medicol/8.png",
-          "/img/projects/medicol/9.png",
-        ],
+        images: ["/img/projects/medicol/7.png", "/img/projects/medicol/8.png"],
       },
     ],
     quote: {
-      person: "Martin LeBlanc",
+      author: "Martin LeBlanc",
       description:
         "A user interface is like a joke. If you have to explain it, it’s not that good.",
     },
@@ -67,7 +63,7 @@ export const projects: Project[] = [
     subtitle: "Order your gift and send it anywhere with one click",
     description:
       "Momyz is a set of applications made to link the stores, delivery and clients together in one service, it businesses to manage their stores, products and sales. It also facilitate the work of delivery men with guaranteed service. It is also destinated for user, who want to purchase prizes of gifts and send it someone with just an online service.",
-    cover: "/img/projects/momyz/1.png",
+    coverUrl: "/img/projects/momyz/1.png",
     slug: "momyz",
     topics: [
       { title: "Date", content: "March - April 2022" },
@@ -138,7 +134,7 @@ export const projects: Project[] = [
       },
     ],
     quote: {
-      person: "Paula Scher",
+      author: "Paula Scher",
       description:
         "It's through mistakes that you actually can grow. You have to get bad in order to get good.",
     },
@@ -150,7 +146,7 @@ export const projects: Project[] = [
     subtitle: "Revise your lessons, try exams and rock your studies",
     description:
       "Medecin Quiz is a web application dedicated for dental students, it contains all years modules including lectures and exams which allows student to revise and prepare their exams, the plateform provide an essaie version before paying to unlock all exams and content.",
-    cover: "/img/projects/medecinquiz/1.png",
+    coverUrl: "/img/projects/medecinquiz/1.png",
     slug: "medecinquiz",
     topics: [
       { title: "Date", content: "December 2021 - January 2022" },
@@ -217,7 +213,7 @@ export const projects: Project[] = [
       },
     ],
     quote: {
-      person: "Antoine de Saint-Exupéry",
+      author: "Antoine de Saint-Exupéry",
       description:
         "A designer knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away.",
     },
@@ -229,7 +225,7 @@ export const projects: Project[] = [
     subtitle: "Simplest way to track & control all your daily tasks in one app",
     description:
       "We all have a busy day from work to shopping to home obligations, managing all these stuff together without forgetting any task is way too hard to maintain, the best solution is TODO lists! but with the advancement of the world and technology it is not practicle to take a book or a list with you everywhere!! Here where our todo app comes! In this research we will take a deep look on our users needs and best solutions we can provide, let’s roll into it!",
-    cover: "/img/projects/todoapp/1.png",
+    coverUrl: "/img/projects/todoapp/1.png",
     slug: "todoapp",
     topics: [
       { title: "Date", content: "June 2022" },
@@ -307,7 +303,7 @@ export const projects: Project[] = [
       },
     ],
     quote: {
-      person: "Paul Rand",
+      author: "Paul Rand",
       description:
         "Simplicity is not the goal. It is the by-product of a good idea and modest expectations.",
     },
@@ -319,7 +315,7 @@ export const projects: Project[] = [
     subtitle: "The easiest way to get your studies visa abroad.",
     description:
       "This web application is made to help a company specialized in getting visa and help students get accpeted in other countries, by facilitating the process to the very low level and manage complicated applications.",
-    cover: "/img/projects/saidetudes/1.png",
+    coverUrl: "/img/projects/saidetudes/1.png",
     slug: "saidetudes",
     topics: [
       { title: "Date", content: "December 2021 - January 2022" },
@@ -412,7 +408,7 @@ export const projects: Project[] = [
       },
     ],
     quote: {
-      person: "Lindo Leader",
+      author: "Lindo Leader",
       description:
         "I strive for two things in design: simplicity and clarity. Great design is born of those two things.",
     },
@@ -424,7 +420,7 @@ export const projects: Project[] = [
     subtitle: "Complete your transactions in seconds with one click!",
     description:
       "SmartTrans is a mobile application made a special big banking company to manage all their transactions between their offices around the world and automate all their system.",
-    cover: "/img/projects/smarttrans/1.png",
+    coverUrl: "/img/projects/smarttrans/1.png",
     slug: "smarttrans",
     topics: [
       { title: "Date", content: "October - December 2021" },
@@ -469,7 +465,7 @@ export const projects: Project[] = [
       },
     ],
     quote: {
-      person: "Andrew Grove",
+      author: "Andrew Grove",
       description:
         "How well we communicate is determined not by how well we say things, but how well we are understood.",
     },
@@ -481,7 +477,7 @@ export const projects: Project[] = [
     subtitle: "Expend your network, make new relations",
     description:
       "A social media application that helps people make new relations with people and extend their network with a cool theme that help the user having a funny and relaxinng experience.",
-    cover: "/img/projects/socialmediaapp/1.png",
+    coverUrl: "/img/projects/socialmediaapp/1.png",
     slug: "socialmediaapp",
     topics: [
       { title: "Date", content: "April 2021" },
@@ -533,7 +529,7 @@ export const projects: Project[] = [
       },
     ],
     quote: {
-      person: " Naoto Fukasawa",
+      author: " Naoto Fukasawa",
       description:
         "Design needs to be plugged into human behavior. Design dissolves in behavior.",
     },
@@ -545,7 +541,7 @@ export const projects: Project[] = [
     subtitle: "A fresh re-design for french beach & snow volleyball website",
     description:
       "A website related with a mobile application for a new fresh design of the official french beach & snow volley website, this was a design for a client participating in a competition for the best re-design for the website, and hopefully the client was completely satisfied and that helped him win the prize.",
-    cover: "/img/projects/beachsnowvolleyball/1.png",
+    coverUrl: "/img/projects/beachsnowvolleyball/1.png",
     slug: "beachsnowvolleyball",
     topics: [
       { title: "Date", content: "July - August 2020" },
@@ -590,7 +586,7 @@ export const projects: Project[] = [
       },
     ],
     quote: {
-      person: "Steve Jobs",
+      author: "Steve Jobs",
       description:
         "Design is not just what it looks like and feels like. Design is how it works.",
     },
@@ -602,7 +598,7 @@ export const projects: Project[] = [
     subtitle: "Get your best game packages and live the streaming",
     description:
       "A website destinated to gamers and people interested in gaming & streaming packages allows the user to purchase their favorite game's packages with a marketplace full of customizable packages and components related with games & streaming modes .",
-    cover: "/img/projects/gamingpackages/1.png",
+    coverUrl: "/img/projects/gamingpackages/1.png",
     slug: "gamingpackages",
     topics: [
       { title: "Date", content: "April 2021" },
@@ -644,7 +640,7 @@ export const projects: Project[] = [
       },
     ],
     quote: {
-      person: "Paul Rand",
+      author: "Paul Rand",
       description:
         "Simplicity is not the goal. It is the by-product of a good idea and modest expectations.",
     },

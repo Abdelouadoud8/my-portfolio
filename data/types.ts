@@ -5,19 +5,23 @@ type Project = {
   role: string;
   subtitle: string;
   description: string;
-  cover: string;
+  coverUrl: string;
   topics: { title: string; content: string }[];
-  sections: {
-    id: string;
-    title: string;
-    subtitle: string;
-    description: string;
-    images: string[];
-  }[];
-  quote?: {
-    person: string;
-    description: string;
-  };
+  sections: ProjectSectionType[];
+  quote?: QuoteType;
+};
+
+type ProjectSectionType = {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  images: string[];
+};
+
+type QuoteType = {
+  author: string;
+  description: string;
 };
 
 type Testimonial = {
@@ -31,14 +35,15 @@ type Testimonial = {
 
 type TopicType = {
   title: string;
-  elements: {
+  elements?: {
     id: string;
     title: string;
     description: string;
     dates?: string;
     link?: string;
   }[];
+  content?: string;
   className?: string;
 };
 
-export type { Project, Testimonial, TopicType };
+export type { Project, ProjectSectionType, QuoteType, Testimonial, TopicType };

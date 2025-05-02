@@ -5,11 +5,11 @@ export const testimonials: Testimonial[] = [
     id: "1",
     imageUrl: "https://randomuser.me/api/portraits/women/44.jpg",
     title:
-      "An exceptional collaboration that will be unforgettable for all of us and a benchmark for future projects",
+      "Abdelouadoud never ceases to amaze me with his creativity and ideas out of the box",
     description:
-      "Working with this team was smooth and highly productive. Their attention to detail, creative input, and ability to adapt to feedback exceeded my expectations. From kickoff to delivery, the collaboration was seamless and professional. Everyone involved brought passion and clarity to the process, making this experience one I will always value.",
-    fullname: "Sophie Durand",
-    occupation: "Marketing Manager at NovaTech",
+      "I worked with abdelouadoud in several projects, he feels like an extension of our team. When a project comes up, he is super responsive, professional, and just fun to work with. I’m always amazed at how he manages to take our rough vision and make something beautiful. He makes us look good! Abdelouadoud is also skilled at understanding the business case, setting expectations, and very patiently managing any edits. He has a true eye for design and ensures everything fits within our brand. I’ve recommended him to many others!",
+    fullname: "Azzaz Rahmani Oussama",
+    occupation: "Backend Lead",
   },
   {
     id: "2",

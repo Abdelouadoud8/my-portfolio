@@ -9,7 +9,7 @@ export default function Projects() {
           key={project.id}
           title={project.title}
           role={project.role}
-          coverUrl={project.cover}
+          coverUrl={project.coverUrl}
           slug={project.slug}
         />
       ))}

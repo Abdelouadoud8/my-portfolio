@@ -15,7 +15,6 @@ export default function About() {
         {topics.map((topic) => {
           return (
             <Topic
-              className="flex flex-col gap-2"
               title={topic.title}
               elements={topic.elements}
               key={topic.title}

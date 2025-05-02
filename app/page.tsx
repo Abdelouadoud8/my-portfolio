@@ -12,7 +12,7 @@ export default function Home() {
       <Heading />
       <Projects />
       <ClientsCarousel />
-      <div className="mb-32 flex flex-col items-center text-center md:text-left gap-5">
+      <div className="flex flex-col items-center text-center md:text-left gap-5">
         <SectionHeader
           subtitle="Testimonials"
           title="Trusted by brands all over the world"
