@@ -23,12 +23,12 @@ const clientsLogos = [
 
 export default function ClientsCarousel() {
   return (
-    <section className="w-full py-12 overflow-hidden text-center">
+    <section className="text-amber-900 w-full py-12 overflow-hidden text-center">
       <SectionHeader
         subtitle="Our Clients"
         title="Discover some of the client that have put trust on us"
       />
-      <div className="mt-12 md:mt-18 grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-8 bg-white">
+      <div className=" mt-12 md:mt-18 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-8 bg-white">
         {clientsLogos.map(({ Logo }, index) => {
           return (
             <ClientBox key={index}>

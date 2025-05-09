@@ -18,7 +18,7 @@ export default function Header() {
 
   return (
     <header className="bg-white px-6 py-6 md:px-16 md:py-8">
-      <div className="flex justify-between items-center">
+      <div className="w-full flex flex-row justify-between items-center overflow-hidden">
         <Link href="/">
           <h1 className="text-neutral-100 text-2xl md:text-3xl font-semibold">
             Abdelouadoud8
@@ -26,7 +26,7 @@ export default function Header() {
         </Link>
 
         <button
-          className="md:hidden text-neutral-100"
+          className="md:hidden text-neutral-100 mr-1"
           onClick={() => setMenuOpen((prev) => !prev)}
         >
           {menuOpen ? (

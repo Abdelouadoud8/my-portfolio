@@ -8,7 +8,7 @@ export const topics: TopicType[] = [
         id: "1",
         title: "University of Montpellier, France",
         description: "Master 2 in Software Architectures",
-        dates: "September 2023 - June 2024",
+        dates: "September 2023",
         link: "https://www.umontpellier.fr",
       },
       {
@@ -16,7 +16,7 @@ export const topics: TopicType[] = [
         title:
           "Higher national school of computer science Sidi Bel Abbes (ESI-SBA), Algeria",
         description: "Computer science engineer degree",
-        dates: "September 2018 - June 2023",
+        dates: "September 2018",
         link: "https://www.esi-sba.dz",
       },
       {
@@ -32,14 +32,14 @@ export const topics: TopicType[] = [
     elements: [
       {
         id: "1",
-        title: "Atos",
+        title: "Atos, France",
         description: "Fullstack Web Developer",
         dates: "February 2024 - Present",
         link: "https://atos.net/en/",
       },
       {
         id: "2",
-        title: "Alwasaet",
+        title: "Alwasaet, Saoudi Arabia",
         description: "Product Designer ",
         dates: "September 2023 - February 2024",
         link: "https://alwasaet.com",
@@ -47,21 +47,21 @@ export const topics: TopicType[] = [
       {
         id: "3",
         title:
-          "Laboratoire d'informatique, de robotique et de microélectronique (LIRMM)",
+          "Laboratoire d'informatique, de robotique et de microélectronique (LIRMM), France",
         description: "Software Engineer Intern",
         dates: "April - August 2023",
         link: "https://www.lirmm.fr",
       },
       {
         id: "4",
-        title: "Lasting Dynamics",
+        title: "Lasting Dynamics, Spain",
         description: "Junior UX/UI Designer",
         dates: "May 2022 - April 2023",
         link: "https://www.lastingdynamics.com",
       },
       {
         id: "5",
-        title: "Hoskadev",
+        title: "Hoskadev, Algeria",
         description: "Junior UX/UI Designer",
         dates: "January - June 2022",
         link: "https://hoskadev.com/en/",

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Heading() {
   return (
-    <div className="w-full flex flex-col mt-4 sm:mt-2 font-sans items-center sm:px-86">
+    <div className="w-full flex flex-col mt-4 sm:mt-2 items-center sm:px-24 md:px-40 lg:px-56">
       <Image
         src={"/mypicture.jpeg"}
         width={64}
