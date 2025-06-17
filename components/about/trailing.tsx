@@ -1,21 +1,10 @@
 import React from "react";
-import PrimaryButton from "../primary-button";
-
-const socialLinks = [
-  { title: "Instagram", href: "https://www.instagram.com/abdelouadoud.8/" },
-  {
-    title: "Linkedin",
-    href: "https://www.linkedin.com/in/abdelouadoud-mahdaoui/",
-  },
-  { title: "Github", href: "https://github.com/Abdelouadoud8" },
-  { title: "X", href: "https://x.com/AbdElWadoud_8/" },
-];
-
-const contacts = ["+33773471197", "abdelouadoud.mahdaoui@gmail.com"];
+import { Button } from "../ui/button";
+import { socialLinks, contacts } from "@/data/general";
 
 export default function Trailing() {
   return (
-    <div className="flex flex-col md:flex-row justify-between gap-8 md:mb-20 mb-36">
+    <div className="flex flex-col md:flex-row justify-between gap-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-neutral-100 text-xl font-semibold">Social links</h1>
         <div className="flex flex-col gap-1">
@@ -49,11 +38,15 @@ export default function Trailing() {
         </ul>
       </div>
       <div className="self-start">
-        <PrimaryButton
-          link="/files/MahdaouiAbdelouadoud_CV.pdf"
-          download="MahdaouiAbdelouadoud_CV.pdf"
-          text="Download CV"
-        />
+        <Button>
+          <a
+            href="/files/MahdaouiAbdelouadoud_CV.pdf"
+            target="_blank"
+            download="MahdaouiAbdelouadoud_CV.pdf"
+          >
+            Download CV
+          </a>
+        </Button>
       </div>
     </div>
   );
