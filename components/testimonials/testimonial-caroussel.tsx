@@ -20,7 +20,7 @@ export default function TestimonialCaroussel() {
   return (
     <div className="flex flex-col md:flex-row justify-between my-8 gap-[2rem] md:gap-[4rem] lg:gap-[8rem]">
       <CarousselImage imageUrl={testimonial.imageUrl} />
-      <div className="mt-3 lg:mt-6 w-full md:w-5/8 flex flex-col gap-12">
+      <div className="mt-3 lg:mt-6 w-full md:w-5/8 flex flex-col gap-12 justify-between">
         <div className="flex flex-col gap-[1.5rem] md:min-h-64">
           <p className="text-lg md:text-xl leading-[2rem] text-neutral-100 font-medium ">
             {testimonial.title}

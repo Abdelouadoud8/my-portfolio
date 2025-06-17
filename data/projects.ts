@@ -534,6 +534,9 @@ export const projects: Project[] = [
         "Design needs to be plugged into human behavior. Design dissolves in behavior.",
     },
   },
+];
+
+export const unusedProjects = [
   {
     id: "8",
     role: "UI/UX Designer",

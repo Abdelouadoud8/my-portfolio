@@ -4,6 +4,7 @@ import { IconGithub } from "./icons/icon-github";
 import { IconEmail } from "./icons/icon-email";
 import { IconInstagram } from "./icons/icon-instagram";
 import { IconLinkedin } from "./icons/icon-linkedin";
+import { IconTwitter } from "./icons/icon-twitter";
 
 export default function Footer() {
   const thisYear = new Date();
@@ -23,6 +24,11 @@ export default function Footer() {
       href: "https://github.com/Abdelouadoud8",
       icon: IconGithub,
       title: "GitHub",
+    },
+    {
+      href: "https://x.com/AbdElWadoud_8/",
+      icon: IconTwitter,
+      title: "Twitter",
     },
     {
       href: "mailto:abdelouadoud.mahdaoui@gmail.com",
@@ -47,7 +53,7 @@ export default function Footer() {
             rel={href.startsWith("http") ? "noreferrer" : undefined}
             title={title}
           >
-            <Icon width={20} height={20} className="text-neutral-100" />
+            <Icon width={28} height={28} className="text-neutral-100" />
           </a>
         ))}
       </div>

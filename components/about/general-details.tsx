@@ -5,7 +5,7 @@ function GeneralDetails() {
     <div className="flex flex-col md:flex-row justify-between my-8 gap-[2rem] lg:gap-[8rem]">
       <div className="relative w-full md:w-[1500px] h-[520px] mb-4 sm:mb-8">
         <Image
-          src="/mypicture.jpeg"
+          src="/img/about-picture.jpg"
           alt="Portfolio cover"
           fill
           className="object-cover rounded-md"
