@@ -53,7 +53,7 @@ export default function Footer() {
             rel={href.startsWith("http") ? "noreferrer" : undefined}
             title={title}
           >
-            <Icon width={28} height={28} className="text-neutral-100" />
+            <Icon width={28} height={28} className="text-neutral-90" />
           </a>
         ))}
       </div>

@@ -11,15 +11,17 @@ export default function Contact() {
   ];
 
   return (
-    <div className="md:mb-0 flex flex-col items-center text-center md:text-left min-h-screen gap-20">
+    <div className="md:mb-0 flex flex-col items-center text-center md:text-left gap-20">
       <SectionHeader
         title="Get in touch easily the way that works best for you"
         subtitle="Reach out"
       />
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="w-full flex flex-col lg:flex-row gap-8">
         <div className="flex flex-col gap-8 pt-0 sm:pt-32">
           <div>
-            <h1 className="font-semibold text-4xl mb-2">Reach Me</h1>
+            <h1 className="font-semibold text-4xl mb-2 hidden md:block">
+              Reach Me
+            </h1>
             <p className="text-neutral-80 text-lg">
               Have a question, a project in mind, or need an estimate? Feel free
               to reach out via email, phone, or the contact form — I&lsquo;m
@@ -31,7 +33,7 @@ export default function Contact() {
               return (
                 <div
                   key={index}
-                  className="flex flex-row gap-2 items-center text-lg text-neutral-100"
+                  className="flex flex-row gap-2 items-center text-base lg:text-lg text-neutral-100"
                 >
                   <contact.icon width={32} height={32} />
                   <p>{contact.content}</p>
