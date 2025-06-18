@@ -4,7 +4,79 @@ export const projects: Project[] = [
   {
     id: "1",
     role: "UI/UX designer",
-    title: "Medicol mobile UI kit",
+    title: "Spinet NFC Platforms",
+    subtitle: "Empower your network with spinet",
+    link: "https://www.spinetnfc.com",
+    description:
+      "Empower your networking with a simple and easy digital way to instantly share your contact information or get others' contact information all at once. Build your network and grow your business using our NFC based features.",
+    coverUrl: "/img/projects/spinet-nfc/1.png",
+    slug: "spinet-nfc",
+    topics: [
+      { title: "Dates", content: "May 2021 - June 2024" },
+      { title: "Role", content: "UI/UX designer" },
+      { title: "Client", content: "Spinet NFC Sarl" },
+      {
+        title: "Deliverables",
+        content:
+          "Multiple products including 2 mobile apps, a landing page and a business dashboard. Deliverables included figma source files and final prototypes.",
+      },
+    ],
+    sections: [
+      {
+        id: "1",
+        title: "About the project",
+        subtitle: "Applications overview",
+        description:
+          "Spinet NFC comprises web and mobile applications enabling seamless exchange of social links. It offers two mobile solutions utilizing NFC technology and QR Codes for instant profile sharing without requiring additional installations. Additionally, it provides enterprise solutions for managing and monitoring user or employee networks, allowing comprehensive insights and real-time updates.",
+        images: ["/img/projects/spinet-nfc/2.png"],
+      },
+      {
+        id: "2",
+        title: "Design process",
+        subtitle: "Which process did we follow?",
+        description:
+          "The platforms were designed iteratively over different periods, with each new app launched individually. After each release, we gathered user feedback and continuously improved the solutions. Every new app revealed additional needs, which we addressed either by developing new applications or by introducing new features. To deliver a final product that meets client expectations and aligns with end-user standards, we followed a comprehensive process for each product, including: Scope Definition, UX Research, User Flows, Wireframing, UI Design, Design System Creation, Prototyping, Usability Testing, and Design Iterations.",
+        images: ["/img/projects/spinet-nfc/3.png"],
+      },
+      {
+        id: "3",
+        title: "Graphic chart",
+        subtitle: "What about colors & font?",
+        description:
+          "The NFC application is built around connection, sharing, and seamless interactions. To reflect these values, we chose royal blue as the main color, symbolizing trust, reliability, and professionalism. For the Events app, we introduced orange as the primary color to convey energy, enthusiasm, and engagement. We maintained the use of the Gilroy font across all applications to ensure a consistent, modern, and joyful user experience. The consistent use of fonts and a carefully selected color palette across the three applications helps strengthen the overall branding and maintain visual coherence.",
+        images: ["/img/projects/spinet-nfc/4.png"],
+      },
+      {
+        id: "4",
+        title: "User Interface Design",
+        subtitle: "Applications screens",
+        description:
+          "Here, you will find key design elements from each application: the two mobile apps and the business web app. You’ll notice that we focused on maintaining strong consistency across all platforms by applying the same design style and unified visual identity, using a shared graphic system and typography to ensure a cohesive brand experience.",
+        images: [
+          "/img/projects/spinet-nfc/5.png",
+          "/img/projects/spinet-nfc/6.png",
+          "/img/projects/spinet-nfc/7.png",
+        ],
+      },
+      {
+        id: "5",
+        title: "Design system",
+        subtitle: "How did we manage components between apps?",
+        description:
+          "We ensured consistency and efficiency by creating a shared design system that unified components across the two mobile apps and the business web app. By reusing key elements such as buttons, input fields, icons, and typography, we maintained a cohesive user experience while reducing design and development time. This approach allowed us to keep the same visual language across all platforms while adapting specific components to meet the unique needs of each application.",
+        images: ["/img/projects/spinet-nfc/8.png"],
+      },
+    ],
+    quote: {
+      author: "Julie Zhou",
+      description:
+        "To find ideas, find problems. To find problems, talk to people.",
+    },
+  },
+  {
+    id: "2",
+    role: "UI/UX designer",
+    title: "Medicol UI kit",
     subtitle: "Control your medical life & health from your home",
     description:
       "Medicol is a mobile application dedicated to all users that want to control their medical life including their medical folders, appointments with doctors, access to all pharmacies and also a space for exchange with doctors and people. If you are a dad or a mom, Medicol allows you to follow your son's vaccination and the follow-up with his doctor",
@@ -57,169 +129,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "2",
-    role: "UI/UX designer",
-    title: "Momyz mobile application",
-    subtitle: "Order your gift and send it anywhere with one click",
-    description:
-      "Momyz is a set of applications made to link the stores, delivery and clients together in one service, it businesses to manage their stores, products and sales. It also facilitate the work of delivery men with guaranteed service. It is also destinated for user, who want to purchase prizes of gifts and send it someone with just an online service.",
-    coverUrl: "/img/projects/momyz/1.png",
-    slug: "momyz",
-    topics: [
-      { title: "Date", content: "March - April 2022" },
-      { title: "Role", content: "UI/UX designer" },
-      { title: "Agency", content: "HoskaDev company" },
-      {
-        title: "Deliverables",
-        content:
-          "Mobile UI design, iPhone 11 Pro mockups, complete prototype and figma source file.",
-      },
-    ],
-    sections: [
-      {
-        id: "1",
-        title: "About the project",
-        subtitle: "Applications overview",
-        description:
-          "Momyz is a project composed of 3 mobile applications related to perform a specific service, all 3 applications have a similar UX to help multiple users adapt with them, whether you are a store owner, a delivery man or a client, we found solutions for your problems, below you will find common problems and the solution we found for each problem.",
-        images: ["/img/projects/momyz/2.png"],
-      },
-      {
-        id: "2",
-        title: "Steps",
-        subtitle: "Design process",
-        description:
-          "During the design of 3 applications, we performed many steps [Scope definition - UX research - User flow - Wireframing - UI Design - Design system - prototyping - Usability testing - Design updates] to get a final product that satisfies our clients and complies with our end user standars and criteria.",
-        images: ["/img/projects/momyz/3.png"],
-      },
-      {
-        id: "3",
-        title: "Users workflow",
-        subtitle: "Flow Chart",
-        description:
-          "Since the applications are destinated to multiple users audience, we had to divide each application with its flow chart to determine functionnalities, screens and realtions between them, here you will finnd an overview for -Store application- flow chart.",
-        images: ["/img/projects/momyz/4.png"],
-      },
-      {
-        id: "4",
-        title: "Wireframing",
-        subtitle: "What to do before design?",
-        description:
-          "After finishing our UX research and User Flow, we started the wireframe to determine the structure of our screens, the items places and how to organize and keep consistency throw the pages, the wireframing part is just to show a general and minimal idea about the project before the design phase.",
-        images: ["/img/projects/momyz/5.png"],
-      },
-      {
-        id: "5",
-        title: "Graphic chart",
-        subtitle: "What about colors & font?",
-        description:
-          "The application idea is gifts, so it is all about joy, love and kindness, for this we choosed the pink as our main color as it describes love and kindness and also gives the idea of sharing for users. We also used the Gilroy font, a flexible font to give more flexibility and joy to our user experience. We used the same colors and font for all 3 applciations to keep the consistency and also the branding.",
-        images: ["/img/projects/momyz/6.png"],
-      },
-      {
-        id: "6",
-        title: "User Interface Design",
-        subtitle: "UI Screens & parts",
-        description:
-          "Here you will find some parts of the design of each application, you will notice that we made our best to keep consistency between applications by applying the same design style with same graphic chart.",
-        images: ["/img/projects/momyz/7.png"],
-      },
-      {
-        id: "7",
-        title: "Design system",
-        subtitle: "What about components?",
-        description:
-          "To facilitate our work and make it easier to collaborate, we started by implementing a design system including all important components, after finishing design we added some additional components, here you will find an overview with some components from our design system.",
-        images: ["/img/projects/momyz/8.png"],
-      },
-    ],
-    quote: {
-      author: "Paula Scher",
-      description:
-        "It's through mistakes that you actually can grow. You have to get bad in order to get good.",
-    },
-  },
-  {
     id: "3",
-    role: "UI/UX designer",
-    title: "Medecin Quiz Web App",
-    subtitle: "Revise your lessons, try exams and rock your studies",
-    description:
-      "Medecin Quiz is a web application dedicated for dental students, it contains all years modules including lectures and exams which allows student to revise and prepare their exams, the plateform provide an essaie version before paying to unlock all exams and content.",
-    coverUrl: "/img/projects/medecin-quiz/1.png",
-    slug: "medecin-quiz",
-    topics: [
-      { title: "Date", content: "December 2021 - January 2022" },
-      { title: "Agency", content: "Blue Dental Clinic" },
-      { title: "Role", content: "UI/UX designer" },
-      {
-        title: "Deliverable",
-        content: "Web UI design, complete prototype and figma source file.",
-      },
-    ],
-    sections: [
-      {
-        id: "1",
-        title: "The Challenge",
-        subtitle: "Why we did this work?",
-        description:
-          "The company offers an educational system and she decided to automate it by creating a solution that allows student to revise or even test their capacities before the real exam and always keep track of their progress, and here our web app comes as a solution!",
-        images: ["/img/projects/medecin-quiz/1.png"],
-      },
-      {
-        id: "2",
-        title: "Graphic chart",
-        subtitle: "What about fonts? colors?",
-        description:
-          "Colors used are some fresh colors that goes with the dental environment with the white, and that helps student concentrate while scrolling in our plateform. For the fonts, we used mainly the poppins font.",
-        images: ["/img/projects/medecin-quiz/2.png"],
-      },
-      {
-        id: "3",
-        title: "Landing Page",
-        subtitle: "A modern minimalist landing page",
-        description:
-          "The landing page has been designed to attract the student, showcase what the website offers, multiple modules included, pricing, some clients testimonials, FAQ and most important why to choose us!",
-        images: ["/img/projects/medecin-quiz/3.png"],
-      },
-      {
-        id: "4",
-        title: "Login / Sign up",
-        subtitle: "A modern & simple login",
-        description:
-          "The user has the ability to sign in and sign up to his account and also to reset his password.",
-        images: [
-          "/img/projects/medecin-quiz/3_1.png",
-          "/img/projects/medecin-quiz/3_2.png",
-        ],
-      },
-      {
-        id: "5",
-        title: "Logged in",
-        subtitle: "User workflow",
-        description:
-          "The user has a simple and main workflow for both revision and exams, he either start by choosing a year, then a module then a semester and finaly ends up with the exam/lesson lists, or he can access directly if he has already marked the exam/lesson in favoris. There are two kinds of questions, QCM and long questions, by finishing all questions student will get the result of his session with all previous answers.",
-        images: [
-          "/img/projects/medecin-quiz/4.png",
-          "/img/projects/medecin-quiz/5.png",
-          "/img/projects/medecin-quiz/6.png",
-          "/img/projects/medecin-quiz/7.png",
-          "/img/projects/medecin-quiz/8.png",
-          "/img/projects/medecin-quiz/9.png",
-          "/img/projects/medecin-quiz/11.png",
-          "/img/projects/medecin-quiz/12.png",
-          "/img/projects/medecin-quiz/10.png",
-        ],
-      },
-    ],
-    quote: {
-      author: "Antoine de Saint-Exupéry",
-      description:
-        "A designer knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away.",
-    },
-  },
-  {
-    id: "4",
     role: "UI/UX Designer",
     title: "To Do App",
     subtitle: "Simplest way to track & control all your daily tasks in one app",
@@ -309,10 +219,237 @@ export const projects: Project[] = [
     },
   },
   {
+    id: "4",
+    role: "UI/UX designer",
+    title: "Medecin Quiz",
+    subtitle: "Revise your lessons, try exams and rock your studies",
+    description:
+      "Medecin Quiz is a web application dedicated for dental students, it contains all years modules including lectures and exams which allows student to revise and prepare their exams, the plateform provide an essaie version before paying to unlock all exams and content.",
+    coverUrl: "/img/projects/medecin-quiz/1.png",
+    slug: "medecin-quiz",
+    topics: [
+      { title: "Date", content: "December 2021 - January 2022" },
+      { title: "Agency", content: "Blue Dental Clinic" },
+      { title: "Role", content: "UI/UX designer" },
+      {
+        title: "Deliverable",
+        content: "Web UI design, complete prototype and figma source file.",
+      },
+    ],
+    sections: [
+      {
+        id: "1",
+        title: "The Challenge",
+        subtitle: "Why we did this work?",
+        description:
+          "The company offers an educational system and she decided to automate it by creating a solution that allows student to revise or even test their capacities before the real exam and always keep track of their progress, and here our web app comes as a solution!",
+        images: ["/img/projects/medecin-quiz/1.png"],
+      },
+      {
+        id: "2",
+        title: "Graphic chart",
+        subtitle: "What about fonts? colors?",
+        description:
+          "Colors used are some fresh colors that goes with the dental environment with the white, and that helps student concentrate while scrolling in our plateform. For the fonts, we used mainly the poppins font.",
+        images: ["/img/projects/medecin-quiz/2.png"],
+      },
+      {
+        id: "3",
+        title: "Landing Page",
+        subtitle: "A modern minimalist landing page",
+        description:
+          "The landing page has been designed to attract the student, showcase what the website offers, multiple modules included, pricing, some clients testimonials, FAQ and most important why to choose us!",
+        images: ["/img/projects/medecin-quiz/3.png"],
+      },
+      {
+        id: "4",
+        title: "Login / Sign up",
+        subtitle: "A modern & simple login",
+        description:
+          "The user has the ability to sign in and sign up to his account and also to reset his password.",
+        images: [
+          "/img/projects/medecin-quiz/3_1.png",
+          "/img/projects/medecin-quiz/3_2.png",
+        ],
+      },
+      {
+        id: "5",
+        title: "Logged in",
+        subtitle: "User workflow",
+        description:
+          "The user has a simple and main workflow for both revision and exams, he either start by choosing a year, then a module then a semester and finaly ends up with the exam/lesson lists, or he can access directly if he has already marked the exam/lesson in favoris. There are two kinds of questions, QCM and long questions, by finishing all questions student will get the result of his session with all previous answers.",
+        images: [
+          "/img/projects/medecin-quiz/4.png",
+          "/img/projects/medecin-quiz/5.png",
+          "/img/projects/medecin-quiz/6.png",
+          "/img/projects/medecin-quiz/7.png",
+          "/img/projects/medecin-quiz/8.png",
+          "/img/projects/medecin-quiz/9.png",
+          "/img/projects/medecin-quiz/11.png",
+          "/img/projects/medecin-quiz/12.png",
+          "/img/projects/medecin-quiz/10.png",
+        ],
+      },
+    ],
+    quote: {
+      author: "Antoine de Saint-Exupéry",
+      description:
+        "A designer knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away.",
+    },
+  },
+  {
     id: "5",
+    role: "UI/UX designer",
+    title: "Momyz",
+    subtitle: "Order your gift and send it anywhere with one click",
+    description:
+      "Momyz is a set of applications made to link the stores, delivery and clients together in one service, it businesses to manage their stores, products and sales. It also facilitate the work of delivery men with guaranteed service. It is also destinated for user, who want to purchase prizes of gifts and send it someone with just an online service.",
+    coverUrl: "/img/projects/momyz/1.png",
+    slug: "momyz",
+    topics: [
+      { title: "Date", content: "March - April 2022" },
+      { title: "Role", content: "UI/UX designer" },
+      { title: "Agency", content: "HoskaDev company" },
+      {
+        title: "Deliverables",
+        content:
+          "Mobile UI design, iPhone 11 Pro mockups, complete prototype and figma source file.",
+      },
+    ],
+    sections: [
+      {
+        id: "1",
+        title: "About the project",
+        subtitle: "Applications overview",
+        description:
+          "Momyz is a project composed of 3 mobile applications related to perform a specific service, all 3 applications have a similar UX to help multiple users adapt with them, whether you are a store owner, a delivery man or a client, we found solutions for your problems, below you will find common problems and the solution we found for each problem.",
+        images: ["/img/projects/momyz/2.png"],
+      },
+      {
+        id: "2",
+        title: "Steps",
+        subtitle: "Design process",
+        description:
+          "During the design of 3 applications, we performed many steps [Scope definition - UX research - User flow - Wireframing - UI Design - Design system - prototyping - Usability testing - Design updates] to get a final product that satisfies our clients and complies with our end user standars and criteria.",
+        images: ["/img/projects/momyz/3.png"],
+      },
+      {
+        id: "3",
+        title: "Users workflow",
+        subtitle: "Flow Chart",
+        description:
+          "Since the applications are destinated to multiple users audience, we had to divide each application with its flow chart to determine functionnalities, screens and realtions between them, here you will finnd an overview for -Store application- flow chart.",
+        images: ["/img/projects/momyz/4.png"],
+      },
+      {
+        id: "4",
+        title: "Wireframing",
+        subtitle: "What to do before design?",
+        description:
+          "After finishing our UX research and User Flow, we started the wireframe to determine the structure of our screens, the items places and how to organize and keep consistency throw the pages, the wireframing part is just to show a general and minimal idea about the project before the design phase.",
+        images: ["/img/projects/momyz/5.png"],
+      },
+      {
+        id: "5",
+        title: "Graphic chart",
+        subtitle: "What about colors & font?",
+        description:
+          "The application idea is gifts, so it is all about joy, love and kindness, for this we choosed the pink as our main color as it describes love and kindness and also gives the idea of sharing for users. We also used the Gilroy font, a flexible font to give more flexibility and joy to our user experience. We used the same colors and font for all 3 applciations to keep the consistency and also the branding.",
+        images: ["/img/projects/momyz/6.png"],
+      },
+      {
+        id: "6",
+        title: "User Interface Design",
+        subtitle: "UI Screens & parts",
+        description:
+          "Here you will find some parts of the design of each application, you will notice that we made our best to keep consistency between applications by applying the same design style with same graphic chart.",
+        images: ["/img/projects/momyz/7.png"],
+      },
+      {
+        id: "7",
+        title: "Design system",
+        subtitle: "What about components?",
+        description:
+          "To facilitate our work and make it easier to collaborate, we started by implementing a design system including all important components, after finishing design we added some additional components, here you will find an overview with some components from our design system.",
+        images: ["/img/projects/momyz/8.png"],
+      },
+    ],
+    quote: {
+      author: "Paula Scher",
+      description:
+        "It's through mistakes that you actually can grow. You have to get bad in order to get good.",
+    },
+  },
+  {
+    id: "6",
     role: "UI/UX Designer",
-    title: "Said Etudes web app",
+    title: "MeetThem",
+    subtitle: "Expend your network, make new relations",
+    description:
+      "A social media application that helps people make new relations with people and extend their network with a cool theme that help the user having a funny and relaxinng experience.",
+    coverUrl: "/img/projects/social-media-app/1.png",
+    slug: "meet-them",
+    topics: [
+      { title: "Date", content: "April 2021" },
+      { title: "Role", content: "UI/UX Designer" },
+      {
+        title: "Plateforms",
+        content: "Destinated for mobile - android & iOS -",
+      },
+      {
+        title: "Deliverable",
+        content:
+          "Mobile app design, iPhone 11 Pro mockups, Wireframes, prototype, figma source file.",
+      },
+    ],
+    sections: [
+      {
+        id: "1",
+        title: "The Challenge",
+        subtitle: "Why we did this work?",
+        description:
+          "The client was searching for a solution to make people interact more with others and push them to make new friendships, know new people and the most important is enjoying their time while doing thi. In another side, the solution has to be made in a modern way that attract people and gives an idea about the daily improvement of the world.",
+        images: ["/img/projects/social-media-app/1.png"],
+      },
+      {
+        id: "2",
+        title: "Graphic chart",
+        subtitle: "What about fonts? colors?",
+        description:
+          "For our colors, we used fresh modern colors that sends the idea of joy and love, the design includes both light and dark versions, the colors choice was completely based on the idea of giving the user the sense of love and more emotions that impacts him and help spreading love among people.",
+        images: [
+          "/img/projects/social-media-app/5.png",
+          "/img/projects/social-media-app/6.png",
+        ],
+      },
+      {
+        id: "3",
+        title: "UI screens & parts",
+        subtitle: "What does the work includes?",
+        description:
+          "As mentioned before the application is available in both light & dark modes, by openinng it you will face a simple login and sigup pages, after signing up you will get into the home page where you can find people, like them and share your interests, the profiles are displayed in an attractive way that allows users to know others, like them and even contacting them throw a chat section, the user has the ability to edit and customize their profiles.",
+        images: [
+          "/img/projects/social-media-app/2.png",
+          "/img/projects/social-media-app/3.png",
+          "/img/projects/social-media-app/4.png",
+          "/img/projects/social-media-app/6.png",
+          "/img/projects/social-media-app/7.png",
+          "/img/projects/social-media-app/8.png",
+        ],
+      },
+    ],
+    quote: {
+      author: " Naoto Fukasawa",
+      description:
+        "Design needs to be plugged into human behavior. Design dissolves in behavior.",
+    },
+  },
+  {
+    id: "7",
+    role: "UI/UX Designer",
+    title: "SDZ Travel",
     subtitle: "The easiest way to get your studies visa abroad.",
+    link: "https://www.sdztravel.com",
     description:
       "This web application is made to help a company specialized in getting visa and help students get accpeted in other countries, by facilitating the process to the very low level and manage complicated applications.",
     coverUrl: "/img/projects/said-etudes/1.png",
@@ -414,9 +551,9 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "6",
+    id: "8",
     role: "UI/UX Designer",
-    title: "smart-trans Mobile app",
+    title: "Smart Trans",
     subtitle: "Complete your transactions in seconds with one click!",
     description:
       "smart-trans is a mobile application made a special big banking company to manage all their transactions between their offices around the world and automate all their system.",
@@ -468,70 +605,6 @@ export const projects: Project[] = [
       author: "Andrew Grove",
       description:
         "How well we communicate is determined not by how well we say things, but how well we are understood.",
-    },
-  },
-  {
-    id: "7",
-    role: "UI/UX Designer",
-    title: "Social Media Application",
-    subtitle: "Expend your network, make new relations",
-    description:
-      "A social media application that helps people make new relations with people and extend their network with a cool theme that help the user having a funny and relaxinng experience.",
-    coverUrl: "/img/projects/social-media-app/1.png",
-    slug: "social-media-app",
-    topics: [
-      { title: "Date", content: "April 2021" },
-      { title: "Role", content: "UI/UX Designer" },
-      {
-        title: "Plateforms",
-        content: "Destinated for mobile - android & iOS -",
-      },
-      {
-        title: "Deliverable",
-        content:
-          "Mobile app design, iPhone 11 Pro mockups, Wireframes, prototype, figma source file.",
-      },
-    ],
-    sections: [
-      {
-        id: "1",
-        title: "The Challenge",
-        subtitle: "Why we did this work?",
-        description:
-          "The client was searching for a solution to make people interact more with others and push them to make new friendships, know new people and the most important is enjoying their time while doing thi. In another side, the solution has to be made in a modern way that attract people and gives an idea about the daily improvement of the world.",
-        images: ["/img/projects/social-media-app/1.png"],
-      },
-      {
-        id: "2",
-        title: "Graphic chart",
-        subtitle: "What about fonts? colors?",
-        description:
-          "For our colors, we used fresh modern colors that sends the idea of joy and love, the design includes both light and dark versions, the colors choice was completely based on the idea of giving the user the sense of love and more emotions that impacts him and help spreading love among people.",
-        images: [
-          "/img/projects/social-media-app/5.png",
-          "/img/projects/social-media-app/6.png",
-        ],
-      },
-      {
-        id: "3",
-        title: "UI screens & parts",
-        subtitle: "What does the work includes?",
-        description:
-          "As mentioned before the application is available in both light & dark modes, by openinng it you will face a simple login and sigup pages, after signing up you will get into the home page where you can find people, like them and share your interests, the profiles are displayed in an attractive way that allows users to know others, like them and even contacting them throw a chat section, the user has the ability to edit and customize their profiles.",
-        images: [
-          "/img/projects/social-media-app/2.png",
-          "/img/projects/social-media-app/3.png",
-          "/img/projects/social-media-app/4.png",
-          "/img/projects/social-media-app/6.png",
-          "/img/projects/social-media-app/7.png",
-          "/img/projects/social-media-app/8.png",
-        ],
-      },
-    ],
-    quote: {
-      author: " Naoto Fukasawa",
-      description:
-        "Design needs to be plugged into human behavior. Design dissolves in behavior.",
     },
   },
 ];

@@ -30,6 +30,7 @@ export default async function ProjectPage({ params }: Props) {
         subtitle={project.subtitle}
         role={project.role}
         description={project.description}
+        link={project.link}
       />
 
       <Image

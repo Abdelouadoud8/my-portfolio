@@ -13,13 +13,13 @@ import { LastingDynamicsLogo } from "../icons/logos/lastingdynamics";
 
 const clientsLogos = [
   { Logo: MomyzLogo, name: "Momyz" },
-  { Logo: HoskadevLogo, name: "HoskaDev" },
+  { Logo: LastingDynamicsLogo, name: "Lasting Dynamics" },
   { Logo: SpartifyLogo, name: "Spartify" },
   { Logo: SpinetLogo, name: "Spinet" },
+  { Logo: TaalimLogo, name: "Taalim" },
   { Logo: WadiniLogo, name: "Wadini" },
   { Logo: FcConnectLogo, name: "FC Connect" },
-  { Logo: TaalimLogo, name: "Taalim" },
-  { Logo: LastingDynamicsLogo, name: "Lasting Dynamics" },
+  { Logo: HoskadevLogo, name: "HoskaDev" },
 ];
 
 export default function ClientsCarousel() {

@@ -3,6 +3,7 @@ type Project = {
   slug: string;
   title: string;
   role: string;
+  link?: string;
   subtitle: string;
   description: string;
   coverUrl: string;

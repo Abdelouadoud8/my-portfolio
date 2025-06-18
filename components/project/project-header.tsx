@@ -1,10 +1,13 @@
 import React from "react";
+import { Button } from "../ui/button";
+import { IconOpenInNewTab } from "../icons/icon-open-new-tab";
 
 type ProjectHeaderProps = {
   title: string;
   subtitle: string;
   role: string;
   description: string;
+  link?: string;
 };
 
 export default function ProjectHeader({
@@ -12,6 +15,7 @@ export default function ProjectHeader({
   subtitle,
   role,
   description,
+  link,
 }: ProjectHeaderProps) {
   return (
     <div>
@@ -27,6 +31,13 @@ export default function ProjectHeader({
       <p className="text-[1rem] font-normal text-neutral-60 mt-[0.5rem] leading-[1.5rem]">
         {description}
       </p>
+      {link && (
+        <a href={link} target="_blank">
+          <Button className="mt-4">
+            View live website <IconOpenInNewTab className=" text-white" />
+          </Button>
+        </a>
+      )}
     </div>
   );
 }
