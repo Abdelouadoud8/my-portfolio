@@ -19,10 +19,3 @@ export default function SectionHeader({ title, subtitle }: SectionHeaderProps) {
     </div>
   );
 }
-
-/* HEADER WITH UNDERLINE
-<div className="inline-block">
-  <h1 className="text-3xl md:text-4xl font-semibold">{title}</h1>
-  <div className="h-[6px] bg-secondary -mt-2.5" style={{ width: "100%" }} />
-</div>
-*/

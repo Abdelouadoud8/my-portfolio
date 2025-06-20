@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { IconMenu } from "./icons/icon-menu";
 import { IconClose } from "./icons/icon-close";
+import { Logo } from "./icons/logo";
 
 const navItems = [
   { title: "Work", href: "/" },
@@ -20,9 +21,7 @@ export default function Header() {
     <header className="bg-white px-6 py-6 md:px-16 md:py-8">
       <div className="w-full flex flex-row justify-between items-center overflow-hidden">
         <Link href="/">
-          <h1 className="text-neutral-100 text-2xl md:text-3xl font-semibold">
-            Abdelouadoud8
-          </h1>
+          <Logo className="text-primary" width={256} height={48} />
         </Link>
 
         <button

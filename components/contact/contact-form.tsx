@@ -43,13 +43,15 @@ export default function ContactForm({ title, className }: ContactFormProps) {
       });
 
       if (res.ok) {
-        alert("Message envoyé avec succès !");
+        alert(
+          "Your message has been successfully sent. I will get back to you soon!"
+        );
         setFormData(initialFormData);
       } else {
-        alert("Une erreur est survenue.");
+        alert("Your message could not be sent. Please try again later");
       }
     } catch (e) {
-      alert("Une erreur est survenue.");
+      alert("Your message could not be sent. Please try again later");
       console.log(e);
     } finally {
       setIsLoading(false);
