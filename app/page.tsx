@@ -1,6 +1,7 @@
 "use client";
 
 import ClientsCarousel from "@/components/home/clients";
+import ContactCTA from "@/components/home/ContactCTA";
 import Heading from "@/components/home/heading";
 import Projects from "@/components/home/projects";
 import SectionHeader from "@/components/section-header";
@@ -19,6 +20,7 @@ export default function Home() {
         />
         <TestimonialCaroussel />
       </div>
+      <ContactCTA />
     </div>
   );
 }

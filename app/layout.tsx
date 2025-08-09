@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import "./index.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { Poppins } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 
-const poppins = Poppins({
+const poppins = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"], // 700 -> Bold,
   variable: "--font-poppins", // optional if you want to use a CSS variable
