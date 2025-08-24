@@ -16,7 +16,7 @@ export default function Home() {
       <div className="flex flex-col items-center text-center md:text-left gap-5">
         <SectionHeader
           subtitle="Testimonials"
-          title="Trusted by brands all over the world"
+          title="Trusted by leaders all over the world"
         />
         <TestimonialCaroussel />
       </div>

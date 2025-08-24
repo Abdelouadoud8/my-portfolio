@@ -26,7 +26,7 @@ export default function ClientsCarousel() {
   return (
     <section className="text-amber-900 w-full py-12 overflow-hidden text-center">
       <SectionHeader
-        subtitle="Our Clients"
+        subtitle="Previous Clients"
         title="Discover some of the client that have put trust on us"
       />
       <div className=" mt-12 md:mt-18 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-8 bg-white">
