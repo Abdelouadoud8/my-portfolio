@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     siteName: "Abdelouadoud's Portfolio",
     images: [
       {
-        url: "https://abdelouadoud-portfolio.vercel.app/_next/image?url=%2Fmypicture2.jpeg&w=256&q=75", // must be an absolute URL!
+        url: "https://abdelouadoud-portfolio.vercel.app/_next/image?url=%2Fhomepicture.jpg&w=256&q=75",
         width: 1200,
         height: 630,
         alt: "Preview of My Portfolio",

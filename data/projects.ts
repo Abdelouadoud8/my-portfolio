@@ -302,6 +302,7 @@ export const projects: Project[] = [
     role: "UI/UX designer",
     title: "Momyz",
     subtitle: "Order your gift and send it anywhere with one click",
+    link: "https://apps.apple.com/fr/app/momyz/id6444957052?l=en-GB",
     description:
       "Momyz is a set of applications made to link the stores, delivery and clients together in one service, it businesses to manage their stores, products and sales. It also facilitate the work of delivery men with guaranteed service. It is also destinated for user, who want to purchase prizes of gifts and send it someone with just an online service.",
     coverUrl: "/img/projects/momyz/1.png",

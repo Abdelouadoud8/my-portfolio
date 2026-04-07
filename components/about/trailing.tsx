@@ -40,9 +40,9 @@ export default function Trailing() {
       <div className="self-start">
         <Button>
           <a
-            href="/files/MahdaouiAbdelouadoud_CV.pdf"
+            href="/files/CV_MAHDAOUI_ABDELOUADOUD.pdf"
             target="_blank"
-            download="MahdaouiAbdelouadoud_CV.pdf"
+            download="CV_MAHDAOUI_ABDELOUADOUD.pdf"
           >
             Download CV
           </a>

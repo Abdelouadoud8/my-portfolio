@@ -2,32 +2,6 @@ import { TopicType } from "./types";
 
 export const topics: TopicType[] = [
   {
-    title: "education",
-    elements: [
-      {
-        id: "1",
-        title: "University of Montpellier, France",
-        description: "Master 2 in Software Architectures",
-        dates: "September 2023",
-        link: "https://www.umontpellier.fr",
-      },
-      {
-        id: "2",
-        title:
-          "Higher national school of computer science Sidi Bel Abbes (ESI-SBA), Algeria",
-        description: "Computer science engineer degree",
-        dates: "September 2018",
-        link: "https://www.esi-sba.dz",
-      },
-      {
-        id: "3",
-        title: "Technicum Ahmed Zabana, Algeria",
-        description: "Baccalaureate science",
-        dates: "June 2018",
-      },
-    ],
-  },
-  {
     title: "experience",
     elements: [
       {
@@ -40,7 +14,7 @@ export const topics: TopicType[] = [
       {
         id: "2",
         title: "Alwasaet, Saoudi Arabia",
-        description: "Product Designer ",
+        description: "Product Designer",
         dates: "September 2023 - February 2024",
         link: "https://alwasaet.com",
       },
@@ -55,21 +29,40 @@ export const topics: TopicType[] = [
       {
         id: "4",
         title: "Lasting Dynamics, Spain",
-        description: "Junior UX/UI Designer",
+        description: "UX/UI Designer",
         dates: "May 2022 - April 2023",
         link: "https://www.lastingdynamics.com",
-      },
-      {
-        id: "5",
-        title: "Hoskadev, Algeria",
-        description: "Junior UX/UI Designer",
-        dates: "January - June 2022",
-        link: "https://hoskadev.com/en/",
       },
     ],
   },
   {
-    title: "skills",
+    title: "education",
+    elements: [
+      {
+        id: "1",
+        title: "University of Montpellier, France",
+        description: "Master 2 in Software Engineering",
+        dates: "September 2023",
+        link: "https://www.umontpellier.fr",
+      },
+      {
+        id: "2",
+        title:
+          "Higher national school of computer science Sidi Bel Abbes (ESI-SBA), Algeria",
+        description: "Engineering degree - Web &. Information Systems",
+        dates: "September 2018",
+        link: "https://www.esi-sba.dz",
+      },
+      {
+        id: "3",
+        title: "Technicum Ahmed Zabana, Algeria",
+        description: "Baccalaureate science",
+        dates: "June 2018",
+      },
+    ],
+  },
+  {
+    title: "Design & Branding",
     elements: [
       {
         id: "1",
@@ -78,40 +71,36 @@ export const topics: TopicType[] = [
       },
       {
         id: "2",
-        title: "Development",
-        description: "Full-Stack Web Development, Oriented solution.",
+        title: "UI/UX Design",
+        description: "Figma, Sketch, Photoshop.",
       },
     ],
   },
   {
-    title: "technical skills",
+    title: "Web Development",
     elements: [
-      {
-        id: "1",
-        title: "Design",
-        description: "Figma, Adobe XD, Sketch, Photoshop.",
-      },
       {
         id: "2",
         title: "Programming languages",
-        description: "JavaScript, TypeScript, Node.js, Java.",
+        description: "JavaScript & TypeScript, Node.js, Java.",
       },
       {
         id: "3",
         title: "Web Development",
         description:
-          "ReactJs, NextJs, Node.js, ExpressJs Redux & RTK, Springboot, HTML5, CSS3, Sass, Tailwind CSS, Prisma.",
+          "Reactjs, Vuejs, Nextjs, Express, Springboot, Redux & RTK, HTML5, CSS3, Tailwind CSS, Jest, GraphQL, MySQL, MongoDB, PostgreSQL, ORMs (e.g., Hibernate, Sequelize, TypeORM, Prisma)",
       },
       {
         id: "4",
         title: "Technologies & Tools",
         description:
-          "Docker, Git & Github, Jenkins, Nginx, Postman, Jira, Trello, LaTeX, MS-Office.",
+          "Docker, Git & Github, Jenkins, Nginx, Postman, Jira, Npm, Maven.",
       },
       {
         id: "5",
         title: "Modeling & Concepts",
-        description: "Design Patterns, POO, SOA, REST API, Microservices, UML.",
+        description:
+          "Agile (Scrum, Kanban), Design Patterns, POO, SOA, REST API, Microservices, UML.",
       },
     ],
   },
