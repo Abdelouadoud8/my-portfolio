@@ -448,6 +448,81 @@ export const projects: Project[] = [
   {
     id: "7",
     role: "UI/UX Designer",
+    title: "Balouta Landing Page",
+    subtitle: "Balouta zari3a, the sunflower seed that awakens every flavor.",
+    description:
+      "Balouta landing page introduces Balouta zari3a, a sunflower seed snack crafted not just for children but for every savory palate. While the page is primarily built to ease the contact with suppliers/distributors, we made sure to weave in the Balouta caracter (Zaki's Rb incfluencer) identity throughout by blending it with the product's specificities, like its range of flavors, so it feels less like a spec sheet and more like an introduction to the brand itself.",
+    coverUrl: "/img/projects/balouta-landing-page/1.png",
+    slug: "balouta-landing-page",
+    topics: [
+      { title: "Date", content: "February - March 2026" },
+      { title: "Agency", content: "Zaki Rb (Influencer)" },
+      { title: "Role", content: "UI/UX Designer" },
+      {
+        title: "Deliverable",
+        content:
+          "Responsive Web UI design, Desktop & Mobile mockups, complete prototype and figma source file.",
+      },
+    ],
+    sections: [
+      {
+        id: "1",
+        title: "The Challenge",
+        subtitle: "Why we did this work?",
+        description:
+          "The idea for this landing page was born when influencer Zaki rb decided to launch his own sunflower seed product. With over 5 million followers, reaching and managing suppliers across the country the old-fashioned way was simply not scalable for him and his team. This landing page was created to put the product and its flavors in the spotlight, attract suppliers, and make it easy to get in touch through a dedicated contact page, all while carrying through the fun, quirky Balouta character and values the influencer is known for in his series.",
+        images: ["/img/projects/balouta-landing-page/2.png"],
+      },
+      {
+        id: "2",
+        title: "Graphic chart",
+        subtitle: "What about the fonts & colors?",
+        description:
+          "For the colors, we used the three flavor colors as primary colors to stay consistent with the packaging and imagery, reinforcing the same branding idea across every touchpoint. For the fonts, we used three different typefaces: one bold font for titles to catch the eye, another for specific typographic accents, and a regular sans-serif font for descriptions and paragraphs.",
+        images: ["/img/projects/balouta-landing-page/3.png"],
+      },
+      {
+        id: "3",
+        title: "The style and audience",
+        subtitle: "Why this style?",
+        description:
+          "Knowing that sunflower seeds are mostly consumed by children, we wanted the website to feel as vivid and lively as possible, using vibrant colors for each flavor along with plenty of fun transitions and animations. At the same time, we kept things a bit formal to speak to suppliers, aiming for a mix that captures the fun, playful spirit of the product while still coming across as a serious, money-making opportunity.",
+        images: [
+          "/img/projects/balouta-landing-page/4.png",
+          "/img/projects/balouta-landing-page/5.gif",
+        ],
+      },
+      {
+        id: "4",
+        title: "The process",
+        subtitle: "What process did we follow?",
+        description:
+          "We followed a three-phase process, from the first sketch to the final pixel. In Discovery, we defined the scope, carried out research, and mapped the user flow to fully understand the product and its audience. In Design, we moved into wireframing, built a consistent design system, and crafted the UI itself. Finally, in Delivery, we brought everything together into a working prototype, ran usability tests, and applied updates based on feedback ensuring a seamless experience that works for everyone.",
+        images: ["/img/projects/balouta-landing-page/6.png"],
+      },
+      {
+        id: "5",
+        title: "UI Design & Prototyping",
+        subtitle: "Screens & prototype",
+        description:
+          "In this section, we showcase several sections of the landing page, along with the responsive mobile version and the adjustments it required. We also had fun putting together some of the animations we used to highlight the flavors.",
+        images: [
+          "/img/projects/balouta-landing-page/7.gif",
+          "/img/projects/balouta-landing-page/8.png",
+          "/img/projects/balouta-landing-page/9.gif",
+          "/img/projects/balouta-landing-page/10.png",
+        ],
+      },
+    ],
+    quote: {
+      author: "Albert Einstein",
+      description:
+        "Look deep into nature, and then you will understand everything better.",
+    },
+  },
+  {
+    id: "8",
+    role: "UI/UX Designer",
     title: "SDZ Travel",
     subtitle: "The easiest way to get your studies visa abroad.",
     link: "https://www.sdztravel.com",
@@ -552,7 +627,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "8",
+    id: "9",
     role: "UI/UX Designer",
     title: "Smart Trans",
     subtitle: "Complete your transactions in seconds with one click!",
