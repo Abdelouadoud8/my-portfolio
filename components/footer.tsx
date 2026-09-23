@@ -5,6 +5,7 @@ import { IconEmail } from "./icons/icon-email";
 import { IconInstagram } from "./icons/icon-instagram";
 import { IconLinkedin } from "./icons/icon-linkedin";
 import { IconTwitter } from "./icons/icon-twitter";
+import { EVENTS, eventAttributes } from "@/lib/analytics";
 
 export default function Footer() {
   const thisYear = new Date();
@@ -52,6 +53,10 @@ export default function Footer() {
             target={href.startsWith("http") ? "_blank" : undefined}
             rel={href.startsWith("http") ? "noreferrer" : undefined}
             title={title}
+            {...eventAttributes(EVENTS.socialClick, {
+              platform: title,
+              location: "footer",
+            })}
           >
             <Icon width={28} height={28} className="text-neutral-90" />
           </a>

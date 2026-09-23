@@ -1,0 +1,136 @@
+# AGENTS.md — Project context for AI assistants
+
+Read this first. It maps the whole repo so you don't need to re-explore it.
+Keep it updated when you add routes, data files, or dependencies.
+
+## What this is
+Personal portfolio of **Mahdaoui Abdelouadoud** (Software Engineer + freelance UI/UX / Product Designer).
+Live at `https://abdelouadoud-portfolio.vercel.app`, deployed on **Vercel (Hobby/free plan)** from `main`.
+Mostly static content, no database, no CMS. All content lives in TypeScript files in `data/`.
+
+## Stack
+- **Next.js 15.3 (App Router)**, React 19, TypeScript 5 (strict), `--turbopack` in dev
+- **Tailwind CSS v4** (CSS-first config in `app/index.css` via `@theme`; there is no `tailwind.config.*`)
+- **shadcn/ui** (style `new-york`, base `zinc`, `components.json`), only `button`, `input`, `label`, `textarea` installed
+- `lucide-react` icons (plus custom SVG icon components in `components/icons/`)
+- **Umami** analytics (primary, see Analytics section) + `@vercel/analytics` (`<Analytics />`, legacy, kept during transition)
+- `nodemailer` (Gmail SMTP) for the contact form
+- **Neon Postgres** (project `winter-forest-95717998`, branch `production`), linked via the `neon` CLI (`.neon/` git-ignored); config in `neon.ts` (`@neon/config`, `@neon/env`). Not yet used by app code. Neon CLI needs Node >=20.19 (`neon skills` needs >=22.20); system Node is 18, use nvm.
+- Font: **Plus Jakarta Sans** via `next/font/google` (the variable is misleadingly named `poppins` / `--font-poppins`)
+- Both `package-lock.json` and `yarn.lock` exist; npm scripts: `dev`, `build`, `start`, `lint`
+
+## Directory map
+```
+app/
+  layout.tsx                 Root layout: metadata/SEO/OpenGraph, font, <Header/>, <main>, <Analytics/>, <Footer/>, <UmamiAnalytics/>
+  index.css                  Tailwind v4 theme tokens (colors, shadows) + shadcn CSS vars
+  page.tsx                   "/" Home (client component): Heading, Projects grid, Clients, Testimonials, ContactCTA
+  about/page.tsx             "/about": GeneralDetails, topics grid (from data/topics.ts), Trailing
+  contact/page.tsx           "/contact": contact info + <ContactForm/>
+  testimonials/page.tsx      "/testimonials": testimonial carousel
+  projects/[slug]/page.tsx   "/projects/:slug": case study, SSG via generateStaticParams from data/projects.ts
+  api/send-email/route.ts    POST, the only backend: sends contact form via Gmail SMTP (nodemailer)
+components/
+  analytics/umami-analytics.tsx  Loads Umami script + global link-click & scroll-depth tracking
+  header.tsx, footer.tsx     Global nav (navItems array) / footer with social links (hardcoded)
+  section-header.tsx         Reusable subtitle (red, uppercase) + title block
+  home/                      heading, projects (grid), project-card, clients (logo grid), client-box, ContactCTA
+  project/                   project-header, project-section (numbered section + images), quote
+  about/                     general-details, topic (used on about AND project pages), trailing
+  contact/contact-form.tsx   Client form, POSTs JSON to /api/send-email, uses alert() for feedback
+  testimonials/              testimonial-caroussel, caroussel-image
+  icons/                     SVG React components (Icon*), icons/logos/ = client logos
+  ui/                        shadcn primitives (button, input w/ label+leftIcon, label, textarea w/ label)
+data/
+  types.ts                   Project, ProjectSectionType, QuoteType, Testimonial, TopicType
+  projects.ts                Array of Project (the main content, ~800 lines)
+  testimonials.ts            Array of Testimonial
+  topics.ts                  About page sections (experience, education, etc.)
+  general.ts                 socialLinks + contacts (NOT currently used by header/footer, which hardcode them)
+lib/utils.ts                 cn() = clsx + tailwind-merge
+lib/analytics.ts             EVENTS (all event names), trackEvent(), eventAttributes()
+public/
+  img/projects/<slug>/       Project images (1.png = cover by convention), gifs, mp4s
+  img/testimonials/          Testimonial avatars
+  files/CV_MAHDAOUI_ABDELOUADOUD.pdf
+  homepicture.jpg, mypicture2.jpeg, logo.svg
+```
+
+## Common tasks
+### Add a project
+1. Put images in `public/img/projects/<slug>/` (`1.png` = cover).
+2. Append an object to `data/projects.ts` matching `Project` in `data/types.ts`:
+   `id, slug, title, subtitle, role, description, coverUrl, link?, topics[{title,content}], sections[{id,title,subtitle,description,images[]}], quote?`
+   - Section `id` is rendered as the big number ("01", "02"…), so use "1", "2", …
+   - `topics` usually: Dates, Role, Client, Deliverables.
+3. The route `/projects/<slug>` and the home grid card are generated automatically. Order in the array = order on the home page.
+
+### Add a testimonial
+Append to `data/testimonials.ts`, avatar in `public/img/testimonials/`.
+
+### Add a page / nav item
+Create `app/<route>/page.tsx`, then add to `navItems` in `components/header.tsx`.
+
+## Analytics (Umami)
+- Page views (incl. client-side navigation) are automatic once the script loads.
+- `components/analytics/umami-analytics.tsx` auto-tracks, for ANY link without `data-umami-event`:
+  `outbound-link-click` {url, domain, text}, `email-click`, `phone-click`, `file-download` {file};
+  plus `scroll-depth` {depth: 50|100} per page.
+- Named events: add the name to `EVENTS` in `lib/analytics.ts`, then either
+  - declaratively: `<a {...eventAttributes(EVENTS.x, { key: "value" })}>` (Umami handles the click), or
+  - imperatively: `trackEvent(EVENTS.x, { ... })` (forms, state changes).
+- Current named events: `nav-click` {item, location}, `project-card-click` {project, location},
+  `project-live-site-click` {project}, `cta-click` {name, location}, `social-click` {platform, location},
+  `cv-download` {location}, `contact-form-start`, `contact-form-submit` {status}, `testimonial-navigate` {direction}.
+- Event data keys must be lowercase kebab-case (they become `data-umami-event-<key>`).
+- Renders nothing if env vars are missing (safe in local dev).
+
+### Umami instance & API
+- Self-hosted Umami: `https://umami-mcp-three.vercel.app` (separate Vercel project, Neon Postgres).
+  Vercel project settings that must stay: Root Directory = repo root (NOT `packages/mcp`),
+  Framework = Next.js, Node 22.x, `APP_SECRET` set.
+- Website "Portfolio" ID: `8e6e63fa-9627-4598-af83-35f1933fc1c5` (domain `abdelouadoud-portfolio.vercel.app`).
+- API auth: `Authorization: Bearer $UMAMI_API_KEY`, base `$UMAMI_API_URL` (both in `.env.local`, never print them).
+  Do NOT call `GET /api/me`: its response echoes the API key.
+- Useful endpoints (dates are ms timestamps `startAt`/`endAt`):
+  `/api/websites/{id}/stats`, `/metrics?type=path|referrer|country|device|browser|os|event|utm_source`,
+  `/pageviews`, `/events`, `/export`, `/goals`, `/funnels`, `POST /reset` (wipes data, keeps goals/funnels).
+- Saved goals: Contact form sent, CV downloaded, Book a call clicked, Live project site opened, Contact page visited.
+- Saved funnels (60 min window): Contact conversion, Home to contact, Project engagement.
+
+## Styling conventions
+- Design tokens (in `app/index.css` `@theme`): `primary` (#e63946 red) with `primary-50…900`,
+  `neutral-5…100` (neutral-100 = #312e43 main text), `secondary-light/medium/dark`, `shadow-top-light`.
+  Use these classes (`text-neutral-100`, `bg-primary`, `text-neutral-70`), not raw hex.
+- Light mode only (dark scheme forced to light).
+- Layout container is in `layout.tsx`: `container mx-auto px-8 sm:px-4 lg:px-16 pt-6 pb-24`.
+- Sections on home separated with `flex flex-col gap-32`.
+- Components are default-exported function components, one per file, kebab-case filenames
+  (exception: `ContactCTA.tsx`). Icons are named exports `IconXxx` taking SVG props.
+- Import alias `@/*` → repo root.
+- `project-section.tsx` uses a plain `<img>` (eslint rule disabled inline) to support gifs; elsewhere use `next/image`.
+
+## Environment variables
+`.env` / `.env.local` (git-ignored; set on Vercel too):
+- `SMTP_EMAIL`: Gmail address that sends and receives contact messages
+- `SMTP_PASSWORD`: Gmail app password
+- `NEXT_PUBLIC_UMAMI_SCRIPT_URL`: Umami tracker URL (e.g. `https://<umami-host>/script.js`)
+- `NEXT_PUBLIC_UMAMI_WEBSITE_ID`: website ID from the Umami dashboard
+- `NEXT_PUBLIC_UMAMI_DOMAINS` (optional): comma-separated hostnames to track (excludes localhost/previews)
+- `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `NEON_BRANCH`: written into `.env` by `neon link` / `neon deploy`
+
+## Known gaps / gotchas
+- No `sitemap.ts`, `robots.ts`, `not-found.tsx`; the unknown project slug renders a bare `<div>` instead of `notFound()`.
+- Per-project `generateMetadata` is missing (every project page has the default title).
+- `openGraph.url` / `authors.url` lack the `https://` protocol; the OG image points at a 256px `_next/image` URL.
+- `send-email` interpolates user input into HTML without escaping, and `from` uses the visitor's email (Gmail rewrites it; `replyTo` would be correct).
+- Social links are duplicated in `footer.tsx`, `data/general.ts`, and contact page.
+- Phone input is `type="number"` (drops leading `+`/`0`).
+- Large mp4 files in `public/` count against the repo and Vercel deploy size; prefer external hosting for video.
+- Vercel Hobby limits: serverless function timeouts, and Vercel Analytics data retention is short with no export.
+
+## Planned direction (from owner, Sept 2026)
+- ~~Long-retention analytics~~: Umami integrated (code done; hosting = self-hosted Umami on Vercel + free Postgres recommended). Remove `@vercel/analytics` once Umami is trusted.
+- Add a **blog** of AI tips/tutorials for a non-technical Instagram audience (reels → DM → blog link).
+- Add a **link-in-bio page** (Linktree-like) with click stats.
+- Preferred approach: keep everything in this one Next.js app under different routes (`/blog`, `/links`), with MDX content in the repo.

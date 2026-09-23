@@ -1,12 +1,14 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { EVENTS, eventAttributes } from "@/lib/analytics";
 
 type ProjectCardProps = {
   coverUrl: string;
   title: string;
   role: string;
   slug: string;
+  location: string;
 };
 
 export default function ProjectCard({
@@ -14,10 +16,15 @@ export default function ProjectCard({
   role,
   coverUrl,
   slug,
+  location,
 }: ProjectCardProps) {
   return (
     <div className="group relative w-full max-w-[47rem] h-[16rem] sm:h-[14rem] lg:h-[16rem] overflow-hidden transition-all duration-300 ease-out">
-      <Link href={`/projects/${slug}`} className="block w-full h-full relative">
+      <Link
+        href={`/projects/${slug}`}
+        className="block w-full h-full relative"
+        {...eventAttributes(EVENTS.projectCardClick, { project: slug, location })}
+      >
         <Image
           src={coverUrl}
           alt={title}

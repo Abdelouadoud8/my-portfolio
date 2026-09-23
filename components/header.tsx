@@ -5,6 +5,7 @@ import Link from "next/link";
 import { IconMenu } from "./icons/icon-menu";
 import { IconClose } from "./icons/icon-close";
 import { Logo } from "./icons/logo";
+import { EVENTS, eventAttributes } from "@/lib/analytics";
 
 const navItems = [
   { title: "Work", href: "/" },
@@ -20,7 +21,13 @@ export default function Header() {
   return (
     <header className="bg-white px-6 py-6 md:px-16 md:py-8">
       <div className="w-full flex flex-row justify-between items-center overflow-hidden">
-        <Link href="/">
+        <Link
+          href="/"
+          {...eventAttributes(EVENTS.navClick, {
+            item: "Logo",
+            location: "header",
+          })}
+        >
           <Logo className="text-primary" width={256} height={48} />
         </Link>
 
@@ -39,7 +46,14 @@ export default function Header() {
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <Link key={item.href} href={item.href}>
+              <Link
+                key={item.href}
+                href={item.href}
+                {...eventAttributes(EVENTS.navClick, {
+                  item: item.title,
+                  location: "header",
+                })}
+              >
                 <p
                   className={`text-sm uppercase font-semibold ${
                     isActive
@@ -65,6 +79,10 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
+                {...eventAttributes(EVENTS.navClick, {
+                  item: item.title,
+                  location: "mobile-menu",
+                })}
               >
                 <p
                   className={`text-sm uppercase font-semibold ${

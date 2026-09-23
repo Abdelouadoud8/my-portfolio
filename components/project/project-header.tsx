@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { IconOpenInNewTab } from "../icons/icon-open-new-tab";
+import { EVENTS, eventAttributes } from "@/lib/analytics";
 
 type ProjectHeaderProps = {
   title: string;
@@ -32,11 +33,18 @@ export default function ProjectHeader({
         {description}
       </p>
       {link && (
-        <a href={link} target="_blank">
-          <Button className="mt-4">
+        <Button asChild className="mt-4">
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...eventAttributes(EVENTS.projectLiveSiteClick, {
+              project: title,
+            })}
+          >
             View live website <IconOpenInNewTab className=" text-white" />
-          </Button>
-        </a>
+          </a>
+        </Button>
       )}
     </div>
   );

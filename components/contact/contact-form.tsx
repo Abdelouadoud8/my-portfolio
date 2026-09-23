@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { EVENTS, trackEvent } from "@/lib/analytics";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import { Input } from "../ui/input";
@@ -24,8 +25,13 @@ type ContactFormProps = {
 export default function ContactForm({ title, className }: ContactFormProps) {
   const [formData, setFormData] = useState(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
+  const hasStarted = useRef(false);
 
   const handleChange = (field: string, value: string) => {
+    if (!hasStarted.current) {
+      hasStarted.current = true;
+      trackEvent(EVENTS.contactFormStart);
+    }
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -42,6 +48,10 @@ export default function ContactForm({ title, className }: ContactFormProps) {
         body: JSON.stringify(formData),
       });
 
+      trackEvent(EVENTS.contactFormSubmit, {
+        status: res.ok ? "success" : "error",
+      });
+
       if (res.ok) {
         alert(
           "Your message has been successfully sent. I will get back to you soon!"
@@ -51,6 +61,7 @@ export default function ContactForm({ title, className }: ContactFormProps) {
         alert("Your message could not be sent. Please try again later");
       }
     } catch (e) {
+      trackEvent(EVENTS.contactFormSubmit, { status: "network-error" });
       alert("Your message could not be sent. Please try again later");
       console.log(e);
     } finally {

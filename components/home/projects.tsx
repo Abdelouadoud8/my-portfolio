@@ -1,7 +1,11 @@
 import { projects } from "@/data/projects";
 import ProjectCard from "./project-card";
 
-export default function Projects() {
+type ProjectsProps = {
+  location?: string;
+};
+
+export default function Projects({ location = "home" }: ProjectsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-0">
       {projects.map((project) => (
@@ -11,6 +15,7 @@ export default function Projects() {
           role={project.role}
           coverUrl={project.coverUrl}
           slug={project.slug}
+          location={location}
         />
       ))}
     </div>

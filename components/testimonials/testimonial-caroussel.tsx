@@ -3,16 +3,19 @@ import { testimonials } from "@/data/testimonials";
 import { IconLeftArrow } from "@/components/icons/icon-arrow-left";
 import { IconRightArrow } from "@/components/icons/icon-arrow-right";
 import CarousselImage from "./caroussel-image";
+import { EVENTS, trackEvent } from "@/lib/analytics";
 
 export default function TestimonialCaroussel() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    trackEvent(EVENTS.testimonialNavigate, { direction: "next" });
   };
 
   const previousTestimonial = () => {
     setCurrentIndex((prev) => (prev === 0 ? 0 : prev - 1));
+    trackEvent(EVENTS.testimonialNavigate, { direction: "previous" });
   };
 
   const testimonial = testimonials[currentIndex];

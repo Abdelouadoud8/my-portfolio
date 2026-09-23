@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { socialLinks, contacts } from "@/data/general";
+import { EVENTS, eventAttributes } from "@/lib/analytics";
 
 export default function Trailing() {
   return (
@@ -16,6 +17,10 @@ export default function Trailing() {
                   href={href}
                   target="_blank"
                   rel="noreferrer"
+                  {...eventAttributes(EVENTS.socialClick, {
+                    platform: title,
+                    location: "about",
+                  })}
                 >
                   {title}
                 </a>
@@ -38,11 +43,12 @@ export default function Trailing() {
         </ul>
       </div>
       <div className="self-start">
-        <Button>
+        <Button asChild>
           <a
             href="/files/CV_MAHDAOUI_ABDELOUADOUD.pdf"
             target="_blank"
             download="CV_MAHDAOUI_ABDELOUADOUD.pdf"
+            {...eventAttributes(EVENTS.cvDownload, { location: "about" })}
           >
             Download CV
           </a>

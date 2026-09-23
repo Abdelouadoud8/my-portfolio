@@ -70,7 +70,7 @@ export default async function ProjectPage({ params }: Props) {
       )}
 
       <SectionHeader title="Check more of my projects" subtitle="Projects" />
-      <Projects />
+      <Projects location="project-page" />
     </div>
   );
 }

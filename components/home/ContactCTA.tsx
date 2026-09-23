@@ -3,6 +3,7 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { EVENTS, eventAttributes } from "@/lib/analytics";
 
 export default function ContactCTA() {
   const router = useRouter();
@@ -17,6 +18,10 @@ export default function ContactCTA() {
           router.push("/contact");
         }}
         className="w-full sm:w-fit"
+        {...eventAttributes(EVENTS.ctaClick, {
+          name: "book-a-call",
+          location: "home",
+        })}
       >
         Book a call
       </Button>
