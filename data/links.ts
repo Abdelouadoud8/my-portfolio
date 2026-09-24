@@ -52,4 +52,23 @@ export const linksSocials: SocialLink[] = [
 // `stats` are optional, each one is hidden when missing (views/shares are only in your Instagram insights).
 // `href` = the Instagram reel, or later the blog post with the detailed steps.
 // The section is hidden while this list is empty.
-export const featuredReels: FeaturedReel[] = [];
+export const featuredReels: FeaturedReel[] = [
+  {
+    id: "Dde4utyo5Jd",
+    title: "إختصارات لازم أي طالب يعرفها",
+    description: "4 إختصارات chatgpt راح تبدلك طريقة دراستك",
+    imageUrl: "/img/reels/Dde4utyo5Jd.png",
+    href: "https://www.instagram.com/p/Dde4utyo5Jd/",
+    tag: "AI",
+    stats: { views: 277000, likes: 5607, comments: 2402 },
+  },
+  {
+    id: "DdkE4G5IkeH",
+    title: "واش يعرف chatgpt عليك",
+    description: "جرب هاذ الصورة مع البرومبت و بارطاجي معانا النتيجة تاعك",
+    imageUrl: "/img/reels/HSeqknYXYAAqWxd.png",
+    href: "https://www.instagram.com/reel/DdkE4G5IkeH/",
+    tag: "AI",
+    stats: { views: 88300, likes: 2911, comments: 135 },
+  },
+];
