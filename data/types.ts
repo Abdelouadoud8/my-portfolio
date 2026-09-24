@@ -47,4 +47,60 @@ type TopicType = {
   className?: string;
 };
 
-export type { Project, ProjectSectionType, QuoteType, Testimonial, TopicType };
+type SocialPlatform =
+  | "instagram"
+  | "tiktok"
+  | "linkedin"
+  | "snapchat"
+  | "telegram"
+  | "youtube"
+  | "github"
+  | "x"
+  | "whatsapp"
+  | "email";
+
+type SocialLink = {
+  platform: SocialPlatform;
+  label: string;
+  handle?: string;
+  href?: string;
+  followers?: number;
+  comingSoon?: boolean;
+};
+
+type ReelStats = {
+  views?: number;
+  likes?: number;
+  comments?: number;
+  shares?: number;
+};
+
+type FeaturedReel = {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  href: string;
+  tag?: string;
+  stats?: ReelStats;
+};
+
+type LinksProfile = {
+  name: string;
+  tagline: string;
+  bio: string;
+  imageUrl: string;
+};
+
+export type {
+  Project,
+  ProjectSectionType,
+  QuoteType,
+  Testimonial,
+  TopicType,
+  SocialPlatform,
+  SocialLink,
+  FeaturedReel,
+  ReelStats,
+  LinksProfile,
+};

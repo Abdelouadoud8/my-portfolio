@@ -17,6 +17,7 @@ export const EVENTS = {
   contactFormStart: "contact-form-start",
   contactFormSubmit: "contact-form-submit",
   testimonialNavigate: "testimonial-navigate",
+  reelClick: "reel-click",
   outboundLinkClick: "outbound-link-click",
   emailClick: "email-click",
   phoneClick: "phone-click",

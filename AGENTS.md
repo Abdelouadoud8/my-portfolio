@@ -30,6 +30,7 @@ app/
     contact/page.tsx         "/contact": contact info + <ContactForm/>
     testimonials/page.tsx    "/testimonials": testimonial carousel
     projects/[slug]/page.tsx "/projects/:slug": case study, SSG via generateStaticParams from data/projects.ts
+  links/page.tsx             "/links": link-in-bio page (no portfolio header, keeps <Footer/>), content from data/links.ts
   api/send-email/route.ts    POST, the only backend: sends contact form via Gmail SMTP (nodemailer)
 components/
   analytics/umami-analytics.tsx  Loads Umami script + global link-click & scroll-depth tracking
@@ -38,6 +39,7 @@ components/
   home/                      heading, projects (grid), project-card, clients (logo grid), client-box, ContactCTA
   project/                   project-header, project-section (numbered section + images), quote
   about/                     general-details, topic (used on about AND project pages), trailing
+  links/                     links-profile, social-link-button (platform→icon map), reel-card
   contact/contact-form.tsx   Client form, POSTs JSON to /api/send-email, uses alert() for feedback
   testimonials/              testimonial-caroussel, caroussel-image
   icons/                     SVG React components (Icon*), icons/logos/ = client logos
@@ -47,6 +49,7 @@ data/
   projects.ts                Array of Project (the main content, ~800 lines)
   testimonials.ts            Array of Testimonial
   topics.ts                  About page sections (experience, education, etc.)
+  links.ts                   /links content: linksProfile, linksSocials, featuredReels
   general.ts                 socialLinks + contacts (NOT currently used by header/footer, which hardcode them)
 lib/utils.ts                 cn() = clsx + tailwind-merge
 lib/analytics.ts             EVENTS (all event names), trackEvent(), eventAttributes()
@@ -73,6 +76,21 @@ Append to `data/testimonials.ts`, avatar in `public/img/testimonials/`.
 Create `app/(site)/<route>/page.tsx` (gets header/footer), then add to `navItems` in `components/header.tsx`.
 Standalone pages without portfolio chrome go directly in `app/<route>/`.
 
+### Update the /links page (link in bio)
+Everything is in `data/links.ts`:
+- `linksSocials`: order = display order; no `href` → hidden; `comingSoon: true` → greyed "Soon" item.
+  `followers` (number, optional) is shown compact on the right (6606 → 6.6K); updated by hand.
+  Public counts readable without API: Instagram (og:description with a link-preview user agent), TikTok
+  (`followerCount` in page JSON). Snapchat count is hidden (0) and LinkedIn blocks bots (HTTP 999).
+  New platform: add it to `SocialPlatform` (data/types.ts) and to `platformIcons` in
+  `components/links/social-link-button.tsx` (icons are Phosphor duotone, viewBox 256).
+- `featuredReels`: newest first; thumbnail in `public/img/reels/` (9:16 portrait); section hidden when empty.
+  Vertical cards (single reel = centered half-width). Optional `stats` {views, likes, comments, shares},
+  each hidden when missing; views overlay the image, the others show under the title (lucide icons).
+  Only likes/comments are public on Instagram; views/shares come from the owner's insights.
+  `formatCompact()` in `lib/utils.ts` formats all counts (6606 → 6.6K).
+- Clicks are tracked: `social-click` {platform, location: "links"}, `reel-click` {reel: id, location: "links"}.
+
 ## Analytics (Umami)
 - Page views (incl. client-side navigation) are automatic once the script loads.
 - `components/analytics/umami-analytics.tsx` auto-tracks, for ANY link without `data-umami-event`:
@@ -83,7 +101,8 @@ Standalone pages without portfolio chrome go directly in `app/<route>/`.
   - imperatively: `trackEvent(EVENTS.x, { ... })` (forms, state changes).
 - Current named events: `nav-click` {item, location}, `project-card-click` {project, location},
   `project-live-site-click` {project}, `cta-click` {name, location}, `social-click` {platform, location},
-  `cv-download` {location}, `contact-form-start`, `contact-form-submit` {status}, `testimonial-navigate` {direction}.
+  `cv-download` {location}, `contact-form-start`, `contact-form-submit` {status}, `testimonial-navigate` {direction},
+  `reel-click` {reel, location}.
 - Event data keys must be lowercase kebab-case (they become `data-umami-event-<key>`).
 - Renders nothing if env vars are missing, or on Vercel preview deployments.
 - Umami records the hostname per visit: `/metrics?type=hostname` compares the portfolio's aliases.
@@ -141,5 +160,5 @@ Standalone pages without portfolio chrome go directly in `app/<route>/`.
 ## Planned direction (from owner, Sept 2026)
 - ~~Long-retention analytics~~: Umami integrated (code done; hosting = self-hosted Umami on Vercel + free Postgres recommended). Remove `@vercel/analytics` once Umami is trusted.
 - Add a **blog** of AI tips/tutorials for a non-technical Instagram audience (reels → DM → blog link).
-- Add a **link-in-bio page** (Linktree-like) with click stats.
+- ~~Link-in-bio page~~: done at `/links` (data/links.ts).
 - Preferred approach: keep everything in this one Next.js app under different routes (`/blog`, `/links`), with MDX content in the repo.
