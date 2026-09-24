@@ -131,10 +131,10 @@ Everything is in `data/links.ts`:
   once real visitors exist. Session ID = hash(IP + user agent), so the same browser on two domains is one session.
 - Custom **"Links page" tab** in the Umami fork (github.com/Abdelouadoud8/umami, local clone `~/Desktop/umami`,
   folder `src/app/(main)/websites/[websiteId]/link-page/`): cards for /links visits, top social link, top reel,
-  top source + visits chart + clicks chart/table. It filters on the event names `links-<platform>-click`,
+  top source (name shown in a tag) + visits chart + one bar chart per social link and per reel + ranking table. It filters on the event names `links-<platform>-click`,
   `reel-<id>`, `visit-from-<source>` and path `/links`: if you rename these events or the /links route,
   update `linkPageQueries.ts` in the fork too. When syncing the fork with upstream Umami, keep that folder and
-  the small edits in `useWebsiteNavItems.tsx`, `EventsChart.tsx` (`params` prop), `useWebsiteEventsSeriesQuery.ts`.
+  the menu entry in `src/components/hooks/useWebsiteNavItems.tsx` (the only edited core file).
 - Saved goals: Contact form sent, CV downloaded, Book a call clicked, Live project site opened, Contact page visited.
 - Saved funnels (60 min window): Contact conversion, Home to contact, Project engagement.
 
