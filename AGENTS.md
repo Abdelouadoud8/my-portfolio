@@ -83,7 +83,8 @@ Create `app/<route>/page.tsx`, then add to `navItems` in `components/header.tsx`
   `project-live-site-click` {project}, `cta-click` {name, location}, `social-click` {platform, location},
   `cv-download` {location}, `contact-form-start`, `contact-form-submit` {status}, `testimonial-navigate` {direction}.
 - Event data keys must be lowercase kebab-case (they become `data-umami-event-<key>`).
-- Renders nothing if env vars are missing (safe in local dev).
+- Renders nothing if env vars are missing, or on Vercel preview deployments.
+- Umami records the hostname per visit: `/metrics?type=hostname` compares the portfolio's aliases.
 
 ### Umami instance & API
 - Self-hosted Umami: `https://umami-mcp-three.vercel.app` (separate Vercel project, Neon Postgres).
@@ -116,7 +117,9 @@ Create `app/<route>/page.tsx`, then add to `navItems` in `components/header.tsx`
 - `SMTP_PASSWORD`: Gmail app password
 - `NEXT_PUBLIC_UMAMI_SCRIPT_URL`: Umami tracker URL (e.g. `https://<umami-host>/script.js`)
 - `NEXT_PUBLIC_UMAMI_WEBSITE_ID`: website ID from the Umami dashboard
-- `NEXT_PUBLIC_UMAMI_DOMAINS` (optional): comma-separated hostnames to track (excludes localhost/previews)
+- `NEXT_PUBLIC_UMAMI_DOMAINS` (optional): comma-separated hostname allowlist. Keep it UNSET on Vercel so all
+  production aliases (abdelouadoud-portfolio / abdelouadoud-mahdaoui .vercel.app) are tracked; set in `.env.local`
+  to keep localhost out. Preview deployments are skipped via Vercel's automatic `NEXT_PUBLIC_VERCEL_ENV`.
 - `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `NEON_BRANCH`: written into `.env` by `neon link` / `neon deploy`
 
 ## Known gaps / gotchas

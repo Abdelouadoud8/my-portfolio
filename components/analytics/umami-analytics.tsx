@@ -7,7 +7,10 @@ import { EVENTS, trackEvent } from "@/lib/analytics";
 
 const scriptUrl = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL;
 const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
+// Optional hostname allowlist. Leave unset on Vercel so every production alias is tracked.
 const domains = process.env.NEXT_PUBLIC_UMAMI_DOMAINS;
+// Set automatically by Vercel ("production" | "preview" | "development"); undefined locally.
+const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV;
 
 const SCROLL_MILESTONES = [50, 100];
 const FILE_EXTENSIONS = /\.(pdf|zip|docx?|pptx?|xlsx?)$/i;
@@ -80,12 +83,14 @@ export default function UmamiAnalytics() {
   useScrollDepth(pathname);
 
   if (!scriptUrl || !websiteId) return null;
+  // Never count preview deployments
+  if (vercelEnv && vercelEnv !== "production") return null;
 
   return (
     <Script
       src={scriptUrl}
       data-website-id={websiteId}
-      data-domains={domains}
+      data-domains={domains || undefined}
       strategy="afterInteractive"
     />
   );
