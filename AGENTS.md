@@ -15,7 +15,6 @@ Mostly static content, no database, no CMS. All content lives in TypeScript file
 - `lucide-react` icons (plus custom SVG icon components in `components/icons/`)
 - **Umami** analytics (primary, see Analytics section) + `@vercel/analytics` (`<Analytics />`, legacy, kept during transition)
 - `nodemailer` (Gmail SMTP) for the contact form
-- **Neon Postgres** (project `winter-forest-95717998`, branch `production`), linked via the `neon` CLI (`.neon/` git-ignored); config in `neon.ts` (`@neon/config`, `@neon/env`). Not yet used by app code. Neon CLI needs Node >=20.19 (`neon skills` needs >=22.20); system Node is 18, use nvm.
 - Font: **Plus Jakarta Sans** via `next/font/google` (the variable is misleadingly named `poppins` / `--font-poppins`)
 - Both `package-lock.json` and `yarn.lock` exist; npm scripts: `dev`, `build`, `start`, `lint`
 
@@ -96,6 +95,10 @@ Create `app/<route>/page.tsx`, then add to `navItems` in `components/header.tsx`
 - Useful endpoints (dates are ms timestamps `startAt`/`endAt`):
   `/api/websites/{id}/stats`, `/metrics?type=path|referrer|country|device|browser|os|event|utm_source`,
   `/pageviews`, `/events`, `/export`, `/goals`, `/funnels`, `POST /reset` (wipes data, keeps goals/funnels).
+- Testing on production without polluting stats: visit with `?utm_source=claude-test`, then list
+  `/sessions` (note: utm filters are ignored there; identify by browser/os/time) and
+  `DELETE /api/websites/{id}/sessions/{sessionId}` (removes the session + its events). Never `POST /reset`
+  once real visitors exist. Session ID = hash(IP + user agent), so the same browser on two domains is one session.
 - Saved goals: Contact form sent, CV downloaded, Book a call clicked, Live project site opened, Contact page visited.
 - Saved funnels (60 min window): Contact conversion, Home to contact, Project engagement.
 
