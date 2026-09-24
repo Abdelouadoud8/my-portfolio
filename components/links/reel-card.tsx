@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { Eye, Heart, MessageCircle, Play, Send } from "lucide-react";
 import { FeaturedReel } from "@/data/types";
-import { EVENTS, eventAttributes } from "@/lib/analytics";
+import { DYNAMIC_EVENTS, eventAttributes } from "@/lib/analytics";
 import { formatCompact } from "@/lib/utils";
 
 export default function ReelCard({
@@ -26,7 +26,10 @@ export default function ReelCard({
       target="_blank"
       rel="noopener noreferrer"
       className="group flex flex-col gap-2"
-      {...eventAttributes(EVENTS.reelClick, { reel: id, location: "links" })}
+      {...eventAttributes(DYNAMIC_EVENTS.reelClick(id), {
+        reel: id,
+        location: "links",
+      })}
     >
       <div className="relative aspect-[9/16] w-full overflow-hidden rounded-lg bg-neutral-10">
         <Image

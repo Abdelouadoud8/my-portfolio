@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { socialLinks, contacts } from "@/data/general";
-import { EVENTS, eventAttributes } from "@/lib/analytics";
+import { DYNAMIC_EVENTS, EVENTS, eventAttributes } from "@/lib/analytics";
 
 export default function Trailing() {
   return (
@@ -17,10 +17,13 @@ export default function Trailing() {
                   href={href}
                   target="_blank"
                   rel="noreferrer"
-                  {...eventAttributes(EVENTS.socialClick, {
-                    platform: title,
-                    location: "about",
-                  })}
+                  {...eventAttributes(
+                    DYNAMIC_EVENTS.socialClick(title, "about"),
+                    {
+                      platform: title,
+                      location: "about",
+                    },
+                  )}
                 >
                   {title}
                 </a>

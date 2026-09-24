@@ -89,20 +89,28 @@ Everything is in `data/links.ts`:
   each hidden when missing; views overlay the image, the others show under the title (lucide icons).
   Only likes/comments are public on Instagram; views/shares come from the owner's insights.
   `formatCompact()` in `lib/utils.ts` formats all counts (6606 → 6.6K).
-- Clicks are tracked: `social-click` {platform, location: "links"}, `reel-click` {reel: id, location: "links"}.
+- Clicks are tracked as `links-<platform>-click` and `reel-<id>` (see Analytics).
 
 ## Analytics (Umami)
 - Page views (incl. client-side navigation) are automatic once the script loads.
 - `components/analytics/umami-analytics.tsx` auto-tracks, for ANY link without `data-umami-event`:
   `outbound-link-click` {url, domain, text}, `email-click`, `phone-click`, `file-download` {file};
   plus `scroll-depth` {depth: 50|100} per page.
+- Per-item events (built by `DYNAMIC_EVENTS` in `lib/analytics.ts`, names max 50 chars):
+  - `<location>-<platform>-click` for social links, e.g. `links-instagram-click`, `footer-x-click`,
+    `about-github-click` (props: platform, location)
+  - `reel-<id>` for reel cards, e.g. `reel-Dde4utyo5Jd` (props: reel, location)
+  - `visit-from-<source>` once per browser session (sessionStorage), e.g. `visit-from-instagram`,
+    `visit-from-google`, `visit-from-direct` (props: source, via = utm | in-app-browser | referrer | direct,
+    landing). Priority: `utm_source` > in-app browser user agent (Instagram/TikTok/Snapchat/LinkedIn/
+    Facebook/X send no referrer) > referrer domain > direct.
 - Named events: add the name to `EVENTS` in `lib/analytics.ts`, then either
   - declaratively: `<a {...eventAttributes(EVENTS.x, { key: "value" })}>` (Umami handles the click), or
   - imperatively: `trackEvent(EVENTS.x, { ... })` (forms, state changes).
 - Current named events: `nav-click` {item, location}, `project-card-click` {project, location},
-  `project-live-site-click` {project}, `cta-click` {name, location}, `social-click` {platform, location},
-  `cv-download` {location}, `contact-form-start`, `contact-form-submit` {status}, `testimonial-navigate` {direction},
-  `reel-click` {reel, location}.
+  `project-live-site-click` {project}, `cta-click` {name, location},
+  `cv-download` {location}, `contact-form-start`, `contact-form-submit` {status}, `testimonial-navigate` {direction}.
+  (Before 2026-09-25 social/reel clicks were logged as `social-click` / `reel-click` with the same props.)
 - Event data keys must be lowercase kebab-case (they become `data-umami-event-<key>`).
 - Renders nothing if env vars are missing, or on Vercel preview deployments.
 - Umami records the hostname per visit: `/metrics?type=hostname` compares the portfolio's aliases.

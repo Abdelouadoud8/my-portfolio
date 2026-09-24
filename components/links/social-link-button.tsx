@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowUpRight } from "lucide-react";
 import { SocialLink, SocialPlatform } from "@/data/types";
-import { EVENTS, eventAttributes } from "@/lib/analytics";
+import { DYNAMIC_EVENTS, eventAttributes } from "@/lib/analytics";
 import { formatCompact } from "@/lib/utils";
 import { IconProps } from "../icons/icon-arrow-right";
 import { IconInstagram } from "../icons/icon-instagram";
@@ -74,7 +74,10 @@ export default function SocialLinkButton({
       target="_blank"
       rel="noopener noreferrer"
       className={`group ${baseClassName} transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-primary hover:shadow-[0_6px_20px_rgba(230,57,70,0.12)]`}
-      {...eventAttributes(EVENTS.socialClick, { platform: label, location: "links" })}
+      {...eventAttributes(DYNAMIC_EVENTS.socialClick(platform, "links"), {
+        platform: label,
+        location: "links",
+      })}
     >
       {content}
       {followers !== undefined && (
@@ -82,7 +85,7 @@ export default function SocialLinkButton({
           className="shrink-0 text-sm font-semibold text-neutral-80"
           title={`${followers.toLocaleString("en")} followers`}
         >
-          {formatCompact(followers)}
+          {` + ${formatCompact(followers)}`}
         </span>
       )}
       <ArrowUpRight className="size-4 shrink-0 text-neutral-30 transition-colors group-hover:text-primary" />
