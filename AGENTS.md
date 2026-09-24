@@ -21,13 +21,15 @@ Mostly static content, no database, no CMS. All content lives in TypeScript file
 ## Directory map
 ```
 app/
-  layout.tsx                 Root layout: metadata/SEO/OpenGraph, font, <Header/>, <main>, <Analytics/>, <Footer/>, <UmamiAnalytics/>
+  layout.tsx                 Root layout: html/body, metadata/SEO/OpenGraph, font, <Analytics/>, <UmamiAnalytics/>
   index.css                  Tailwind v4 theme tokens (colors, shadows) + shadcn CSS vars
-  page.tsx                   "/" Home (client component): Heading, Projects grid, Clients, Testimonials, ContactCTA
-  about/page.tsx             "/about": GeneralDetails, topics grid (from data/topics.ts), Trailing
-  contact/page.tsx           "/contact": contact info + <ContactForm/>
-  testimonials/page.tsx      "/testimonials": testimonial carousel
-  projects/[slug]/page.tsx   "/projects/:slug": case study, SSG via generateStaticParams from data/projects.ts
+  (site)/                    Route group = portfolio pages WITH header/footer (group name not in URL)
+    layout.tsx               <Header/>, <main container>, <Footer/>
+    page.tsx                 "/" Home (client component): Heading, Projects grid, Clients, Testimonials, ContactCTA
+    about/page.tsx           "/about": GeneralDetails, topics grid (from data/topics.ts), Trailing
+    contact/page.tsx         "/contact": contact info + <ContactForm/>
+    testimonials/page.tsx    "/testimonials": testimonial carousel
+    projects/[slug]/page.tsx "/projects/:slug": case study, SSG via generateStaticParams from data/projects.ts
   api/send-email/route.ts    POST, the only backend: sends contact form via Gmail SMTP (nodemailer)
 components/
   analytics/umami-analytics.tsx  Loads Umami script + global link-click & scroll-depth tracking
@@ -68,7 +70,8 @@ public/
 Append to `data/testimonials.ts`, avatar in `public/img/testimonials/`.
 
 ### Add a page / nav item
-Create `app/<route>/page.tsx`, then add to `navItems` in `components/header.tsx`.
+Create `app/(site)/<route>/page.tsx` (gets header/footer), then add to `navItems` in `components/header.tsx`.
+Standalone pages without portfolio chrome go directly in `app/<route>/`.
 
 ## Analytics (Umami)
 - Page views (incl. client-side navigation) are automatic once the script loads.

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./index.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import UmamiAnalytics from "@/components/analytics/umami-analytics";
@@ -69,12 +67,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.className}>
       <body className="background-white">
-        <Header />
-        <main className="container mx-auto px-8 sm:px-4 lg:px-16 pt-6 pb-24">
-          {children}
-          <Analytics />
-        </main>
-        <Footer />
+        {children}
+        <Analytics />
         <UmamiAnalytics />
       </body>
     </html>
