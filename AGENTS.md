@@ -134,9 +134,32 @@ Everything is in `data/links.ts`:
   top source (name shown in a tag) + visits chart + one bar chart per social link and per reel + ranking table. It filters on the event names `links-<platform>-click`,
   `reel-<id>`, `visit-from-<source>` and path `/links`: if you rename these events or the /links route,
   update `linkPageQueries.ts` in the fork too. When syncing the fork with upstream Umami, keep that folder and
-  the menu entry in `src/components/hooks/useWebsiteNavItems.tsx` (the only edited core file).
+  the Instagram tab/API folders and the menu entries in `src/components/hooks/useWebsiteNavItems.tsx` (the only edited core file).
 - Saved goals: Contact form sent, CV downloaded, Book a call clicked, Live project site opened, Contact page visited.
 - Saved funnels (60 min window): Contact conversion, Home to contact, Project engagement.
+
+## Automations: Instagram daily stats (`automations/instagram-stats/`)
+- Neon Function **`igstats`** hosted in the Frankfurt project **`portfolio-automations`** (`young-wildflower-73641515`,
+  branch `br-steep-resonance-b1bwn48v`) because Neon Functions aren't offered in eu-west-2 (London), where the
+  stats DB (`my-portfolio` / `winter-forest-95717998`, the Umami DB) lives. It writes to the London DB through the
+  `STATS_DATABASE_URL` env var. Not part of the Next.js app (excluded in `tsconfig.json`; own `package.json`, esbuild).
+- Schedule: **23:59 Europe/Paris**, records `stat_date` = that day. Neon cron is UTC only, so two triggers fire at
+  21:59 and 22:59 UTC; the handler only works when it's 23:xx in Paris (handles DST).
+- Data: Instagram API with Instagram Login (graph.instagram.com v25.0): `/me?fields=followers_count` +
+  `/me/insights?metric=follower_demographics&breakdown=gender` (counts F/M/U, can lag up to 48h, needs a
+  professional account and `instagram_business_manage_insights`). Meta app in development mode, own account only.
+- Tables (London DB, schema `social_stats`, separate from Umami's `public` tables):
+  `instagram_daily` (stat_date PK, followers_count, new_followers = net change, male/female_percentage = share of
+  known genders, new_male/female_followers = net change, raw male/female/unknown counts) and `instagram_token`
+  (single row; the function refreshes the 60-day token when < 20 days remain). Upsert per day: the 23:59 run wins.
+- Scripts (read `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `STATS_DATABASE_URL` from `.env.local`, never print them;
+  shared IDs in `neon-api.sh`): `./deploy.sh` bundles + deploys; `./run.sh` = dry run for today, `./run.sh --save`.
+- Endpoints: `POST /` (trigger only, requires `x-neon-trigger-invocation-id`), `POST /run?dryRun=1&date=YYYY-MM-DD`
+  (Bearer RUN_SECRET).
+- Displayed in the Umami fork's **"Instagram" tab** (`src/app/(main)/websites/[websiteId]/instagram/`, API route
+  `src/app/api/websites/[websiteId]/instagram-stats/route.ts` querying `social_stats.instagram_daily`): doughnut +
+  horizontal bar of women/men % (latest row with gender) and a table of all days. Renaming table columns breaks it.
+- History before 2026-09-26 was entered by hand (followers only, dated as noted: counts taken ~00:01 that day).
 
 ## Styling conventions
 - Design tokens (in `app/index.css` `@theme`): `primary` (#e63946 red) with `primary-50…900`,
@@ -159,7 +182,7 @@ Everything is in `data/links.ts`:
 - `NEXT_PUBLIC_UMAMI_DOMAINS` (optional): comma-separated hostname allowlist. Keep it UNSET on Vercel so all
   production aliases (abdelouadoud-portfolio / abdelouadoud-mahdaoui .vercel.app) are tracked; set in `.env.local`
   to keep localhost out. Preview deployments are skipped via Vercel's automatic `NEXT_PUBLIC_VERCEL_ENV`.
-- `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `NEON_BRANCH`: written into `.env` by `neon link` / `neon deploy`
+- `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `STATS_DATABASE_URL`: used only by `automations/instagram-stats/*.sh` (not the website)
 
 ## Known gaps / gotchas
 - No `sitemap.ts`, `robots.ts`, `not-found.tsx`; the unknown project slug renders a bare `<div>` instead of `notFound()`.

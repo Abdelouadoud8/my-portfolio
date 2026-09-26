@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# automations (Neon Functions) build output
+automations/**/node_modules
+automations/**/dist
+automations/**/function.zip
