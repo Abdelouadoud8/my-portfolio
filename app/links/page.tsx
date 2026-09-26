@@ -3,6 +3,7 @@ import LinksProfile from "@/components/links/links-profile";
 import SocialLinkButton from "@/components/links/social-link-button";
 import ReelCard from "@/components/links/reel-card";
 import { featuredReels, linksProfile, linksSocials } from "@/data/links";
+import { getInstagramFollowers } from "@/lib/instagram-followers";
 import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
@@ -10,9 +11,19 @@ export const metadata: Metadata = {
   description: `${linksProfile.tagline} by ${linksProfile.name}: socials and featured reels with detailed steps.`,
 };
 
+// Regenerated at most once a day to pick up the latest Instagram follower count
+export const revalidate = 86400;
+
 // Link-in-bio page. Lives outside the (site) group: no portfolio header, but keeps the footer.
-export default function LinksPage() {
-  const socials = linksSocials.filter((link) => link.comingSoon || link.href);
+export default async function LinksPage() {
+  const instagramFollowers = await getInstagramFollowers();
+  const socials = linksSocials
+    .filter((link) => link.comingSoon || link.href)
+    .map((link) =>
+      link.platform === "instagram" && instagramFollowers
+        ? { ...link, followers: instagramFollowers }
+        : link
+    );
 
   return (
     <div className="flex min-h-dvh flex-col">

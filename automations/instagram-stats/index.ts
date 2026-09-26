@@ -189,6 +189,21 @@ app.post("/", async (c) => {
   return c.json({ ok: true, row });
 });
 
+// Public, read-only: latest follower count (already public on the Instagram profile).
+// Used by the portfolio's /links page, which refreshes it once a day.
+app.get("/public/instagram", async (c) => {
+  const [row] = (await sql`
+    SELECT to_char(stat_date, 'YYYY-MM-DD') AS date, followers_count AS followers
+    FROM social_stats.instagram_daily
+    ORDER BY stat_date DESC
+    LIMIT 1`) as { date: string; followers: number }[];
+
+  if (!row) return c.json({ error: "no data yet" }, 404);
+
+  c.header("Cache-Control", "public, max-age=3600");
+  return c.json({ followers: row.followers, date: row.date });
+});
+
 // Manual run: POST /run with "Authorization: Bearer <RUN_SECRET>".
 // ?dryRun=1 computes the row without saving it; ?date=YYYY-MM-DD overrides the day.
 app.post("/run", async (c) => {

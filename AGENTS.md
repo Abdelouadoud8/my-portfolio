@@ -81,7 +81,9 @@ Standalone pages without portfolio chrome go directly in `app/<route>/`.
 ### Update the /links page (link in bio)
 Everything is in `data/links.ts`:
 - `linksSocials`: order = display order; no `href` → hidden; `comingSoon: true` → greyed "Soon" item.
-  `followers` (number, optional) is shown compact on the right (6606 → 6.6K); updated by hand.
+  `followers` (number, optional) is shown compact on the right (6606 → 6.6K); updated by hand, EXCEPT Instagram:
+  `/links` fetches the latest daily count from igstats' public `GET /public/instagram` (`lib/instagram-followers.ts`,
+  `revalidate = 86400`, 5 s timeout) and falls back to the value in `data/links.ts` on failure.
   Public counts readable without API: Instagram (og:description with a link-preview user agent), TikTok
   (`followerCount` in page JSON). Snapchat count is hidden (0) and LinkedIn blocks bots (HTTP 999).
   New platform: add it to `SocialPlatform` (data/types.ts) and to `platformIcons` in
@@ -157,7 +159,7 @@ Everything is in `data/links.ts`:
 - Scripts (read `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `STATS_DATABASE_URL` from `.env.local`, never print them;
   shared IDs in `neon-api.sh`): `./deploy.sh` bundles + deploys; `./run.sh` = dry run for today, `./run.sh --save`.
 - Endpoints: `POST /` (trigger only, requires `x-neon-trigger-invocation-id`), `POST /run?dryRun=1&date=YYYY-MM-DD`
-  (Bearer RUN_SECRET).
+  (Bearer RUN_SECRET), `GET /public/instagram` (public, read-only: `{ followers, date }` of the latest row).
 - Displayed in the Umami fork's **"Instagram" tab** (`src/app/(main)/websites/[websiteId]/instagram/`, API route
   `src/app/api/websites/[websiteId]/instagram-stats/route.ts` querying `social_stats.instagram_daily`): doughnut +
   horizontal bar of women/men % (latest row with gender) and a table of all days. Renaming table columns breaks it.

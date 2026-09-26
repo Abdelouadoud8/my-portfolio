@@ -20,7 +20,8 @@ export const linksSocials: SocialLink[] = [
     label: "Instagram",
     handle: "@abdelouadoud.mahdaoui",
     href: "https://www.instagram.com/abdelouadoud.mahdaoui/",
-    followers: +11349,
+    // Fallback only: /links shows the daily count from igstats (lib/instagram-followers.ts)
+    followers: 11349,
   },
   {
     platform: "tiktok",
