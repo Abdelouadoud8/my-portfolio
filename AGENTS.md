@@ -9,14 +9,15 @@ Live at `https://abdelouadoud-portfolio.vercel.app`, deployed on **Vercel (Hobby
 Mostly static content, no database, no CMS. All content lives in TypeScript files in `data/`.
 
 ## Stack
-- **Next.js 15.3 (App Router)**, React 19, TypeScript 5 (strict), `--turbopack` in dev
+- **Next.js 15.5 (App Router)**, React 19, TypeScript 5 (strict), `--turbopack` in dev
 - **Tailwind CSS v4** (CSS-first config in `app/index.css` via `@theme`; there is no `tailwind.config.*`)
 - **shadcn/ui** (style `new-york`, base `zinc`, `components.json`), only `button`, `input`, `label`, `textarea` installed
 - `lucide-react` icons (plus custom SVG icon components in `components/icons/`)
 - **Umami** analytics (primary, see Analytics section) + `@vercel/analytics` (`<Analytics />`, legacy, kept during transition)
 - `nodemailer` (Gmail SMTP) for the contact form
 - Font: **Plus Jakarta Sans** via `next/font/google` (the variable is misleadingly named `poppins` / `--font-poppins`)
-- Both `package-lock.json` and `yarn.lock` exist; npm scripts: `dev`, `build`, `start`, `lint`
+- **npm only** (`package-lock.json`; `yarn.lock` removed). `overrides.postcss` forces Next's bundled PostCSS to the
+  patched top-level version. Check `npm audit --omit=dev` after dependency changes. Scripts: `dev`, `build`, `start`, `lint`
 
 ## Directory map
 ```
@@ -31,7 +32,8 @@ app/
     testimonials/page.tsx    "/testimonials": testimonial carousel
     projects/[slug]/page.tsx "/projects/:slug": case study, SSG via generateStaticParams from data/projects.ts
   links/page.tsx             "/links": link-in-bio page (no portfolio header, keeps <Footer/>), content from data/links.ts
-  api/send-email/route.ts    POST, the only backend: sends contact form via Gmail SMTP (nodemailer)
+  api/send-email/route.ts    POST, the only backend: validated + HTML-escaped contact form via Gmail SMTP (nodemailer 9);
+                             anti-spam: honeypot `website` field, `startedAt` min 3s, 3 msgs/10 min per IP (in-memory)
 components/
   analytics/umami-analytics.tsx  Loads Umami script + global link-click & scroll-depth tracking
   header.tsx, footer.tsx     Global nav (navItems array) / footer with social links (hardcoded)
@@ -188,9 +190,7 @@ Everything is in `data/links.ts`:
 - No `sitemap.ts`, `robots.ts`, `not-found.tsx`; the unknown project slug renders a bare `<div>` instead of `notFound()`.
 - Per-project `generateMetadata` is missing (every project page has the default title).
 - `openGraph.url` / `authors.url` lack the `https://` protocol; the OG image points at a 256px `_next/image` URL.
-- `send-email` interpolates user input into HTML without escaping, and `from` uses the visitor's email (Gmail rewrites it; `replyTo` would be correct).
 - Social links are duplicated in `footer.tsx`, `data/general.ts`, and contact page.
-- Phone input is `type="number"` (drops leading `+`/`0`).
 - Large mp4 files in `public/` count against the repo and Vercel deploy size; prefer external hosting for video.
 - Vercel Hobby limits: serverless function timeouts, and Vercel Analytics data retention is short with no export.
 

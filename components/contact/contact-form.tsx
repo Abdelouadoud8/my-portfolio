@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { EVENTS, trackEvent } from "@/lib/analytics";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
@@ -26,6 +26,13 @@ export default function ContactForm({ title, className }: ContactFormProps) {
   const [formData, setFormData] = useState(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
   const hasStarted = useRef(false);
+  // Anti-spam: when the form was shown, and a hidden field only bots fill in
+  const startedAt = useRef(0);
+  const [honeypot, setHoneypot] = useState("");
+
+  useEffect(() => {
+    startedAt.current = Date.now();
+  }, []);
 
   const handleChange = (field: string, value: string) => {
     if (!hasStarted.current) {
@@ -45,7 +52,11 @@ export default function ContactForm({ title, className }: ContactFormProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          website: honeypot,
+          startedAt: startedAt.current,
+        }),
       });
 
       trackEvent(EVENTS.contactFormSubmit, {
@@ -57,8 +68,10 @@ export default function ContactForm({ title, className }: ContactFormProps) {
           "Your message has been successfully sent. I will get back to you soon!"
         );
         setFormData(initialFormData);
+        startedAt.current = Date.now();
       } else {
-        alert("Your message could not be sent. Please try again later");
+        const { error } = await res.json().catch(() => ({ error: "" }));
+        alert(error || "Your message could not be sent. Please try again later");
       }
     } catch (e) {
       trackEvent(EVENTS.contactFormSubmit, { status: "network-error" });
@@ -79,6 +92,17 @@ export default function ContactForm({ title, className }: ContactFormProps) {
         </h2>
       )}
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+        {/* Honeypot: hidden from people and screen readers, bots fill it in */}
+        <input
+          type="text"
+          name="website"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="absolute -left-[9999px] h-0 w-0 opacity-0"
+        />
         {/* General information */}
         <div className="grid grid-col-1 sm:grid-cols-2 gap-6">
           <Input
@@ -89,6 +113,7 @@ export default function ContactForm({ title, className }: ContactFormProps) {
             onChange={(e) => handleChange("firstname", e.target.value)}
             label="Firstname"
             name="Firstname"
+            maxLength={100}
           />
           <Input
             required
@@ -98,6 +123,7 @@ export default function ContactForm({ title, className }: ContactFormProps) {
             onChange={(e) => handleChange("lastname", e.target.value)}
             label="Lastname"
             name="Lastname"
+            maxLength={100}
           />
           <Input
             required
@@ -108,6 +134,7 @@ export default function ContactForm({ title, className }: ContactFormProps) {
             leftIcon={<IconEmail className="h-5 w-5 text-neutral-70" />}
             label="Email"
             name="email"
+            maxLength={254}
           />
           <Input
             required
@@ -115,9 +142,10 @@ export default function ContactForm({ title, className }: ContactFormProps) {
             value={formData.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
             leftIcon={<IconPhone className="h-5 w-5 text-neutral-70" />}
-            type="number"
+            type="tel"
             label="Phone"
             name="phone"
+            maxLength={30}
           />
         </div>
 
@@ -129,6 +157,7 @@ export default function ContactForm({ title, className }: ContactFormProps) {
           type="text"
           label="Subject"
           name="subject"
+          maxLength={200}
         />
 
         <Textarea
@@ -137,6 +166,7 @@ export default function ContactForm({ title, className }: ContactFormProps) {
           value={formData.message}
           onChange={(e) => handleChange("message", e.target.value)}
           name="message"
+          maxLength={5000}
         />
 
         {/* CTA */}
