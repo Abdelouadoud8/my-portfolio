@@ -7,9 +7,10 @@
 // Needs: social_stats.instagram_token (long-lived Instagram Login token, auto-refreshed here)
 // Env:   STATS_DATABASE_URL (the Umami/stats DB in London; the function itself runs in the
 //        Frankfurt project "portfolio-automations" because Functions aren't offered in eu-west-2),
-//        RUN_SECRET (for manual runs)
+//        RUN_SECRET (for manual runs), SMTP_EMAIL + SMTP_PASSWORD (Gmail, failure alerts)
 import { neon } from "@neondatabase/serverless";
 import { Hono } from "hono";
+import nodemailer from "nodemailer";
 
 const GRAPH_HOST = "https://graph.instagram.com";
 const GRAPH = `${GRAPH_HOST}/v25.0`;
@@ -171,6 +172,39 @@ async function collect(statDate: string, { dryRun = false } = {}) {
   return row;
 }
 
+// Email the owner when the scheduled run fails (same Gmail account as the portfolio contact form)
+async function sendFailureAlert(statDate: string, error: Error) {
+  const { SMTP_EMAIL: email, SMTP_PASSWORD: password } = process.env;
+  if (!email || !password) {
+    console.error("alert not sent: SMTP_EMAIL / SMTP_PASSWORD missing");
+    return;
+  }
+  try {
+    await nodemailer
+      .createTransport({ service: "Gmail", auth: { user: email, pass: password } })
+      .sendMail({
+        from: { name: "igstats automation", address: email },
+        to: email,
+        subject: `⚠️ Instagram stats not saved for ${statDate}`,
+        text: [
+          `The 23:59 Instagram snapshot for ${statDate} failed, so no row was saved.`,
+          "",
+          `Error: ${error.message}`,
+          "",
+          "What to check:",
+          "- 'API access blocked' / OAuthException: open your Meta app dashboard (alerts, required actions).",
+          "- Token errors: generate a new token and save it in social_stats.instagram_token.",
+          "- Logs: Neon console > portfolio-automations > Functions > igstats.",
+          "",
+          "The missed day can be added by hand from Instagram > Professional dashboard > Followers.",
+        ].join("\n"),
+      });
+    console.log(`failure alert sent for ${statDate}`);
+  } catch (mailError) {
+    console.error(`failure alert could not be sent: ${(mailError as Error).message}`);
+  }
+}
+
 // Scheduled call from the Neon trigger (21:59 and 22:59 UTC)
 app.post("/", async (c) => {
   if (!c.req.header("x-neon-trigger-invocation-id")) {
@@ -185,8 +219,15 @@ app.post("/", async (c) => {
     return c.json({ skipped: true });
   }
 
-  const row = await collect(statDateFor(scheduledAt));
-  return c.json({ ok: true, row });
+  const statDate = statDateFor(scheduledAt);
+  try {
+    const row = await collect(statDate);
+    return c.json({ ok: true, row });
+  } catch (error) {
+    console.error(`igstats failed: ${(error as Error).message}`);
+    await sendFailureAlert(statDate, error as Error);
+    return c.json({ error: (error as Error).message }, 500);
+  }
 });
 
 // Public, read-only: latest follower count (already public on the Instagram profile).
@@ -212,6 +253,11 @@ app.post("/run", async (c) => {
     return c.json({ error: "unauthorized" }, 401);
   }
   const statDate = c.req.query("date") ?? statDateFor(new Date());
+  // ?testAlert=1 sends a sample failure email without touching Instagram or the database
+  if (c.req.query("testAlert") === "1") {
+    await sendFailureAlert(statDate, new Error("This is a test alert, nothing failed."));
+    return c.json({ ok: true, alert: "sent" });
+  }
   const row = await collect(statDate, { dryRun: c.req.query("dryRun") === "1" });
   return c.json({ ok: true, row });
 });

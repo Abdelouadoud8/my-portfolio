@@ -156,8 +156,12 @@ Everything is in `data/links.ts`:
   `instagram_daily` (stat_date PK, followers_count, new_followers = net change, male/female_percentage = share of
   known genders, new_male/female_followers = net change, raw male/female/unknown counts) and `instagram_token`
   (single row; the function refreshes the 60-day token when < 20 days remain). Upsert per day: the 23:59 run wins.
-- Scripts (read `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `STATS_DATABASE_URL` from `.env.local`, never print them;
-  shared IDs in `neon-api.sh`): `./deploy.sh` bundles + deploys; `./run.sh` = dry run for today, `./run.sh --save`.
+- Scripts (read `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `STATS_DATABASE_URL`, `SMTP_EMAIL`, `SMTP_PASSWORD` from
+  `.env.local`, never print them; shared IDs in `neon-api.sh`): `./deploy.sh` bundles + deploys; `./run.sh` = dry run
+  for today, `./run.sh --save`, `./run.sh --test-alert` (sample failure email, no Instagram/DB access).
+- Failure alerts: if the scheduled 23:59 run fails, the function emails SMTP_EMAIL (same Gmail app password as the
+  contact form). 2026-09-27 was missed: Meta returned `API access blocked` (OAuthException 200, app restricted),
+  lifted the next day; that row was added by hand (no gender counts).
 - Endpoints: `POST /` (trigger only, requires `x-neon-trigger-invocation-id`), `POST /run?dryRun=1&date=YYYY-MM-DD`
   (Bearer RUN_SECRET), `GET /public/instagram` (public, read-only: `{ followers, date }` of the latest row).
 - Displayed in the Umami fork's **"Instagram" tab** (`src/app/(main)/websites/[websiteId]/instagram/`, API route
@@ -186,7 +190,8 @@ Everything is in `data/links.ts`:
 - `NEXT_PUBLIC_UMAMI_DOMAINS` (optional): comma-separated hostname allowlist. Keep it UNSET on Vercel so all
   production aliases (abdelouadoud-portfolio / abdelouadoud-mahdaoui .vercel.app) are tracked; set in `.env.local`
   to keep localhost out. Preview deployments are skipped via Vercel's automatic `NEXT_PUBLIC_VERCEL_ENV`.
-- `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `STATS_DATABASE_URL`: used only by `automations/instagram-stats/*.sh` (not the website)
+- `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `STATS_DATABASE_URL`: used only by `automations/instagram-stats/*.sh` (not the website);
+  the deploy script also forwards `SMTP_EMAIL`/`SMTP_PASSWORD` to the igstats function for failure alerts
 
 ## Known gaps / gotchas
 - No `sitemap.ts`, `robots.ts`, `not-found.tsx`; the unknown project slug renders a bare `<div>` instead of `notFound()`.

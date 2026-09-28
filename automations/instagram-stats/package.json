@@ -10,7 +10,9 @@
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
     "@types/node": "^26.6.3",
-    "hono": "^4.6.0"
+    "@types/nodemailer": "^8.0.2",
+    "hono": "^4.6.0",
+    "nodemailer": "^9.1.1"
   },
   "devDependencies": {
     "esbuild": "^0.25.0"
