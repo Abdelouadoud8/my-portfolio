@@ -1,19 +1,26 @@
-import { FeaturedReel, LinksProfile, SocialLink } from "./types";
+import {
+  CollaborationCta,
+  FeaturedReel,
+  LinksProfile,
+  SocialLink,
+} from "./types";
 
 // Content of the /links page (link in bio). Edit this file only, the page updates itself.
 
 export const linksProfile: LinksProfile = {
   name: "Abdelouadoud Mahdaoui",
   tagline: "Content Creator",
-  bio: "Salem 👋 Ana Ouadoud, a software engineer living in France and a tech content creator.",
+  bio: "Salem 👋 Ana Ouadoud, a software engineer living in France and a tech & AI content creator.",
   imageUrl: "/homepicture.jpg",
 };
 
-// Order here = order on the page.
-// - A link without `href` is hidden (fill it in to show it).
+export const collaboration: CollaborationCta = {
+  email: "abdelouadoud.mahdaoui.pro@gmail.com",
+  label: "Collaborate with me",
+  subject: "Collaboration request",
+};
+
 // - `comingSoon: true` shows a greyed "Soon" item that isn't clickable.
-// - `followers` is shown compact on the right (6606 -> 6.6K); leave it out to hide it.
-//   Update by hand from time to time (last update: 2026-09-24).
 export const linksSocials: SocialLink[] = [
   {
     platform: "instagram",
@@ -30,12 +37,12 @@ export const linksSocials: SocialLink[] = [
     href: "https://www.tiktok.com/@abdelouadoud_8",
     followers: +1000,
   },
-  {
-    platform: "snapchat",
-    label: "Snapchat",
-    handle: "@abdelwadoud_8",
-    href: "https://www.snapchat.com/@abdelwadoud_8",
-  },
+  // {
+  //   platform: "snapchat",
+  //   label: "Snapchat",
+  //   handle: "@abdelwadoud_8",
+  //   href: "https://www.snapchat.com/@abdelwadoud_8",
+  // },
   {
     platform: "linkedin",
     label: "LinkedIn",
@@ -48,10 +55,6 @@ export const linksSocials: SocialLink[] = [
   { platform: "youtube", label: "YouTube" },
 ];
 
-// Newest first. Put thumbnails in public/img/reels/ (portrait 9:16, e.g. 720x1280).
-// `stats` are optional, each one is hidden when missing (views/shares are only in your Instagram insights).
-// `href` = the Instagram reel, or later the blog post with the detailed steps.
-// The section is hidden while this list is empty.
 export const featuredReels: FeaturedReel[] = [
   {
     id: "Dde4utyo5Jd",
@@ -60,17 +63,26 @@ export const featuredReels: FeaturedReel[] = [
     imageUrl: "/img/reels/Dde4utyo5Jd.png",
     href: "https://www.instagram.com/p/Dde4utyo5Jd/",
     tag: "AI",
-    stats: { views: 305000, likes: 6280, comments: 2772 },
+    stats: { views: 335000, likes: 6861, comments: 3124 },
   },
   {
-    id: "DdZzfuWIT4d",
-    title: "أفضل أدوات الذكاء الإصطناعي - الجزء 1",
+    id: "DdmqbYyIMbW",
+    title: "أفضل أدوات الذكاء الإصطناعي - الجزء 2",
     description: "مقارنة أفضل أدوات الذكاء الإصطناعي لي راح تسهل عليك حياتك",
     imageUrl: "/img/reels/DdZzfuWIT4d.png",
-    href: "https://www.instagram.com/p/DdZzfuWIT4d/",
+    href: "https://www.instagram.com/p/DdmqbYyIMbW/",
     tag: "AI",
-    stats: { views: 106000, likes: 2808, comments: 411 },
+    stats: { views: 343000, likes: 9607, comments: 1020 },
   },
+  // {
+  //   id: "DdZzfuWIT4d",
+  //   title: "أفضل أدوات الذكاء الإصطناعي - الجزء 1",
+  //   description: "مقارنة أفضل أدوات الذكاء الإصطناعي لي راح تسهل عليك حياتك",
+  //   imageUrl: "/img/reels/DdZzfuWIT4d.png",
+  //   href: "https://www.instagram.com/p/DdZzfuWIT4d/",
+  //   tag: "AI",
+  //   stats: { views: 106000, likes: 2808, comments: 411 },
+  // },
   // {
   //   id: "DdkE4G5IkeH",
   //   title: "واش يعرف chatgpt عليك",

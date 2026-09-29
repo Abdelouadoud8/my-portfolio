@@ -93,7 +93,10 @@ Everything is in `data/links.ts`:
   each hidden when missing; views overlay the image, the others show under the title (lucide icons).
   Only likes/comments are public on Instagram; views/shares come from the owner's insights.
   `formatCompact()` in `lib/utils.ts` formats all counts (6606 → 6.6K).
-- Clicks are tracked as `links-<platform>-click` and `reel-<id>` (see Analytics).
+- `collaboration` {email, label, subject}: red "Collaborate with me" button under the profile
+  (`components/links/collaborate-button.tsx`), hidden while `email` is empty. Opens `mailto:` with the subject; the
+  address is passed base64-encoded and decoded on click, so it never appears in the HTML (anti-scraping).
+- Clicks are tracked as `links-<platform>-click`, `reel-<id>` and `collaborate-click` (see Analytics).
 
 ## Analytics (Umami)
 - Page views (incl. client-side navigation) are automatic once the script loads.
@@ -113,7 +116,8 @@ Everything is in `data/links.ts`:
   - imperatively: `trackEvent(EVENTS.x, { ... })` (forms, state changes).
 - Current named events: `nav-click` {item, location}, `project-card-click` {project, location},
   `project-live-site-click` {project}, `cta-click` {name, location},
-  `cv-download` {location}, `contact-form-start`, `contact-form-submit` {status}, `testimonial-navigate` {direction}.
+  `cv-download` {location}, `contact-form-start`, `contact-form-submit` {status}, `testimonial-navigate` {direction},
+  `collaborate-click` {location} (deliberately NOT `links-…-click`, which the Umami Links tab counts as a social link).
   (Before 2026-09-25 social/reel clicks were logged as `social-click` / `reel-click` with the same props.)
 - Event data keys must be lowercase kebab-case (they become `data-umami-event-<key>`).
 - Renders nothing if env vars are missing, or on Vercel preview deployments.
@@ -139,7 +143,8 @@ Everything is in `data/links.ts`:
   `reel-<id>`, `visit-from-<source>` and path `/links`: if you rename these events or the /links route,
   update `linkPageQueries.ts` in the fork too. When syncing the fork with upstream Umami, keep that folder and
   the Instagram tab/API folders and the menu entries in `src/components/hooks/useWebsiteNavItems.tsx` (the only edited core file).
-- Saved goals: Contact form sent, CV downloaded, Book a call clicked, Live project site opened, Contact page visited.
+- Saved goals: Contact form sent, CV downloaded, Book a call clicked, Live project site opened, Contact page visited,
+  Collaborate clicked. The Links tab also shows a "Collaborate clicks" card and a Collaboration chart.
 - Saved funnels (60 min window): Contact conversion, Home to contact, Project engagement.
 
 ## Automations: Instagram daily stats (`automations/instagram-stats/`)

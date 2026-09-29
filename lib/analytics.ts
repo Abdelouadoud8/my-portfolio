@@ -21,6 +21,7 @@ export const EVENTS = {
   phoneClick: "phone-click",
   fileDownload: "file-download",
   scrollDepth: "scroll-depth",
+  collaborateClick: "collaborate-click",
 } as const;
 
 // "LinkedIn" -> "linkedin", "X (Twitter)" -> "x-twitter"

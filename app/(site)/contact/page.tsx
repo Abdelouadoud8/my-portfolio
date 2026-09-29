@@ -6,7 +6,7 @@ import React from "react";
 
 export default function Contact() {
   const contacts = [
-    { icon: IconEmail, content: "abdelouadoud.mahdaoui@gmail.com" },
+    { icon: IconEmail, content: "abdelouadoud.mahdaoui.pro@gmail.com" },
     { icon: IconWhatsapp, content: "+33773471197" },
   ];
 

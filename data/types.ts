@@ -85,6 +85,12 @@ type FeaturedReel = {
   stats?: ReelStats;
 };
 
+type CollaborationCta = {
+  email: string;
+  label: string;
+  subject: string;
+};
+
 type LinksProfile = {
   name: string;
   tagline: string;
@@ -103,4 +109,5 @@ export type {
   FeaturedReel,
   ReelStats,
   LinksProfile,
+  CollaborationCta,
 };
