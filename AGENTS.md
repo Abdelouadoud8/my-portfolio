@@ -114,7 +114,9 @@ Everything is in `data/links.ts`:
 - `linksSocials`: order = display order; no `href` → hidden; `comingSoon: true` → greyed "Soon" item.
   `followers` (number, optional) is shown compact on the right (6606 → 6.6K); updated by hand, EXCEPT Instagram:
   `/links` fetches the latest daily count from igstats' public `GET /public/instagram` (`lib/instagram-followers.ts`,
-  `revalidate = 86400`, 5 s timeout) and falls back to the value in `data/links.ts` on failure.
+  `revalidate = 86400`, 5 s timeout) and falls back to the value in `data/links.ts` on failure. The fetch URL carries
+  `?deploy=<VERCEL_GIT_COMMIT_SHA>` because Next's data cache survives deployments: each deploy gets the current count.
+  To force a fresh count: `automations/instagram-stats/run.sh --save`, then redeploy.
   Public counts readable without API: Instagram (og:description with a link-preview user agent), TikTok
   (`followerCount` in page JSON). Snapchat count is hidden (0) and LinkedIn blocks bots (HTTP 999).
   New platform: add it to `SocialPlatform` (data/types.ts) and to `platformIcons` in

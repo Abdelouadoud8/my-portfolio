@@ -23,7 +23,10 @@ export async function getVisibleSocials(socials: SocialLink[]) {
 // Returns undefined on any failure so the page falls back to the value in data/links.ts
 export async function getInstagramFollowers(): Promise<number | undefined> {
   try {
-    const res = await fetch(INSTAGRAM_STATS_URL, {
+    // Next's data cache outlives deployments: keying it by commit makes every deploy fetch the
+    // current count, then the daily revalidation applies until the next deploy
+    const cacheKey = process.env.VERCEL_GIT_COMMIT_SHA ?? "local";
+    const res = await fetch(`${INSTAGRAM_STATS_URL}?deploy=${cacheKey}`, {
       next: { revalidate: ONE_DAY_IN_SECONDS },
       signal: AbortSignal.timeout(5000),
     });
