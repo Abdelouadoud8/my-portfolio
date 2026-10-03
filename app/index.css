@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -162,4 +163,38 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Blog: Arabic article text (IBM Plex Sans Arabic, loaded in app/blog/layout.tsx) */
+.font-arabic {
+  font-family: var(--font-arabic), system-ui, sans-serif;
+}
+
+/* Hide scrollbars on the horizontally scrollable category chips (mobile) */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Blog articles: prompts in code blocks are often Arabic. A monospace font breaks Arabic letter joining,
+   so keep the Arabic font and let each line pick its own direction (Arabic or English prompt). */
+.blog-article pre {
+  direction: rtl;
+  text-align: right;
+}
+.blog-article pre code {
+  font-family: var(--font-arabic), ui-monospace, monospace;
+  white-space: pre-wrap;
+  unicode-bidi: plaintext;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+/* No automatic quotation marks around Arabic blockquotes */
+.blog-article blockquote p::before,
+.blog-article blockquote p::after {
+  content: none;
 }

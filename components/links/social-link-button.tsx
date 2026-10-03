@@ -35,17 +35,27 @@ export default function SocialLinkButton({
   href,
   followers,
   comingSoon,
-}: SocialLink) {
+  location = "links",
+  compact = false,
+}: SocialLink & { location?: string; compact?: boolean }) {
   const Icon = platformIcons[platform];
 
   const content = (
     <>
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-        <Icon width={24} height={24} />
+      <span
+        className={`flex shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary ${
+          compact ? "size-8" : "size-10"
+        }`}
+      >
+        <Icon width={compact ? 18 : 24} height={compact ? 18 : 24} />
       </span>
-      <span className="min-w-0 flex-1 text-left">
-        <span className="block font-semibold text-neutral-100">{label}</span>
-        {handle && (
+      <span className="min-w-0 flex-1 text-start">
+        <span
+          className={`block font-semibold text-neutral-100 ${compact ? "text-sm" : ""}`}
+        >
+          {label}
+        </span>
+        {handle && !compact && (
           <span className="block truncate text-sm text-neutral-50">
             {handle}
           </span>
@@ -54,8 +64,9 @@ export default function SocialLinkButton({
     </>
   );
 
-  const baseClassName =
-    "flex w-full items-center gap-3 rounded-lg border border-neutral-20 bg-white py-3 pl-3 pr-4";
+  const baseClassName = `flex w-full items-center gap-3 rounded-lg border border-neutral-20 bg-white ${
+    compact ? "py-2 pl-2 pr-3" : "py-3 pl-3 pr-4"
+  }`;
 
   if (comingSoon) {
     return (
@@ -74,9 +85,9 @@ export default function SocialLinkButton({
       target="_blank"
       rel="noopener noreferrer"
       className={`group ${baseClassName} transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-primary hover:shadow-[0_6px_20px_rgba(230,57,70,0.12)]`}
-      {...eventAttributes(DYNAMIC_EVENTS.socialClick(platform, "links"), {
+      {...eventAttributes(DYNAMIC_EVENTS.socialClick(platform, location), {
         platform: label,
-        location: "links",
+        location,
       })}
     >
       {content}
@@ -85,10 +96,10 @@ export default function SocialLinkButton({
           className="shrink-0 text-sm font-semibold text-neutral-80"
           title={`${followers.toLocaleString("en")} followers`}
         >
-          {` + ${formatCompact(followers)}`}
+          <bdi dir="ltr">{` + ${formatCompact(followers)}`}</bdi>
         </span>
       )}
-      <ArrowUpRight className="size-4 shrink-0 text-neutral-30 transition-colors group-hover:text-primary" />
+      <ArrowUpRight className="size-4 shrink-0 text-neutral-30 transition-colors group-hover:text-primary rtl:-scale-x-100" />
     </a>
   );
 }

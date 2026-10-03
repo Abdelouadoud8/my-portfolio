@@ -31,6 +31,17 @@ app/
     contact/page.tsx         "/contact": contact info + <ContactForm/>
     testimonials/page.tsx    "/testimonials": testimonial carousel
     projects/[slug]/page.tsx "/projects/:slug": case study, SSG via generateStaticParams from data/projects.ts
+  blog/                      "/blog": Markdown blog (own layout: BlogHeader + <Footer/>, IBM Plex Sans Arabic as --font-arabic)
+    page.tsx                 home: one list of all articles (compact numbered light-red rows, no covers);
+                             filtering is done with the category menu (no Featured section)
+    category/[category]/     one page per category (data/blog-categories.ts), dynamicParams=false
+    [slug]/page.tsx          article: RTL Arabic prose, "Watch the reel" button, related posts
+                             All blog pages use <BlogShell>, which is dir="rtl" (most readers are Arabic speakers;
+                             header/footer stay LTR): first column (on the right) = categories + compact Follow me (links,
+                             collaborate, up to 3 reels as horizontal RTL cards, cover on the right, comments hidden: ReelCard `layout="horizontal"
+                             hideComments`). English text inside RTL: use dir="auto" + text-right so punctuation
+                             stays at the end; direction-aware styles (border-s, text-start, rtl:) keep /links unchanged.); on mobile categories are chips on top and Follow me
+                             goes below.
   links/page.tsx             "/links": link-in-bio page (no portfolio header, keeps <Footer/>), content from data/links.ts
   api/send-email/route.ts    POST, the only backend: validated + HTML-escaped contact form via Gmail SMTP (nodemailer 9);
                              anti-spam: honeypot `website` field, `startedAt` min 3s, 3 msgs/10 min per IP (in-memory)
@@ -41,7 +52,12 @@ components/
   home/                      heading, projects (grid), project-card, clients (logo grid), client-box, ContactCTA
   project/                   project-header, project-section (numbered section + images), quote
   about/                     general-details, topic (used on about AND project pages), trailing
-  links/                     links-profile, social-link-button (platform→icon map), reel-card
+  links/                     links-profile, social-link-button (platform→icon map), reel-card, collaborate-button
+                             (all take a `location` prop for analytics: "links" default, "blog" in the blog)
+  blog/                      blog-shell, blog-header, category-nav, post-list + post-card (numbered rows, dir=rtl:
+                             number right, arrow ← left), post-meta (each English item wrapped LTR via <bdi>/dir so
+                             dates stay "3 Oct 2026" inside RTL rows),
+                             section-title, follow-section (uses SocialLinkButton `compact`)
   contact/contact-form.tsx   Client form, POSTs JSON to /api/send-email, uses alert() for feedback
   testimonials/              testimonial-caroussel, caroussel-image
   icons/                     SVG React components (Icon*), icons/logos/ = client logos
@@ -51,10 +67,14 @@ data/
   projects.ts                Array of Project (the main content, ~800 lines)
   testimonials.ts            Array of Testimonial
   topics.ts                  About page sections (experience, education, etc.)
-  links.ts                   /links content: linksProfile, linksSocials, featuredReels
+  links.ts                   /links content: linksProfile, linksSocials, featuredReels, collaboration
+  blog-categories.ts         blog categories (slug, English label, description), sidebar order
+content/blog/                blog articles as Markdown (<slug>.md); _template.md documents the front matter
   general.ts                 socialLinks + contacts (NOT currently used by header/footer, which hardcode them)
 lib/utils.ts                 cn() = clsx + tailwind-merge
 lib/analytics.ts             EVENTS (all event names), trackEvent(), eventAttributes()
+lib/blog.ts                  reads content/blog (gray-matter), validates front matter, Markdown→HTML (unified/remark/rehype)
+lib/instagram-followers.ts   live Instagram count from igstats + getVisibleSocials() (shared by /links and /blog)
 public/
   img/projects/<slug>/       Project images (1.png = cover by convention), gifs, mp4s
   img/testimonials/          Testimonial avatars
@@ -77,6 +97,17 @@ Append to `data/testimonials.ts`, avatar in `public/img/testimonials/`.
 ### Add a page / nav item
 Create `app/(site)/<route>/page.tsx` (gets header/footer), then add to `navItems` in `components/header.tsx`.
 Standalone pages without portfolio chrome go directly in `app/<route>/`.
+
+### Write a blog article
+1. Copy `content/blog/_template.md` to `content/blog/<slug>.md` (file name = URL `/blog/<slug>`, lowercase + dashes).
+2. Front matter: `title`, `description` (Arabic), `category` (slug from `data/blog-categories.ts`, build fails with
+   the valid list otherwise), `date` (YYYY-MM-DD, newest first),
+   `cover` (image in `public/blog/<slug>/`), `reel` (Instagram URL → "Watch the reel"), `keyword`, `draft: true`.
+3. Drafts show in `npm run dev` (or `BLOG_SHOW_DRAFTS=1`), never in production builds. Remove `draft` to publish.
+4. Body: Markdown + GFM, rendered RTL with the Arabic font; code blocks keep the Arabic font (prompts) and pick
+   each line's direction (`.blog-article` rules in app/index.css). UI labels stay in English.
+- Links for Instagram auto-DMs: `/blog/<slug>?utm_source=instagram&utm_campaign=<keyword>` (visit source tracking).
+- Blog pages use `revalidate = 86400` (live Instagram count in the Follow me section).
 
 ### Update the /links page (link in bio)
 Everything is in `data/links.ts`:
@@ -141,7 +172,8 @@ Everything is in `data/links.ts`:
   folder `src/app/(main)/websites/[websiteId]/link-page/`): cards for /links visits, top social link, top reel,
   top source (name shown in a tag) + visits chart + one bar chart per social link and per reel + ranking table. It filters on the event names `links-<platform>-click`,
   `reel-<id>`, `visit-from-<source>` and path `/links`: if you rename these events or the /links route,
-  update `linkPageQueries.ts` in the fork too. When syncing the fork with upstream Umami, keep that folder and
+  update `linkPageQueries.ts` in the fork too. All its click queries filter on path `/links` (the blog fires the
+  same events with location "blog"). When syncing the fork with upstream Umami, keep that folder and
   the Instagram tab/API folders and the menu entries in `src/components/hooks/useWebsiteNavItems.tsx` (the only edited core file).
 - Saved goals: Contact form sent, CV downloaded, Book a call clicked, Live project site opened, Contact page visited,
   Collaborate clicked. The Links tab also shows a "Collaborate clicks" card and a Collaboration chart.
@@ -208,6 +240,6 @@ Everything is in `data/links.ts`:
 
 ## Planned direction (from owner, Sept 2026)
 - ~~Long-retention analytics~~: Umami integrated (code done; hosting = self-hosted Umami on Vercel + free Postgres recommended). Remove `@vercel/analytics` once Umami is trusted.
-- Add a **blog** of AI tips/tutorials for a non-technical Instagram audience (reels → DM → blog link).
+- ~~Blog~~: done at `/blog` (Markdown in content/blog). Not linked from the portfolio header yet (Arabic audience).
 - ~~Link-in-bio page~~: done at `/links` (data/links.ts).
 - Preferred approach: keep everything in this one Next.js app under different routes (`/blog`, `/links`), with MDX content in the repo.

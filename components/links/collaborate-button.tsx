@@ -8,15 +8,17 @@ type CollaborateButtonProps = {
   subject: string;
   // Base64 of the email address, so it never appears in the page HTML
   encodedEmail: string;
+  location?: string;
 };
 
 export default function CollaborateButton({
   label,
   subject,
   encodedEmail,
+  location = "links",
 }: CollaborateButtonProps) {
   const handleClick = () => {
-    trackEvent(EVENTS.collaborateClick, { location: "links" });
+    trackEvent(EVENTS.collaborateClick, { location });
     const email = atob(encodedEmail);
     window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
   };

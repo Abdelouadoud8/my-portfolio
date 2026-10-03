@@ -9,7 +9,7 @@ import {
   linksProfile,
   linksSocials,
 } from "@/data/links";
-import { getInstagramFollowers } from "@/lib/instagram-followers";
+import { getVisibleSocials } from "@/lib/instagram-followers";
 import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
@@ -22,14 +22,7 @@ export const revalidate = 86400;
 
 // Link-in-bio page. Lives outside the (site) group: no portfolio header, but keeps the footer.
 export default async function LinksPage() {
-  const instagramFollowers = await getInstagramFollowers();
-  const socials = linksSocials
-    .filter((link) => link.comingSoon || link.href)
-    .map((link) =>
-      link.platform === "instagram" && instagramFollowers
-        ? { ...link, followers: instagramFollowers }
-        : link,
-    );
+  const socials = await getVisibleSocials(linksSocials);
 
   return (
     <div className="flex min-h-dvh flex-col">
