@@ -10,6 +10,7 @@ import { IconLinkedin } from "../icons/icon-linkedin";
 import { IconSnapchat } from "../icons/icon-snapchat";
 import { IconTelegram } from "../icons/icon-telegram";
 import { IconYoutube } from "../icons/icon-youtube";
+import { IconFacebook } from "../icons/icon-facebook";
 import { IconGithub } from "../icons/icon-github";
 import { IconTwitter } from "../icons/icon-twitter";
 import { IconWhatsapp } from "../icons/icon-whatsapp";
@@ -24,6 +25,7 @@ const platformIcons: Record<SocialPlatform, React.FC<IconProps>> = {
   youtube: IconYoutube,
   github: IconGithub,
   x: IconTwitter,
+  facebook: IconFacebook,
   whatsapp: IconWhatsapp,
   email: IconEmail,
 };

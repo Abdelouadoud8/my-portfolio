@@ -56,6 +56,7 @@ type SocialPlatform =
   | "youtube"
   | "github"
   | "x"
+  | "facebook"
   | "whatsapp"
   | "email";
 

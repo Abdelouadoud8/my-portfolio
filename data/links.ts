@@ -50,6 +50,12 @@ export const linksSocials: SocialLink[] = [
     href: "https://www.linkedin.com/in/abdelouadoud-mahdaoui/",
     followers: +1176,
   },
+  {
+    platform: "facebook",
+    label: "Facebook",
+    handle: "Abdelouadoud Mahdaoui",
+    href: "https://www.facebook.com/abdelouadoud.mahdaoui",
+  },
   // Not launched yet: add the href to show them (or `comingSoon: true` for a "Soon" badge)
   { platform: "telegram", label: "Telegram" },
   { platform: "youtube", label: "YouTube" },
