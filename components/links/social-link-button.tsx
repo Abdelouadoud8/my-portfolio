@@ -16,7 +16,7 @@ import { IconTwitter } from "../icons/icon-twitter";
 import { IconWhatsapp } from "../icons/icon-whatsapp";
 import { IconEmail } from "../icons/icon-email";
 
-const platformIcons: Record<SocialPlatform, React.FC<IconProps>> = {
+export const platformIcons: Record<SocialPlatform, React.FC<IconProps>> = {
   instagram: IconInstagram,
   tiktok: IconTiktok,
   linkedin: IconLinkedin,

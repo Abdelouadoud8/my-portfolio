@@ -31,6 +31,13 @@ export const linksSocials: SocialLink[] = [
     followers: 11349,
   },
   {
+    platform: "facebook",
+    label: "Facebook",
+    handle: "Abdelouadoud Mahdaoui",
+    href: "https://www.facebook.com/abdelouadoud.mahdaoui",
+    followers: 9266,
+  },
+  {
     platform: "tiktok",
     label: "TikTok",
     handle: "@abdelouadoud_8",
@@ -49,12 +56,6 @@ export const linksSocials: SocialLink[] = [
     handle: "Abdelouadoud Mahdaoui",
     href: "https://www.linkedin.com/in/abdelouadoud-mahdaoui/",
     followers: +1176,
-  },
-  {
-    platform: "facebook",
-    label: "Facebook",
-    handle: "Abdelouadoud Mahdaoui",
-    href: "https://www.facebook.com/abdelouadoud.mahdaoui",
   },
   // Not launched yet: add the href to show them (or `comingSoon: true` for a "Soon" badge)
   { platform: "telegram", label: "Telegram" },

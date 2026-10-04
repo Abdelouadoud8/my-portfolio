@@ -126,6 +126,9 @@ Everything is in `data/links.ts`:
   each hidden when missing; views overlay the image, the others show under the title (lucide icons).
   Only likes/comments are public on Instagram; views/shares come from the owner's insights.
   `formatCompact()` in `lib/utils.ts` formats all counts (6606 → 6.6K).
+- Total followers block under the profile (`components/links/total-followers.tsx`): sum of every visible link's
+  `followers` (Instagram = live count): big number, red "Total followers" label, then the counted platforms'
+  icons in a row; hidden when no counts. /links only.
 - `collaboration` {email, label, subject}: red "Collaborate with me" button under the profile
   (`components/links/collaborate-button.tsx`), hidden while `email` is empty. Opens `mailto:` with the subject; the
   address is passed base64-encoded and decoded on click, so it never appears in the HTML (anti-scraping).
