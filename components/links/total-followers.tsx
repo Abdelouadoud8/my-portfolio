@@ -32,7 +32,7 @@ export default function TotalFollowers({ socials }: { socials: SocialLink[] }) {
           {formatCompact(total)}
         </p>
         <p className="mt-2 text-xs font-bold uppercase tracking-wide text-primary">
-          Total followers
+          Followers across all platforms
         </p>
       </div>
       <ul className="flex items-center gap-2" aria-hidden="true">
