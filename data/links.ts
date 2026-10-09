@@ -35,7 +35,7 @@ export const linksSocials: SocialLink[] = [
     label: "Facebook",
     handle: "Abdelouadoud Mahdaoui",
     href: "https://www.facebook.com/abdelouadoud.mahdaoui",
-    followers: 9266,
+    followers: 20430,
   },
   {
     platform: "tiktok",
@@ -70,7 +70,7 @@ export const featuredReels: FeaturedReel[] = [
     imageUrl: "/img/reels/Dde4utyo5Jd.png",
     href: "https://www.instagram.com/p/Dde4utyo5Jd/",
     tag: "AI",
-    stats: { views: 335000, likes: 6861, comments: 3124 },
+    stats: { views: 380000, likes: 7700, comments: 3600 },
   },
   {
     id: "DdmqbYyIMbW",
@@ -79,7 +79,7 @@ export const featuredReels: FeaturedReel[] = [
     imageUrl: "/img/reels/DdZzfuWIT4d.png",
     href: "https://www.instagram.com/p/DdmqbYyIMbW/",
     tag: "AI",
-    stats: { views: 343000, likes: 9607, comments: 1020 },
+    stats: { views: 607000, likes: 15507, comments: 1720 },
   },
   // {
   //   id: "DdZzfuWIT4d",
