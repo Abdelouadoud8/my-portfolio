@@ -74,7 +74,8 @@ content/blog/                blog articles as Markdown (<slug>.md); _template.md
 lib/utils.ts                 cn() = clsx + tailwind-merge
 lib/analytics.ts             EVENTS (all event names), trackEvent(), eventAttributes()
 lib/blog.ts                  reads content/blog (gray-matter), validates front matter, Markdown→HTML (unified/remark/rehype)
-lib/instagram-followers.ts   live Instagram count from igstats + getVisibleSocials() (shared by /links and /blog)
+lib/instagram-followers.ts   live follower counts (Instagram from igstats, Facebook from fbstats, fetched
+                             independently) + getVisibleSocials() (shared by /links and /blog)
 public/
   img/projects/<slug>/       Project images (1.png = cover by convention), gifs, mp4s
   img/testimonials/          Testimonial avatars
@@ -112,7 +113,8 @@ Standalone pages without portfolio chrome go directly in `app/<route>/`.
 ### Update the /links page (link in bio)
 Everything is in `data/links.ts`:
 - `linksSocials`: order = display order; no `href` → hidden; `comingSoon: true` → greyed "Soon" item.
-  `followers` (number, optional) is shown compact on the right (6606 → 6.6K); updated by hand, EXCEPT Instagram:
+  `followers` (number, optional) is shown compact on the right (6606 → 6.6K); updated by hand, EXCEPT Instagram and
+  Facebook (live from igstats / fbstats, the data/links.ts value is only the fallback):
   `/links` fetches the latest daily count from igstats' public `GET /public/instagram` (`lib/instagram-followers.ts`,
   `revalidate = 86400`, 5 s timeout) and falls back to the value in `data/links.ts` on failure. The fetch URL carries
   `?deploy=<VERCEL_GIT_COMMIT_SHA>` because Next's data cache survives deployments: each deploy gets the current count.
@@ -211,6 +213,27 @@ Everything is in `data/links.ts`:
   horizontal bar of women/men % (latest row with gender) and a table of all days. Renaming table columns breaks it.
 - History before 2026-09-26 was entered by hand (followers only, dated as noted: counts taken ~00:01 that day).
 
+## Automations: Facebook daily stats (`automations/facebook-stats/`)
+- Neon Function **`fbstats`**, same Frankfurt project/branch as igstats but fully independent (own code folder,
+  token, table, trigger, failure alert): one platform failing never stops the other.
+- Facebook link is a Page (new Pages experience, fb://profile/61593759236599 publicly). Graph API v25.0 with a
+  **Page access token** (permissions `pages_show_list`, `pages_read_engagement`, `read_insights`); Page tokens from a
+  long-lived user token don't expire, so no refresh logic. Stored with the Page ID in `social_stats.facebook_token`.
+- Data: `/{page-id}?fields=followers_count` + Page Insights `page_daily_follows_unique` /
+  `page_daily_unfollows_unique` (latest complete day; Facebook days end at midnight Pacific → `insights_date`) +
+  best-effort countries (`page_follows_country`, fallback `page_fans_country`). Insights/countries failures don't
+  fail the row. **Gender/age are not available**: Meta removed Page follower demographics from the API in 03/2024.
+- Table `social_stats.facebook_daily` (stat_date PK, followers_count, new_followers = net change, follows,
+  unfollows, insights_date, top_countries jsonb). Upsert per day: the 23:59 run wins.
+- Scripts like igstats but with `FBSTATS_RUN_SECRET`: `./deploy.sh`, `./run.sh`, `./run.sh --save`,
+  `./run.sh --test-alert`. Endpoints: `POST /` (trigger only), `POST /run`, `GET /public/facebook` (public
+  `{ followers, date }`; feeds the Facebook count on /links and /blog via `lib/instagram-followers.ts`).
+- Trigger: create a schedule `59 21,22 * * *` for slug `fbstats` (same as igstats) ONLY once the Page token works,
+  otherwise every night fails and sends an alert email.
+- Umami fork **"Facebook" tab** (`src/app/(main)/websites/[websiteId]/facebook/`, API route
+  `src/app/api/websites/[websiteId]/facebook-stats/route.ts`): followers chart, follows vs unfollows, top countries
+  (if any), daily table.
+
 ## Styling conventions
 - Design tokens (in `app/index.css` `@theme`): `primary` (#e63946 red) with `primary-50…900`,
   `neutral-5…100` (neutral-100 = #312e43 main text), `secondary-light/medium/dark`, `shadow-top-light`.
@@ -232,7 +255,8 @@ Everything is in `data/links.ts`:
 - `NEXT_PUBLIC_UMAMI_DOMAINS` (optional): comma-separated hostname allowlist. Keep it UNSET on Vercel so all
   production aliases (abdelouadoud-portfolio / abdelouadoud-mahdaoui .vercel.app) are tracked; set in `.env.local`
   to keep localhost out. Preview deployments are skipped via Vercel's automatic `NEXT_PUBLIC_VERCEL_ENV`.
-- `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `STATS_DATABASE_URL`: used only by `automations/instagram-stats/*.sh` (not the website);
+- `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `FBSTATS_RUN_SECRET`, `STATS_DATABASE_URL`: used only by `automations/*/*.sh`
+  (not the website);
   the deploy script also forwards `SMTP_EMAIL`/`SMTP_PASSWORD` to the igstats function for failure alerts
 
 ## Known gaps / gotchas
