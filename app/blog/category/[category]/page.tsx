@@ -5,7 +5,8 @@ import PostList from "@/components/blog/post-list";
 import { blogCategories } from "@/data/blog-categories";
 import { getPostsByCategory } from "@/lib/blog";
 
-export const revalidate = 86400;
+// Re-read the live follower counts (public igstats/fbstats endpoints) at most every 15 minutes
+export const revalidate = 900;
 export const dynamicParams = false;
 
 type Props = { params: Promise<{ category: string }> };

@@ -3,8 +3,8 @@ import PostList from "@/components/blog/post-list";
 import SectionTitle from "@/components/blog/section-title";
 import { getAllPosts } from "@/lib/blog";
 
-// Daily refresh for the live Instagram count in the sidebar
-export const revalidate = 86400;
+// Re-read the live follower counts (public igstats/fbstats endpoints) at most every 15 minutes
+export const revalidate = 900;
 
 export default function BlogPage() {
   const posts = getAllPosts();

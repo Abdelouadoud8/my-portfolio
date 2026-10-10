@@ -108,7 +108,7 @@ Standalone pages without portfolio chrome go directly in `app/<route>/`.
 4. Body: Markdown + GFM, rendered RTL with the Arabic font; code blocks keep the Arabic font (prompts) and pick
    each line's direction (`.blog-article` rules in app/index.css). UI labels stay in English.
 - Links for Instagram auto-DMs: `/blog/<slug>?utm_source=instagram&utm_campaign=<keyword>` (visit source tracking).
-- Blog pages use `revalidate = 86400` (live Instagram count in the Follow me section).
+- Blog pages use `revalidate = 900` (live follower counts in the Follow me section).
 
 ### Update the /links page (link in bio)
 Everything is in `data/links.ts`:
@@ -116,9 +116,11 @@ Everything is in `data/links.ts`:
   `followers` (number, optional) is shown compact on the right (6606 → 6.6K); updated by hand, EXCEPT Instagram and
   Facebook (live from igstats / fbstats, the data/links.ts value is only the fallback):
   `/links` fetches the latest daily count from igstats' public `GET /public/instagram` (`lib/instagram-followers.ts`,
-  `revalidate = 86400`, 5 s timeout) and falls back to the value in `data/links.ts` on failure. The fetch URL carries
+  15-minute cache: `revalidate = 900` on the fetch and the page, 5 s timeout) and falls back to the value in
+  `data/links.ts` on failure. New 23:59 counts show up within 15 minutes (refreshed only on visits); no secret
+  or webhook involved. The fetch URL carries
   `?deploy=<VERCEL_GIT_COMMIT_SHA>` because Next's data cache survives deployments: each deploy gets the current count.
-  To force a fresh count: `automations/instagram-stats/run.sh --save`, then redeploy.
+  To force a fresh count: `automations/instagram-stats/run.sh --save` (shows on /links within 15 minutes).
   Public counts readable without API: Instagram (og:description with a link-preview user agent), TikTok
   (`followerCount` in page JSON). Snapchat count is hidden (0) and LinkedIn blocks bots (HTTP 999).
   New platform: add it to `SocialPlatform` (data/types.ts) and to `platformIcons` in
