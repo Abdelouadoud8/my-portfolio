@@ -216,7 +216,8 @@ Everything is in `data/links.ts`:
 ## Automations: Facebook daily stats (`automations/facebook-stats/`)
 - Neon Function **`fbstats`**, same Frankfurt project/branch as igstats but fully independent (own code folder,
   token, table, trigger, failure alert): one platform failing never stops the other.
-- Facebook link is a Page (new Pages experience, fb://profile/61593759236599 publicly). Graph API v25.0 with a
+- Facebook link is a Page (new Pages experience; public fb://profile/61593759236599, but the Graph API Page ID is
+  **1191205224085834**). Graph API v25.0 with a
   **Page access token** (permissions `pages_show_list`, `pages_read_engagement`, `read_insights`); Page tokens from a
   long-lived user token don't expire, so no refresh logic. Stored with the Page ID in `social_stats.facebook_token`.
 - Data: `/{page-id}?fields=followers_count` + Page Insights `page_daily_follows_unique` /
@@ -228,8 +229,11 @@ Everything is in `data/links.ts`:
 - Scripts like igstats but with `FBSTATS_RUN_SECRET`: `./deploy.sh`, `./run.sh`, `./run.sh --save`,
   `./run.sh --test-alert`. Endpoints: `POST /` (trigger only), `POST /run`, `GET /public/facebook` (public
   `{ followers, date }`; feeds the Facebook count on /links and /blog via `lib/instagram-followers.ts`).
-- Trigger: create a schedule `59 21,22 * * *` for slug `fbstats` (same as igstats) ONLY once the Page token works,
-  otherwise every night fails and sends an alert email.
+- Trigger `fbstats-daily-2359-paris` (`59 21,22 * * *`, created 2026-10-10 once the token worked).
+- New Page token: put a long-lived USER token (permissions pages_show_list, pages_read_engagement, read_insights,
+  business_management; Page ticked in the login dialog) in `.env.local` as `FB_USER_TOKEN`, run `./setup-token.sh`
+  (prints permissions/Pages, never tokens; saves the Page token), then remove FB_USER_TOKEN.
+- Insights lag ~3 days (follows/unfollows of the latest complete Facebook day). Countries still available (2026-10).
 - Umami fork **"Facebook" tab** (`src/app/(main)/websites/[websiteId]/facebook/`, API route
   `src/app/api/websites/[websiteId]/facebook-stats/route.ts`): followers chart, follows vs unfollows, top countries
   (if any), daily table.
