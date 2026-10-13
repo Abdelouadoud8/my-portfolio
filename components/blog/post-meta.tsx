@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { formatPostDate, type BlogPostMeta } from "@/lib/blog";
 
-// Category tag · date · reading time (English UI). Each item is isolated as LTR so it stays readable
+// Category tag (Arabic) · date · reading time (English). Each item is isolated so it stays readable
 // inside right-to-left rows (otherwise "3 Oct 2026" renders as "Oct 2026 3").
 export default function PostMeta({
   post,
@@ -11,7 +11,7 @@ export default function PostMeta({
   linkCategory?: boolean;
 }) {
   const category = (
-    <bdi dir="ltr" className="font-bold uppercase tracking-wide text-primary">
+    <bdi className="font-arabic font-bold text-primary">
       {post.category.label}
     </bdi>
   );

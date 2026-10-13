@@ -67,7 +67,7 @@ export default async function BlogPostPage({ params }: Props) {
           <span aria-hidden="true">/</span>
           <Link
             href={`/blog/category/${post.category.slug}`}
-            className="hover:text-primary"
+            className="font-arabic hover:text-primary"
           >
             {post.category.label}
           </Link>
@@ -128,7 +128,7 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="flex flex-col gap-6 border-t border-neutral-10 pt-8">
           {related.length > 0 && (
             <section className="flex flex-col gap-5">
-              <SectionTitle label={`More in ${post.category.label}`} />
+              <SectionTitle label={`مقالات أخرى في ${post.category.label}`} />
               <PostList posts={related} />
             </section>
           )}

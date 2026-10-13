@@ -22,8 +22,8 @@ export default function FollowSection({
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-3">
-        <p className="text-xs font-bold uppercase tracking-wide text-neutral-50">
-          Follow me
+        <p className="font-arabic text-sm font-bold text-neutral-50">
+          تابعني
         </p>
         <div className="flex flex-col gap-2">
           {socials.map((link) => (
@@ -47,8 +47,8 @@ export default function FollowSection({
 
       {reels.length > 0 && (
         <section className="flex flex-col gap-3">
-          <p className="text-xs font-bold uppercase tracking-wide text-neutral-50">
-            Featured reels
+          <p className="font-arabic text-sm font-bold text-neutral-50">
+            أحسن الريلز
           </p>
           <div className="flex flex-col gap-3">
             {reels.map((reel) => (

@@ -16,27 +16,27 @@ export default function BlogPage() {
           Blog
         </p>
         <h1
-          dir="auto"
-          className="text-right text-3xl font-semibold text-neutral-100 md:text-4xl"
+          dir="rtl"
+          className="text-right font-arabic text-3xl font-semibold text-neutral-100 md:text-4xl"
         >
-          Tips & tutorials from my reels
+          نصائح وشروحات من الريلز تاعي
         </h1>
-        <p dir="auto" className="max-w-2xl text-right text-neutral-70">
-          Everything I share on Instagram, explained step by step with the
-          prompts and links you need.
+        <p dir="rtl" className="max-w-2xl text-right font-arabic text-neutral-70">
+          كلش واش نشارك في Instagram، مشروح خطوة بخطوة مع البرومبتات والروابط
+          اللي تحتاجهم.
         </p>
       </header>
 
       {posts.length === 0 && (
-        <p className="rounded-lg border border-dashed border-neutral-20 p-8 text-center text-neutral-60">
-          The first articles are coming soon.
+        <p className="rounded-lg border border-dashed border-neutral-20 p-8 text-center font-arabic text-neutral-60">
+          أول المقالات جايين قريب.
         </p>
       )}
 
 
       {posts.length > 0 && (
         <section className="flex flex-col gap-3">
-          <SectionTitle label="All articles" />
+          <SectionTitle label="كل المقالات" />
           <PostList posts={posts} />
         </section>
       )}

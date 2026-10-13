@@ -33,23 +33,21 @@ export default async function BlogCategoryPage({ params }: Props) {
   return (
     <BlogShell activeCategory={slug}>
       <header className="flex flex-col gap-3">
-        <p className="text-sm font-bold uppercase tracking-wide text-primary">
-          Category
-        </p>
+        <p className="font-arabic text-sm font-bold text-primary">القسم</p>
         <h1
-          dir="auto"
-          className="text-right text-3xl font-semibold text-neutral-100 md:text-4xl"
+          dir="rtl"
+          className="text-right font-arabic text-3xl font-semibold text-neutral-100 md:text-4xl"
         >
           {category.label}
         </h1>
-        <p dir="auto" className="max-w-2xl text-right text-neutral-70">
+        <p dir="rtl" className="max-w-2xl text-right font-arabic text-neutral-70">
           {category.description}
         </p>
       </header>
 
       {posts.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-neutral-20 p-8 text-center text-neutral-60">
-          No articles in this category yet.
+        <p className="rounded-lg border border-dashed border-neutral-20 p-8 text-center font-arabic text-neutral-60">
+          مازال ما كاين حتى مقال في هذا القسم، ارجع قريب.
         </p>
       ) : (
         <PostList posts={posts} />

@@ -14,14 +14,14 @@ export default function CategoryNav({
   active,
 }: CategoryNavProps) {
   const items = [
-    { slug: "all", label: "All articles", count: total, href: "/blog" },
+    { slug: "all", label: "كل المقالات", count: total, href: "/blog" },
     ...categories.map((c) => ({ ...c, href: `/blog/category/${c.slug}` })),
   ];
 
   return (
     <nav aria-label="Categories">
-      <p className="mb-3 hidden text-xs font-bold uppercase tracking-wide text-neutral-50 lg:block">
-        Categories
+      <p className="mb-3 hidden font-arabic text-sm font-bold text-neutral-50 lg:block">
+        الأقسام
       </p>
       <ul className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:px-0">
         {items.map((item) => {
@@ -37,7 +37,7 @@ export default function CategoryNav({
                     : "border-neutral-20 text-neutral-70 hover:bg-neutral-5 hover:text-neutral-100 lg:border-transparent"
                 }`}
               >
-                <span className="whitespace-nowrap">{item.label}</span>
+                <span className="whitespace-nowrap font-arabic">{item.label}</span>
                 <span
                   className={`text-xs ${isActive ? "text-primary" : "text-neutral-40"}`}
                 >

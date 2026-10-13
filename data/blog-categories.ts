@@ -1,5 +1,5 @@
 // Blog categories, in sidebar order. An article uses the `slug` in its `category` front matter.
-// Labels are shown in English; add or rename freely (renaming a slug changes its URL).
+// Labels and descriptions are in Arabic (Darija), like the articles; add or rename freely (renaming a slug changes its URL).
 export type BlogCategory = {
   slug: string;
   label: string;
@@ -9,22 +9,22 @@ export type BlogCategory = {
 export const blogCategories: BlogCategory[] = [
   {
     slug: "ai-tools",
-    label: "AI Tools",
-    description: "Tools and apps that use AI to save you time.",
+    label: "أدوات الذكاء الاصطناعي",
+    description: "أدوات وتطبيقات بالذكاء الاصطناعي يوفرولك الوقت.",
   },
   {
     slug: "chatgpt",
-    label: "ChatGPT & Prompts",
-    description: "Prompts and ChatGPT tricks explained step by step.",
+    label: "ChatGPT والبرومبتات",
+    description: "برومبتات وحيل تاع ChatGPT مشروحة خطوة بخطوة.",
   },
   {
     slug: "productivity",
-    label: "Productivity",
-    description: "Work and study smarter with simple habits and tools.",
+    label: "الإنتاجية",
+    description: "اخدم واقرا بذكاء، بعادات وأدوات ساهلة.",
   },
   {
     slug: "tutorials",
-    label: "Tutorials",
-    description: "Detailed walkthroughs of the reels, step by step.",
+    label: "شروحات",
+    description: "شرح مفصل تاع الريلز، خطوة بخطوة.",
   },
 ];
