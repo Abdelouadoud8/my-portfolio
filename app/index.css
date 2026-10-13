@@ -198,3 +198,15 @@
 .blog-article blockquote p::after {
   content: none;
 }
+
+/* Logo before a heading (e.g. a tool's app icon): small, inline, rounded like an app icon */
+.blog-article h2 img {
+  display: inline-block;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: 0;
+  margin-inline-end: 0.75rem;
+  border-radius: 0.6rem;
+  vertical-align: middle;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08);
+}
