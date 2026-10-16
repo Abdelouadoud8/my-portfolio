@@ -23,6 +23,11 @@ export const blogCategories: BlogCategory[] = [
     description: "اخدم واقرا بذكاء، بعادات وأدوات ساهلة.",
   },
   {
+    slug: "study-abroad",
+    label: "الدراسة في الخارج",
+    description: "منح، جامعات وخطوات التسجيل باش تقرا برا.",
+  },
+  {
     slug: "tutorials",
     label: "شروحات",
     description: "شرح مفصل تاع الريلز، خطوة بخطوة.",

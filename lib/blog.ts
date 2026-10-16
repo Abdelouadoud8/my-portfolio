@@ -94,13 +94,15 @@ export function getPostsByCategory(slug: string) {
   return getAllPosts().filter((post) => post.category.slug === slug);
 }
 
-// Categories with their article count (empty ones included, so the sidebar stays stable)
+// Categories with their article count; empty ones are hidden from the menu
 export function getCategoriesWithCounts() {
   const posts = getAllPosts();
-  return blogCategories.map((category) => ({
-    ...category,
-    count: posts.filter((post) => post.category.slug === category.slug).length,
-  }));
+  return blogCategories
+    .map((category) => ({
+      ...category,
+      count: posts.filter((post) => post.category.slug === category.slug).length,
+    }))
+    .filter((category) => category.count > 0);
 }
 
 export async function getPost(slug: string): Promise<BlogPost | undefined> {
