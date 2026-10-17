@@ -1,6 +1,8 @@
 // One-off: turn a long-lived USER token into the Page token fbstats needs, then save it.
-// Reads FB_USER_TOKEN (+ optional FB_PAGE_ID) and STATS_DATABASE_URL from the env. Never prints tokens.
+// Reads FB_USER_TOKEN (+ optional FB_PAGE_ID), STATS_DATABASE_URL and TOKEN_ENCRYPTION_KEY from the env.
+// Never prints tokens; the Page token is saved encrypted. Remove FB_USER_TOKEN from .env.local afterwards.
 import { neon } from "@neondatabase/serverless";
+import { encryptToken } from "../shared/token-crypto.mjs";
 
 const GRAPH = "https://graph.facebook.com/v25.0";
 const { FB_USER_TOKEN: userToken, STATS_DATABASE_URL: dbUrl } = process.env;
@@ -11,8 +13,12 @@ const REQUIRED = ["pages_show_list", "pages_read_engagement", "read_insights"];
 if (!userToken) throw new Error("Add FB_USER_TOKEN (the long-lived user token) to .env.local");
 if (!dbUrl) throw new Error("STATS_DATABASE_URL missing in .env.local");
 
+// Tokens go in the Authorization header, never in the URL
 async function graph(path, params) {
-  const res = await fetch(`${GRAPH}${path}?${new URLSearchParams(params)}`);
+  const { access_token: token, ...query } = params;
+  const res = await fetch(`${GRAPH}${path}?${new URLSearchParams(query)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   const body = await res.json();
   if (!res.ok || body.error) {
     const e = body.error ?? {};
@@ -87,7 +93,7 @@ try {
 const sql = neon(dbUrl);
 await sql`
   INSERT INTO social_stats.facebook_token (page_id, access_token)
-  VALUES (${page.id}, ${page.access_token})
+  VALUES (${page.id}, ${encryptToken(page.access_token, "facebook_token")})
   ON CONFLICT (id) DO UPDATE SET page_id = EXCLUDED.page_id,
     access_token = EXCLUDED.access_token, updated_at = now()`;
-console.log("saved in social_stats.facebook_token");
+console.log("saved (encrypted) in social_stats.facebook_token");

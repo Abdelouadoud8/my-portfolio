@@ -4,19 +4,27 @@
 // Triggered by a Neon schedule at 21:59 and 22:59 UTC (cron is UTC only); the run that falls on
 // 23:xx Paris time does the work, the other one exits. This keeps 23:59 local time across DST.
 //
-// Needs: social_stats.instagram_token (long-lived Instagram Login token, auto-refreshed here)
+// Needs: social_stats.instagram_token (long-lived Instagram Login token, auto-refreshed here,
+//        stored encrypted: see ../shared/token-crypto.mjs)
 // Env:   STATS_DATABASE_URL (the Umami/stats DB in London; the function itself runs in the
 //        Frankfurt project "portfolio-automations" because Functions aren't offered in eu-west-2),
-//        RUN_SECRET (for manual runs), SMTP_EMAIL + SMTP_PASSWORD (Gmail, failure alerts)
+//        RUN_SECRET (for manual runs), SMTP_EMAIL + SMTP_PASSWORD (Gmail, failure alerts),
+//        TOKEN_ENCRYPTION_KEY (decrypts the stored token). STATS_DATABASE_URL uses the
+//        least-privilege role "stats_automation", which can only touch the social_stats tables.
 import { neon } from "@neondatabase/serverless";
 import { Hono } from "hono";
 import nodemailer from "nodemailer";
+// @ts-expect-error plain JS module shared with fbstats
+import { decryptToken, encryptToken } from "../shared/token-crypto.mjs";
 
 const GRAPH_HOST = "https://graph.instagram.com";
 const GRAPH = `${GRAPH_HOST}/v25.0`;
 const TIMEZONE = "Europe/Paris";
 // Refresh the 60-day token when it has less than this left (Instagram requires it to be > 24h old)
 const REFRESH_WHEN_LESS_THAN_DAYS = 20;
+// If refreshing keeps failing this close to expiry, fail the run so the alert email goes out
+const FAIL_WHEN_LESS_THAN_DAYS = 5;
+const TOKEN_TABLE = "instagram_token";
 
 const sql = neon(process.env.STATS_DATABASE_URL ?? process.env.DATABASE_URL!);
 const app = new Hono();
@@ -41,13 +49,21 @@ function statDateFor(now: Date) {
   return parisParts(now).date;
 }
 
+// The token goes in the Authorization header, never in the URL (URLs end up in logs and proxies).
+// Only exception: /refresh_access_token, where Meta accepts the token nowhere else (header and POST
+// body are refused); that call runs about once every 40 days, over HTTPS, and the URL is never
+// logged or returned (errors only mention the path).
 async function graph<T>(
   path: string,
   params: Record<string, string>,
-  base = GRAPH,
+  token: string,
+  { base = GRAPH, tokenInQuery = false } = {},
 ): Promise<T> {
-  const url = `${base}${path}?${new URLSearchParams(params)}`;
-  const res = await fetch(url, { signal: AbortSignal.timeout(20_000) });
+  const query = new URLSearchParams(tokenInQuery ? { ...params, access_token: token } : params);
+  const res = await fetch(`${base}${path}?${query}`, {
+    headers: tokenInQuery ? {} : { Authorization: `Bearer ${token}` },
+    signal: AbortSignal.timeout(20_000),
+  });
   const body = await res.json();
   if (!res.ok || body.error) {
     throw new Error(`Instagram API ${path}: ${res.status} ${JSON.stringify(body.error ?? body)}`);
@@ -58,40 +74,46 @@ async function graph<T>(
 async function getToken() {
   const rows = await sql`SELECT access_token, expires_at FROM social_stats.instagram_token WHERE id = 1`;
   if (!rows.length) throw new Error("No token in social_stats.instagram_token");
-  let { access_token: token, expires_at: expiresAt } = rows[0] as {
+  const { access_token: stored, expires_at: expiresAt } = rows[0] as {
     access_token: string;
     expires_at: string | null;
   };
+  let token = decryptToken(stored, TOKEN_TABLE) as string;
 
   const daysLeft = expiresAt ? (new Date(expiresAt).getTime() - Date.now()) / 86_400_000 : 0;
   if (daysLeft < REFRESH_WHEN_LESS_THAN_DAYS) {
     try {
       const refreshed = await graph<{ access_token: string; expires_in: number }>(
         "/refresh_access_token",
-        { grant_type: "ig_refresh_token", access_token: token },
-        GRAPH_HOST, // this endpoint is unversioned
+        { grant_type: "ig_refresh_token" },
+        token,
+        { base: GRAPH_HOST, tokenInQuery: true }, // unversioned endpoint, token only accepted in the URL
       );
       token = refreshed.access_token;
       await sql`
         UPDATE social_stats.instagram_token
-        SET access_token = ${token},
+        SET access_token = ${encryptToken(token, TOKEN_TABLE)},
             expires_at = now() + make_interval(secs => ${refreshed.expires_in}),
             updated_at = now()
         WHERE id = 1`;
       console.log(`token refreshed, valid ${Math.round(refreshed.expires_in / 86400)} days`);
     } catch (error) {
-      // Keep going with the current token; it may still be valid
+      // Keep going with the current token while it's still valid for a while
       console.error(`token refresh failed: ${(error as Error).message}`);
+      if (daysLeft < FAIL_WHEN_LESS_THAN_DAYS) {
+        throw new Error(`token refresh failed and the token expires in ${Math.max(0, Math.floor(daysLeft))} days`);
+      }
     }
   }
   return token;
 }
 
 async function fetchInstagram(token: string) {
-  const profile = await graph<{ followers_count: number; username: string }>("/me", {
-    fields: "followers_count,username",
-    access_token: token,
-  });
+  const profile = await graph<{ followers_count: number; username: string }>(
+    "/me",
+    { fields: "followers_count,username" },
+    token,
+  );
 
   const insights = await graph<{ data: any[] }>("/me/insights", {
     metric: "follower_demographics",
@@ -99,8 +121,7 @@ async function fetchInstagram(token: string) {
     metric_type: "total_value",
     timeframe: "this_month",
     breakdown: "gender",
-    access_token: token,
-  });
+  }, token);
 
   const gender: Gender = { male: 0, female: 0, unknown: 0 };
   const results = insights.data?.[0]?.total_value?.breakdowns?.[0]?.results ?? [];

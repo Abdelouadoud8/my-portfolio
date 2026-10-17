@@ -9,12 +9,16 @@
 // followers, net new followers, Page Insights follows/unfollows and (best effort) top countries.
 //
 // Needs: social_stats.facebook_token (Page ID + long-lived Page access token; Page tokens
-//        obtained from a long-lived user token do not expire, so no refresh logic)
+//        obtained from a long-lived user token do not expire, so no refresh logic; stored
+//        encrypted: see ../shared/token-crypto.mjs)
 // Env:   STATS_DATABASE_URL (the Umami/stats DB in London), RUN_SECRET (manual runs),
-//        SMTP_EMAIL + SMTP_PASSWORD (Gmail, failure alerts)
+//        SMTP_EMAIL + SMTP_PASSWORD (Gmail, failure alerts), TOKEN_ENCRYPTION_KEY (decrypts the
+//        stored token). STATS_DATABASE_URL uses the least-privilege role "stats_automation".
 import { neon } from "@neondatabase/serverless";
 import { Hono } from "hono";
 import nodemailer from "nodemailer";
+// @ts-expect-error plain JS module shared with igstats
+import { decryptToken } from "../shared/token-crypto.mjs";
 
 const GRAPH = "https://graph.facebook.com/v25.0";
 const TIMEZONE = "Europe/Paris";
@@ -44,9 +48,13 @@ function statDateFor(now: Date) {
   return dateParts(now, TIMEZONE).date;
 }
 
-async function graph<T>(path: string, params: Record<string, string>): Promise<T> {
+// The token goes in the Authorization header, never in the URL (URLs end up in logs and proxies)
+async function graph<T>(path: string, params: Record<string, string>, token: string): Promise<T> {
   const url = `${GRAPH}${path}?${new URLSearchParams(params)}`;
-  const res = await fetch(url, { signal: AbortSignal.timeout(20_000) });
+  const res = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` },
+    signal: AbortSignal.timeout(20_000),
+  });
   const body = await res.json();
   if (!res.ok || body.error) {
     throw new Error(`Facebook API ${path}: ${res.status} ${JSON.stringify(body.error ?? body)}`);
@@ -57,11 +65,11 @@ async function graph<T>(path: string, params: Record<string, string>): Promise<T
 async function getToken() {
   const rows = await sql`SELECT page_id, access_token FROM social_stats.facebook_token WHERE id = 1`;
   if (!rows.length) throw new Error("No Page token in social_stats.facebook_token");
-  const { page_id: pageId, access_token: token } = rows[0] as {
+  const { page_id: pageId, access_token: stored } = rows[0] as {
     page_id: string;
     access_token: string;
   };
-  return { pageId, token };
+  return { pageId, token: decryptToken(stored, "facebook_token") as string };
 }
 
 type InsightsValue = { value: unknown; end_time: string };
@@ -79,8 +87,7 @@ function latestDay(values: InsightsValue[] | undefined) {
 async function fetchFacebook(pageId: string, token: string) {
   const page = await graph<{ name: string; followers_count: number }>(`/${pageId}`, {
     fields: "name,followers_count",
-    access_token: token,
-  });
+  }, token);
 
   // Follows / unfollows: optional, the row is still saved if Insights fails
   let follows: number | null = null;
@@ -90,8 +97,7 @@ async function fetchFacebook(pageId: string, token: string) {
     const insights = await graph<InsightsResponse>(`/${pageId}/insights`, {
       metric: "page_daily_follows_unique,page_daily_unfollows_unique",
       period: "day",
-      access_token: token,
-    });
+    }, token);
     const byName = Object.fromEntries(insights.data.map((m) => [m.name, latestDay(m.values)]));
     const f = byName.page_daily_follows_unique;
     const u = byName.page_daily_unfollows_unique;
@@ -109,8 +115,7 @@ async function fetchFacebook(pageId: string, token: string) {
       const res = await graph<InsightsResponse>(`/${pageId}/insights`, {
         metric,
         period: "day",
-        access_token: token,
-      });
+      }, token);
       const latest = latestDay(res.data?.[0]?.values);
       if (latest && latest.value && typeof latest.value === "object") {
         topCountries = latest.value as Record<string, number>;

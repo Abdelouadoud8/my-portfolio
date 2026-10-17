@@ -192,7 +192,8 @@ Everything is in `data/links.ts`:
 - Neon Function **`igstats`** hosted in the Frankfurt project **`portfolio-automations`** (`young-wildflower-73641515`,
   branch `br-steep-resonance-b1bwn48v`) because Neon Functions aren't offered in eu-west-2 (London), where the
   stats DB (`my-portfolio` / `winter-forest-95717998`, the Umami DB) lives. It writes to the London DB through the
-  `STATS_DATABASE_URL` env var. Not part of the Next.js app (excluded in `tsconfig.json`; own `package.json`, esbuild).
+  `STATS_DATABASE_URL` env var, which deploy.sh fills with `.env.local`'s `STATS_AUTOMATION_DATABASE_URL` (the
+  least-privilege role `stats_automation`, see "Automations: security"). Not part of the Next.js app (excluded in `tsconfig.json`; own `package.json`, esbuild).
 - Schedule: **23:59 Europe/Paris**, records `stat_date` = that day. Neon cron is UTC only, so two triggers fire at
   21:59 and 22:59 UTC; the handler only works when it's 23:xx in Paris (handles DST).
 - Data: Instagram API with Instagram Login (graph.instagram.com v25.0): `/me?fields=followers_count` +
@@ -201,8 +202,9 @@ Everything is in `data/links.ts`:
 - Tables (London DB, schema `social_stats`, separate from Umami's `public` tables):
   `instagram_daily` (stat_date PK, followers_count, new_followers = net change, male/female_percentage = share of
   known genders, new_male/female_followers = net change, raw male/female/unknown counts) and `instagram_token`
-  (single row; the function refreshes the 60-day token when < 20 days remain). Upsert per day: the 23:59 run wins.
-- Scripts (read `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `STATS_DATABASE_URL`, `SMTP_EMAIL`, `SMTP_PASSWORD` from
+  (single row, token stored **encrypted**; the function refreshes the 60-day token when < 20 days remain and fails the
+  run, so the alert goes out, if refreshing still fails with < 5 days left). Upsert per day: the 23:59 run wins.
+- Scripts (read `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `STATS_AUTOMATION_DATABASE_URL`, `TOKEN_ENCRYPTION_KEY`, `SMTP_EMAIL`, `SMTP_PASSWORD` from
   `.env.local`, never print them; shared IDs in `neon-api.sh`): `./deploy.sh` bundles + deploys; `./run.sh` = dry run
   for today, `./run.sh --save`, `./run.sh --test-alert` (sample failure email, no Instagram/DB access).
 - Failure alerts: if the scheduled 23:59 run fails, the function emails SMTP_EMAIL (same Gmail app password as the
@@ -221,7 +223,7 @@ Everything is in `data/links.ts`:
 - Facebook link is a Page (new Pages experience; public fb://profile/61593759236599, but the Graph API Page ID is
   **1191205224085834**). Graph API v25.0 with a
   **Page access token** (permissions `pages_show_list`, `pages_read_engagement`, `read_insights`); Page tokens from a
-  long-lived user token don't expire, so no refresh logic. Stored with the Page ID in `social_stats.facebook_token`.
+  long-lived user token don't expire, so no refresh logic. Stored (encrypted) with the Page ID in `social_stats.facebook_token`.
 - Data: `/{page-id}?fields=followers_count` + Page Insights `page_daily_follows_unique` /
   `page_daily_unfollows_unique` (latest complete day; Facebook days end at midnight Pacific → `insights_date`) +
   best-effort countries (`page_follows_country`, fallback `page_fans_country`). Insights/countries failures don't
@@ -234,8 +236,23 @@ Everything is in `data/links.ts`:
 - Trigger `fbstats-daily-2359-paris` (`59 21,22 * * *`, created 2026-10-10 once the token worked).
 - New Page token: put a long-lived USER token (permissions pages_show_list, pages_read_engagement, read_insights,
   business_management; Page ticked in the login dialog) in `.env.local` as `FB_USER_TOKEN`, run `./setup-token.sh`
-  (prints permissions/Pages, never tokens; saves the Page token), then remove FB_USER_TOKEN.
+  (prints permissions/Pages, never tokens; saves the Page token encrypted; needs `TOKEN_ENCRYPTION_KEY` and the owner
+  `STATS_DATABASE_URL`), then remove FB_USER_TOKEN.
 - Insights lag ~3 days (follows/unfollows of the latest complete Facebook day). Countries still available (2026-10).
+
+## Automations: security (igstats + fbstats, 2026-10-17)
+- **Least-privilege DB role `stats_automation`** (London DB): the functions log in with it, never as `neondb_owner`.
+  Grants: `SELECT (id, access_token, expires_at)` + `UPDATE (access_token, expires_at, updated_at)` on
+  `social_stats.instagram_token`, `SELECT (id, page_id, access_token)` on `social_stats.facebook_token`,
+  `SELECT, INSERT, UPDATE` on `instagram_daily` / `facebook_daily`; nothing else (no Umami tables, no DELETE/DDL);
+  `statement_timeout` 30s. A new table the functions need must be granted explicitly. The owner URL
+  (`STATS_DATABASE_URL` in `.env.local`) stays for one-off admin scripts only (setup-token, migrations).
+- **Tokens encrypted at rest**: AES-256-GCM in `automations/shared/token-crypto.mjs`, format `v1:<iv>:<tag>:<data>`,
+  the table name bound as additional data. Key `TOKEN_ENCRYPTION_KEY` (32 bytes base64) only in `.env.local` and the
+  functions' env, never in the DB; losing it means generating new tokens. Plain-text values are refused.
+- **Tokens never in URLs**: Graph calls send `Authorization: Bearer <token>`. Only exception: Instagram's
+  `/refresh_access_token`, which accepts the token in the query string only (header and POST body refused, tested);
+  it runs about once every 40 days and that URL is never logged or returned (errors only contain the path).
 - Umami fork **"Facebook" tab** (`src/app/(main)/websites/[websiteId]/facebook/`, API route
   `src/app/api/websites/[websiteId]/facebook-stats/route.ts`): followers chart, follows vs unfollows, top countries
   (if any), daily table.
@@ -261,7 +278,8 @@ Everything is in `data/links.ts`:
 - `NEXT_PUBLIC_UMAMI_DOMAINS` (optional): comma-separated hostname allowlist. Keep it UNSET on Vercel so all
   production aliases (abdelouadoud-portfolio / abdelouadoud-mahdaoui .vercel.app) are tracked; set in `.env.local`
   to keep localhost out. Preview deployments are skipped via Vercel's automatic `NEXT_PUBLIC_VERCEL_ENV`.
-- `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `FBSTATS_RUN_SECRET`, `STATS_DATABASE_URL`: used only by `automations/*/*.sh`
+- `NEON_API_KEY`, `IGSTATS_RUN_SECRET`, `FBSTATS_RUN_SECRET`, `STATS_DATABASE_URL` (owner, admin scripts only),
+  `STATS_AUTOMATION_DATABASE_URL` (stats_automation role, sent to the functions), `TOKEN_ENCRYPTION_KEY`: used only by `automations/*/*.sh`
   (not the website);
   the deploy script also forwards `SMTP_EMAIL`/`SMTP_PASSWORD` to the igstats function for failure alerts
 
