@@ -12,7 +12,7 @@ const fbHistory = [820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 8
 const reels = [
   { img: "DeAX6mpotb8", views: "1M", likes: "31K", comments: "4.4K" },
   { img: "DdmqbYyIMbW", views: "675K", likes: "17K", comments: "2K" },
-  { img: "DehgrESowRf", views: "570K", likes: "18K", comments: "907" },
+  { img: "Dehq6UyITam", views: "200K", likes: "8.1K", comments: "3.5K" },
 ];
 
 // Phosphor duotone paths, same icons as components/icons/ on the website
