@@ -6,7 +6,7 @@ import BlogShell from "@/components/blog/blog-shell";
 import PostList from "@/components/blog/post-list";
 import PostMeta from "@/components/blog/post-meta";
 import SectionTitle from "@/components/blog/section-title";
-import { IconInstagram } from "@/components/icons/icon-instagram";
+import { IconInstagram } from "@/components/shared/icons/icon-instagram";
 import { DYNAMIC_EVENTS, eventAttributes } from "@/lib/analytics";
 import { getAllPosts, getPost, getPostsByCategory } from "@/lib/blog";
 

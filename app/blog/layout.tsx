@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
-import Footer from "@/components/footer";
+import Footer from "@/components/shared/footer";
 import BlogHeader from "@/components/blog/blog-header";
 
 // Arabic articles: Plus Jakarta Sans has no Arabic glyphs

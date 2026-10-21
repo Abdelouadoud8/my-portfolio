@@ -44,3 +44,7 @@ next-env.d.ts
 automations/**/node_modules
 automations/**/dist
 automations/**/function.zip
+
+# media kit: print pages are build intermediates; assets/ holds private analytics screenshots (repo is public)
+media-kit/*.html
+media-kit/assets/

@@ -8,7 +8,7 @@ import remarkRehype from "remark-rehype";
 import rehypeSlug from "rehype-slug";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeStringify from "rehype-stringify";
-import { blogCategories, type BlogCategory } from "@/data/blog-categories";
+import { blogCategories, type BlogCategory } from "@/data/blog/categories";
 
 // Articles are Markdown files in content/blog/<slug>.md (file name = URL).
 // Files starting with "_" (like _template.md) are ignored.

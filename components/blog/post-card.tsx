@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { BlogPostMeta } from "@/lib/blog";
-import PostMeta from "./post-meta";
+import PostMeta from "@/components/blog/post-meta";
 
 type PostCardProps = {
   post: BlogPostMeta;

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BlogShell from "@/components/blog/blog-shell";
 import PostList from "@/components/blog/post-list";
-import { blogCategories } from "@/data/blog-categories";
+import { blogCategories } from "@/data/blog/categories";
 import { getPostsByCategory } from "@/lib/blog";
 
 // Re-read the live follower counts (public igstats/fbstats endpoints) at most every 15 minutes

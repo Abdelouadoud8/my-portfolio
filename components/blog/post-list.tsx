@@ -1,5 +1,5 @@
 import type { BlogPostMeta } from "@/lib/blog";
-import PostCard from "./post-card";
+import PostCard from "@/components/blog/post-card";
 
 // List of compact article rows (light red cards)
 export default function PostList({

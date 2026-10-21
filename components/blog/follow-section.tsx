@@ -1,7 +1,7 @@
-import CollaborateButton from "@/components/links/collaborate-button";
-import ReelCard from "@/components/links/reel-card";
-import SocialLinkButton from "@/components/links/social-link-button";
-import { collaboration, featuredReels } from "@/data/links";
+import CollaborateButton from "@/components/shared/social/collaborate-button";
+import ReelCard from "@/components/shared/social/reel-card";
+import SocialLinkButton from "@/components/shared/social/social-link-button";
+import { collaboration, featuredReels } from "@/data/links/links";
 import type { SocialLink } from "@/data/types";
 
 // Reels are listed one under the other, as horizontal cards (thumbnail + details)

@@ -1,8 +1,8 @@
-import { linksSocials } from "@/data/links";
+import { linksSocials } from "@/data/links/links";
 import { getAllPosts, getCategoriesWithCounts } from "@/lib/blog";
 import { getVisibleSocials } from "@/lib/instagram-followers";
-import CategoryNav from "./category-nav";
-import FollowSection from "./follow-section";
+import CategoryNav from "@/components/blog/category-nav";
+import FollowSection from "@/components/blog/follow-section";
 
 // Blog page frame, right to left (most readers are Arabic speakers): first column (on the right) =
 // categories + "Follow me" (links, collaborate, reels), then the content. English text is right-aligned too.

@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import LinksProfile from "@/components/links/links-profile";
-import SocialLinkButton from "@/components/links/social-link-button";
-import ReelCard from "@/components/links/reel-card";
-import CollaborateButton from "@/components/links/collaborate-button";
+import SocialLinkButton from "@/components/shared/social/social-link-button";
+import ReelCard from "@/components/shared/social/reel-card";
+import CollaborateButton from "@/components/shared/social/collaborate-button";
 import TotalFollowers from "@/components/links/total-followers";
 import {
   collaboration,
   featuredReels,
   linksProfile,
   linksSocials,
-} from "@/data/links";
+} from "@/data/links/links";
 import { getVisibleSocials } from "@/lib/instagram-followers";
-import Footer from "@/components/footer";
+import Footer from "@/components/shared/footer";
 
 export const metadata: Metadata = {
   title: "Links",

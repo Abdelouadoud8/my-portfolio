@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./index.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import UmamiAnalytics from "@/components/analytics/umami-analytics";
+import UmamiAnalytics from "@/components/shared/analytics/umami-analytics";
 
 const poppins = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     siteName: "Abdelouadoud's Portfolio",
     images: [
       {
-        url: "https://abdelouadoud-portfolio.vercel.app/_next/image?url=%2Fhomepicture.jpg&w=256&q=75",
+        url: "https://abdelouadoud-portfolio.vercel.app/_next/image?url=%2Fshared%2Fhomepicture.jpg&w=256&q=75",
         width: 1200,
         height: 630,
         alt: "Preview of My Portfolio",

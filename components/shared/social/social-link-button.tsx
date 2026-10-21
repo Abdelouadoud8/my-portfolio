@@ -1,0 +1,107 @@
+import React from "react";
+import { ArrowUpRight } from "lucide-react";
+import { SocialLink, SocialPlatform } from "@/data/types";
+import { DYNAMIC_EVENTS, eventAttributes } from "@/lib/analytics";
+import { formatCompact } from "@/lib/utils";
+import { IconProps } from "@/components/shared/icons/icon-arrow-right";
+import { IconInstagram } from "@/components/shared/icons/icon-instagram";
+import { IconTiktok } from "@/components/shared/icons/icon-tiktok";
+import { IconLinkedin } from "@/components/shared/icons/icon-linkedin";
+import { IconSnapchat } from "@/components/shared/icons/icon-snapchat";
+import { IconTelegram } from "@/components/shared/icons/icon-telegram";
+import { IconYoutube } from "@/components/shared/icons/icon-youtube";
+import { IconFacebook } from "@/components/shared/icons/icon-facebook";
+import { IconGithub } from "@/components/shared/icons/icon-github";
+import { IconTwitter } from "@/components/shared/icons/icon-twitter";
+import { IconWhatsapp } from "@/components/shared/icons/icon-whatsapp";
+import { IconEmail } from "@/components/shared/icons/icon-email";
+
+export const platformIcons: Record<SocialPlatform, React.FC<IconProps>> = {
+  instagram: IconInstagram,
+  tiktok: IconTiktok,
+  linkedin: IconLinkedin,
+  snapchat: IconSnapchat,
+  telegram: IconTelegram,
+  youtube: IconYoutube,
+  github: IconGithub,
+  x: IconTwitter,
+  facebook: IconFacebook,
+  whatsapp: IconWhatsapp,
+  email: IconEmail,
+};
+
+export default function SocialLinkButton({
+  platform,
+  label,
+  handle,
+  href,
+  followers,
+  comingSoon,
+  location = "links",
+  compact = false,
+}: SocialLink & { location?: string; compact?: boolean }) {
+  const Icon = platformIcons[platform];
+
+  const content = (
+    <>
+      <span
+        className={`flex shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary ${
+          compact ? "size-8" : "size-10"
+        }`}
+      >
+        <Icon width={compact ? 18 : 24} height={compact ? 18 : 24} />
+      </span>
+      <span className="min-w-0 flex-1 text-start">
+        <span
+          className={`block font-semibold text-neutral-100 ${compact ? "text-sm" : ""}`}
+        >
+          {label}
+        </span>
+        {handle && !compact && (
+          <span className="block truncate text-sm text-neutral-50">
+            {handle}
+          </span>
+        )}
+      </span>
+    </>
+  );
+
+  const baseClassName = `flex w-full items-center gap-3 rounded-lg border border-neutral-20 bg-white ${
+    compact ? "py-2 pl-2 pr-3" : "py-3 pl-3 pr-4"
+  }`;
+
+  if (comingSoon) {
+    return (
+      <div className={`${baseClassName} opacity-60`} aria-disabled="true">
+        {content}
+        <span className="rounded-full bg-neutral-10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-neutral-60">
+          Soon
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`group ${baseClassName} transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-primary hover:shadow-[0_6px_20px_rgba(230,57,70,0.12)]`}
+      {...eventAttributes(DYNAMIC_EVENTS.socialClick(platform, location), {
+        platform: label,
+        location,
+      })}
+    >
+      {content}
+      {followers !== undefined && (
+        <span
+          className="shrink-0 text-sm font-semibold text-neutral-80"
+          title={`${followers.toLocaleString("en")} followers`}
+        >
+          <bdi dir="ltr">{` + ${formatCompact(followers)}`}</bdi>
+        </span>
+      )}
+      <ArrowUpRight className="size-4 shrink-0 text-neutral-30 transition-colors group-hover:text-primary rtl:-scale-x-100" />
+    </a>
+  );
+}

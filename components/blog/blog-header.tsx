@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Logo } from "../icons/logo";
+import { Logo } from "@/components/shared/icons/logo";
 import { EVENTS, eventAttributes } from "@/lib/analytics";
 
 const navItems = [

@@ -12,7 +12,7 @@ Mostly static content, no database, no CMS. All content lives in TypeScript file
 - **Next.js 15.5 (App Router)**, React 19, TypeScript 5 (strict), `--turbopack` in dev
 - **Tailwind CSS v4** (CSS-first config in `app/index.css` via `@theme`; there is no `tailwind.config.*`)
 - **shadcn/ui** (style `new-york`, base `zinc`, `components.json`), only `button`, `input`, `label`, `textarea` installed
-- `lucide-react` icons (plus custom SVG icon components in `components/icons/`)
+- `lucide-react` icons (plus custom SVG icon components in `components/shared/icons/`)
 - **Umami** analytics (primary, see Analytics section) + `@vercel/analytics` (`<Analytics />`, legacy, kept during transition)
 - `nodemailer` (Gmail SMTP) for the contact form
 - Font: **Plus Jakarta Sans** via `next/font/google` (the variable is misleadingly named `poppins` / `--font-poppins`)
@@ -20,21 +20,35 @@ Mostly static content, no database, no CMS. All content lives in TypeScript file
   patched top-level version. Check `npm audit --omit=dev` after dependency changes. Scripts: `dev`, `build`, `start`, `lint`
 
 ## Directory map
+The site has four areas, kept apart at every level (route, components, data, public files):
+
+| Area | URL | app/ | components/ | data/ | public/ |
+|---|---|---|---|---|---|
+| Portfolio (UI/UX work) | `/`, `/about`, `/contact`, `/testimonials`, `/projects/:slug` | `(portfolio)/` | `portfolio/` | `portfolio/` | `portfolio/` |
+| Blog | `/blog…` | `blog/` | `blog/` | `blog/` (+ `content/blog/`) | `blog/` |
+| Links (link in bio) | `/links` | `links/` | `links/` | `links/` | `links/` |
+| Media kit | `/media-kit`, `/media-kit/en`, `/media-kit/darja` | (none: static files + rewrites) | (none) | `media-kit/build.mjs` | `media-kit/` |
+
+Code used by more than one area lives in `components/shared/`, `public/shared/`, `data/types.ts` and `lib/`.
+Old public URLs (`/img/…`, `/files/…`, `/homepicture.jpg`) redirect to the new folders (`redirects()` in next.config.ts).
 ```
 app/
   layout.tsx                 Root layout: html/body, metadata/SEO/OpenGraph, font, <Analytics/>, <UmamiAnalytics/>
   index.css                  Tailwind v4 theme tokens (colors, shadows) + shadcn CSS vars
-  (site)/                    Route group = portfolio pages WITH header/footer (group name not in URL)
+  (portfolio)/               Route group = portfolio pages WITH header/footer (group name not in URL)
     layout.tsx               <Header/>, <main container>, <Footer/>
     page.tsx                 "/" Home (client component): Heading, Projects grid, Clients, Testimonials, ContactCTA
-    about/page.tsx           "/about": GeneralDetails, topics grid (from data/topics.ts), Trailing
+    about/page.tsx           "/about": GeneralDetails, topics grid (from data/portfolio/topics.ts), Trailing
     contact/page.tsx         "/contact": contact info + <ContactForm/>
     testimonials/page.tsx    "/testimonials": testimonial carousel
-    projects/[slug]/page.tsx "/projects/:slug": case study, SSG via generateStaticParams from data/projects.ts
+    projects/[slug]/page.tsx "/projects/:slug": case study, SSG via generateStaticParams from data/portfolio/projects.ts
+    api/send-email/route.ts  POST /api/send-email, the only backend: validated + HTML-escaped contact form via Gmail
+                             SMTP (nodemailer 9); anti-spam: honeypot `website` field, `startedAt` min 3s,
+                             3 msgs/10 min per IP (in-memory)
   blog/                      "/blog": Markdown blog (own layout: BlogHeader + <Footer/>, IBM Plex Sans Arabic as --font-arabic)
     page.tsx                 home: one list of all articles (compact numbered light-red rows, no covers);
                              filtering is done with the category menu (no Featured section)
-    category/[category]/     one page per category (data/blog-categories.ts), dynamicParams=false
+    category/[category]/     one page per category (data/blog/categories.ts), dynamicParams=false
     [slug]/page.tsx          article: RTL Arabic prose, "Watch the reel" button, related posts
                              All blog pages use <BlogShell>, which is dir="rtl" (most readers are Arabic speakers;
                              header/footer stay LTR): first column (on the right) = categories + compact Follow me (links,
@@ -42,66 +56,74 @@ app/
                              hideComments`). English text inside RTL: use dir="auto" + text-right so punctuation
                              stays at the end; direction-aware styles (border-s, text-start, rtl:) keep /links unchanged.); on mobile categories are chips on top and Follow me
                              goes below.
-  links/page.tsx             "/links": link-in-bio page (no portfolio header, keeps <Footer/>), content from data/links.ts
-  api/send-email/route.ts    POST, the only backend: validated + HTML-escaped contact form via Gmail SMTP (nodemailer 9);
-                             anti-spam: honeypot `website` field, `startedAt` min 3s, 3 msgs/10 min per IP (in-memory)
+  links/page.tsx             "/links": link-in-bio page (no portfolio header, keeps <Footer/>), content from data/links/links.ts
 components/
-  analytics/umami-analytics.tsx  Loads Umami script + global link-click & scroll-depth tracking
-  header.tsx, footer.tsx     Global nav (navItems array) / footer with social links (hardcoded)
-  section-header.tsx         Reusable subtitle (red, uppercase) + title block
-  home/                      heading, projects (grid), project-card, clients (logo grid), client-box, ContactCTA
-  project/                   project-header, project-section (numbered section + images), quote
-  about/                     general-details, topic (used on about AND project pages), trailing
-  links/                     links-profile, social-link-button (platform→icon map), reel-card, collaborate-button
-                             (all take a `location` prop for analytics: "links" default, "blog" in the blog)
+  portfolio/
+    header.tsx               Portfolio nav (navItems array)
+    section-header.tsx       Reusable subtitle (red, uppercase) + title block
+    home/                    heading, projects (grid), project-card, clients (logo grid), client-box, ContactCTA
+    project/                 project-header, project-section (numbered section + images), quote
+    about/                   general-details, topic (used on about AND project pages), trailing
+    contact/contact-form.tsx Client form, POSTs JSON to /api/send-email, uses alert() for feedback
+    testimonials/            testimonial-caroussel, caroussel-image
   blog/                      blog-shell, blog-header, category-nav, post-list + post-card (numbered rows, dir=rtl:
                              number right, arrow ← left), post-meta (each English item wrapped LTR via <bdi>/dir so
                              dates stay "3 Oct 2026" inside RTL rows),
                              section-title, follow-section (uses SocialLinkButton `compact`)
-  contact/contact-form.tsx   Client form, POSTs JSON to /api/send-email, uses alert() for feedback
-  testimonials/              testimonial-caroussel, caroussel-image
-  icons/                     SVG React components (Icon*), icons/logos/ = client logos
-  ui/                        shadcn primitives (button, input w/ label+leftIcon, label, textarea w/ label)
+  links/                     links-profile, total-followers
+  shared/
+    footer.tsx               Footer with social links (hardcoded), used by portfolio, blog and links
+    analytics/umami-analytics.tsx  Loads Umami script + global link-click & scroll-depth tracking
+    social/                  social-link-button (platform→icon map), reel-card, collaborate-button: used by /links
+                             and the blog; all take a `location` prop for analytics ("links" default, "blog" in the blog)
+    icons/                   SVG React components (Icon*), icons/logos/ = client logos
+    ui/                      shadcn primitives (button, input w/ label+leftIcon, label, textarea w/ label)
 data/
-  types.ts                   Project, ProjectSectionType, QuoteType, Testimonial, TopicType
-  projects.ts                Array of Project (the main content, ~800 lines)
-  testimonials.ts            Array of Testimonial
-  topics.ts                  About page sections (experience, education, etc.)
-  links.ts                   /links content: linksProfile, linksSocials, featuredReels, collaboration
-  blog-categories.ts         blog categories (slug, Darija label + description), sidebar order
+  types.ts                   Project, ProjectSectionType, QuoteType, Testimonial, TopicType, SocialPlatform…
+  portfolio/projects.ts      Array of Project (the main content, ~800 lines)
+  portfolio/testimonials.ts  Array of Testimonial
+  portfolio/topics.ts        About page sections (experience, education, etc.)
+  portfolio/general.ts       socialLinks + contacts (NOT currently used by header/footer, which hardcode them)
+  blog/categories.ts         blog categories (slug, Darija label + description), sidebar order
+  links/links.ts             /links content: linksProfile, linksSocials, featuredReels, collaboration
 content/blog/                blog articles as Markdown (<slug>.md); _template.md documents the front matter
-  general.ts                 socialLinks + contacts (NOT currently used by header/footer, which hardcode them)
+content/*.md                 research notes used to write articles (not published: only content/blog/ is read)
 lib/utils.ts                 cn() = clsx + tailwind-merge
 lib/analytics.ts             EVENTS (all event names), trackEvent(), eventAttributes()
 lib/blog.ts                  reads content/blog (gray-matter), validates front matter, Markdown→HTML (unified/remark/rehype)
 lib/instagram-followers.ts   live follower counts (Instagram from igstats, Facebook from fbstats, fetched
                              independently) + getVisibleSocials() (shared by /links and /blog)
+media-kit/                   media kit generator (NOT part of the Next.js app; excluded in tsconfig): see
+                             media-kit/CLAUDE.md. build.mjs + web.mjs → public/media-kit/*.html, render.sh → PDFs
 public/
-  img/projects/<slug>/       Project images (1.png = cover by convention), gifs, mp4s
-  img/testimonials/          Testimonial avatars
-  files/CV_MAHDAOUI_ABDELOUADOUD.pdf
-  homepicture.jpg, mypicture2.jpeg, logo.svg
+  portfolio/projects/<slug>/ Project images (1.png = cover by convention), gifs, mp4s
+  portfolio/testimonials/    Testimonial avatars
+  portfolio/files/CV_MAHDAOUI_ABDELOUADOUD.pdf, portfolio/about-picture.jpg, contactctabg.png, mypicture2.jpeg
+  blog/<slug>/               Article covers and images
+  links/reels/               Reel thumbnails for /links and the blog (9:16)
+  media-kit/                 GENERATED by media-kit/ (don't edit by hand): fr.html, en.html, darja.html, img/, pdf/
+  shared/homepicture.jpg     Profile photo (home, /links, OpenGraph), shared/logo.svg
 ```
 
 ## Common tasks
 ### Add a project
-1. Put images in `public/img/projects/<slug>/` (`1.png` = cover).
-2. Append an object to `data/projects.ts` matching `Project` in `data/types.ts`:
+1. Put images in `public/portfolio/projects/<slug>/` (`1.png` = cover).
+2. Append an object to `data/portfolio/projects.ts` matching `Project` in `data/types.ts`:
    `id, slug, title, subtitle, role, description, coverUrl, link?, topics[{title,content}], sections[{id,title,subtitle,description,images[]}], quote?`
    - Section `id` is rendered as the big number ("01", "02"…), so use "1", "2", …
    - `topics` usually: Dates, Role, Client, Deliverables.
 3. The route `/projects/<slug>` and the home grid card are generated automatically. Order in the array = order on the home page.
 
 ### Add a testimonial
-Append to `data/testimonials.ts`, avatar in `public/img/testimonials/`.
+Append to `data/portfolio/testimonials.ts`, avatar in `public/portfolio/testimonials/`.
 
 ### Add a page / nav item
-Create `app/(site)/<route>/page.tsx` (gets header/footer), then add to `navItems` in `components/header.tsx`.
+Create `app/(portfolio)/<route>/page.tsx` (gets header/footer), then add to `navItems` in `components/portfolio/header.tsx`.
 Standalone pages without portfolio chrome go directly in `app/<route>/`.
 
 ### Write a blog article
 1. Copy `content/blog/_template.md` to `content/blog/<slug>.md` (file name = URL `/blog/<slug>`, lowercase + dashes).
-2. Front matter: `title`, `description` (Arabic), `category` (slug from `data/blog-categories.ts`, build fails with
+2. Front matter: `title`, `description` (Arabic), `category` (slug from `data/blog/categories.ts`, build fails with
    the valid list otherwise), `date` (YYYY-MM-DD, newest first),
    `cover` (image in `public/blog/<slug>/`), `reel` (Instagram URL → "Watch the reel"), `keyword`, `draft: true`.
 3. Drafts show in `npm run dev` (or `BLOG_SHOW_DRAFTS=1`), never in production builds. Remove `draft` to publish.
@@ -111,21 +133,21 @@ Standalone pages without portfolio chrome go directly in `app/<route>/`.
 - Blog pages use `revalidate = 900` (live follower counts in the Follow me section).
 
 ### Update the /links page (link in bio)
-Everything is in `data/links.ts`:
+Everything is in `data/links/links.ts`:
 - `linksSocials`: order = display order; no `href` → hidden; `comingSoon: true` → greyed "Soon" item.
   `followers` (number, optional) is shown compact on the right (6606 → 6.6K); updated by hand, EXCEPT Instagram and
-  Facebook (live from igstats / fbstats, the data/links.ts value is only the fallback):
+  Facebook (live from igstats / fbstats, the data/links/links.ts value is only the fallback):
   `/links` fetches the latest daily count from igstats' public `GET /public/instagram` (`lib/instagram-followers.ts`,
   15-minute cache: `revalidate = 900` on the fetch and the page, 5 s timeout) and falls back to the value in
-  `data/links.ts` on failure. New 23:59 counts show up within 15 minutes (refreshed only on visits); no secret
+  `data/links/links.ts` on failure. New 23:59 counts show up within 15 minutes (refreshed only on visits); no secret
   or webhook involved. The fetch URL carries
   `?deploy=<VERCEL_GIT_COMMIT_SHA>` because Next's data cache survives deployments: each deploy gets the current count.
   To force a fresh count: `automations/instagram-stats/run.sh --save` (shows on /links within 15 minutes).
   Public counts readable without API: Instagram (og:description with a link-preview user agent), TikTok
   (`followerCount` in page JSON). Snapchat count is hidden (0) and LinkedIn blocks bots (HTTP 999).
   New platform: add it to `SocialPlatform` (data/types.ts) and to `platformIcons` in
-  `components/links/social-link-button.tsx` (icons are Phosphor duotone, viewBox 256).
-- `featuredReels`: newest first; thumbnail in `public/img/reels/` (9:16 portrait); section hidden when empty.
+  `components/shared/social/social-link-button.tsx` (icons are Phosphor duotone, viewBox 256).
+- `featuredReels`: newest first; thumbnail in `public/links/reels/` (9:16 portrait); section hidden when empty.
   Vertical cards (single reel = centered half-width). Optional `stats` {views, likes, comments, shares},
   each hidden when missing; views overlay the image, the others show under the title (lucide icons).
   Only likes/comments are public on Instagram; views/shares come from the owner's insights.
@@ -134,13 +156,20 @@ Everything is in `data/links.ts`:
   `followers` (Instagram = live count): big number, red "Total followers" label, then the counted platforms'
   icons in a row; hidden when no counts. /links only.
 - `collaboration` {email, label, subject}: red "Collaborate with me" button under the profile
-  (`components/links/collaborate-button.tsx`), hidden while `email` is empty. Opens `mailto:` with the subject; the
+  (`components/shared/social/collaborate-button.tsx`), hidden while `email` is empty. Opens `mailto:` with the subject; the
   address is passed base64-encoded and decoded on click, so it never appears in the HTML (anti-scraping).
 - Clicks are tracked as `links-<platform>-click`, `reel-<id>` and `collaborate-click` (see Analytics).
 
+### Update the media kit (/media-kit + PDFs)
+Everything is generated by `media-kit/` (rules, data sources and checks in `media-kit/CLAUDE.md`): edit the numbers and
+texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/media-kit/`. The web pages are plain HTML
+(no React, no shared layout): Umami is loaded by a script tag in `media-kit/web.mjs` (same website ID,
+`data-domains` keeps localhost out) and the PDF/email buttons fire `media-kit-pdf-download` / `media-kit-email-click`
+{lang}. `/media-kit*` are `rewrites()` in next.config.ts to `public/media-kit/{fr,en,darja}.html`.
+
 ## Analytics (Umami)
 - Page views (incl. client-side navigation) are automatic once the script loads.
-- `components/analytics/umami-analytics.tsx` auto-tracks, for ANY link without `data-umami-event`:
+- `components/shared/analytics/umami-analytics.tsx` auto-tracks, for ANY link without `data-umami-event`:
   `outbound-link-click` {url, domain, text}, `email-click`, `phone-click`, `file-download` {file};
   plus `scroll-depth` {depth: 50|100} per page.
 - Per-item events (built by `DYNAMIC_EVENTS` in `lib/analytics.ts`, names max 50 chars):
@@ -253,6 +282,10 @@ Everything is in `data/links.ts`:
 - **Tokens never in URLs**: Graph calls send `Authorization: Bearer <token>`. Only exception: Instagram's
   `/refresh_access_token`, which accepts the token in the query string only (header and POST body refused, tested);
   it runs about once every 40 days and that URL is never logged or returned (errors only contain the path).
+- **Read-only role `ccm_reader`** (2026-10-17): used by the Social Media Manager app (content-creation-management)
+  to import the daily numbers. `SELECT` on `social_stats.instagram_daily` and `facebook_daily` only (no token tables,
+  no Umami tables), `default_transaction_read_only = on`, `statement_timeout` 15s. Its URL lives only in that app's
+  `apps/api/.env` (`STATS_READONLY_DATABASE_URL`). Renaming those tables' columns breaks that import too.
 - Umami fork **"Facebook" tab** (`src/app/(main)/websites/[websiteId]/facebook/`, API route
   `src/app/api/websites/[websiteId]/facebook-stats/route.ts`): followers chart, follows vs unfollows, top countries
   (if any), daily table.
@@ -287,12 +320,13 @@ Everything is in `data/links.ts`:
 - No `sitemap.ts`, `robots.ts`, `not-found.tsx`; the unknown project slug renders a bare `<div>` instead of `notFound()`.
 - Per-project `generateMetadata` is missing (every project page has the default title).
 - `openGraph.url` / `authors.url` lack the `https://` protocol; the OG image points at a 256px `_next/image` URL.
-- Social links are duplicated in `footer.tsx`, `data/general.ts`, and contact page.
+- Social links are duplicated in `components/shared/footer.tsx`, `data/portfolio/general.ts`, and contact page.
 - Large mp4 files in `public/` count against the repo and Vercel deploy size; prefer external hosting for video.
 - Vercel Hobby limits: serverless function timeouts, and Vercel Analytics data retention is short with no export.
 
 ## Planned direction (from owner, Sept 2026)
 - ~~Long-retention analytics~~: Umami integrated (code done; hosting = self-hosted Umami on Vercel + free Postgres recommended). Remove `@vercel/analytics` once Umami is trusted.
 - ~~Blog~~: done at `/blog` (Markdown in content/blog). Not linked from the portfolio header yet (Arabic audience).
-- ~~Link-in-bio page~~: done at `/links` (data/links.ts).
+- ~~Link-in-bio page~~: done at `/links` (data/links/links.ts).
+- ~~Media kit~~: done at `/media-kit` (generated by media-kit/, Oct 2026).
 - Preferred approach: keep everything in this one Next.js app under different routes (`/blog`, `/links`), with MDX content in the repo.

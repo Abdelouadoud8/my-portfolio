@@ -1,6 +1,6 @@
 import type { SocialLink } from "@/data/types";
 import { formatCompact } from "@/lib/utils";
-import { platformIcons } from "./social-link-button";
+import { platformIcons } from "@/components/shared/social/social-link-button";
 
 // Total followers: sum of every visible link that has a follower count (Instagram uses the live
 // daily count). Big number, "Total followers" label, then the counted platforms' icons.
