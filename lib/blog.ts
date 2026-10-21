@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import matter from "gray-matter";
+import yaml from "js-yaml";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
@@ -32,6 +32,14 @@ export type BlogPostMeta = {
 };
 
 export type BlogPost = BlogPostMeta & { html: string };
+
+// Splits "---\n<YAML>\n---\n<Markdown>" into the YAML data and the Markdown content
+function matter(file: string): { data: Record<string, unknown>; content: string } {
+  const m = /^---\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)/.exec(file);
+  if (!m) return { data: {}, content: file };
+  const data = yaml.load(m[1]);
+  return { data: (data ?? {}) as Record<string, unknown>, content: file.slice(m[0].length) };
+}
 
 function readingMinutes(markdown: string) {
   const words = markdown.trim().split(/\s+/).filter(Boolean).length;
