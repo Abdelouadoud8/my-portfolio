@@ -182,15 +182,38 @@
    so keep the Arabic font and let each line pick its own direction (Arabic or English prompt). */
 .blog-article pre {
   direction: rtl;
-  text-align: right;
+  text-align: start;
 }
 .blog-article pre code {
+  display: block;
+  text-align: start; /* with plaintext, start follows each line's direction: English prompts align left */
   font-family: var(--font-arabic), ui-monospace, monospace;
   white-space: pre-wrap;
   unicode-bidi: plaintext;
   background: transparent;
   padding: 0;
   color: inherit;
+}
+
+/* Inline code (e.g. `/epicshot` in a heading) keeps its own direction, so the slash stays in front */
+.blog-article :not(pre) > code {
+  unicode-bidi: plaintext;
+}
+
+/* A paragraph that is only a bold link (**[text](url)**) renders as a red call-to-action button */
+.blog-article p > strong:only-child > a:only-child {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  background: var(--color-primary);
+  color: white;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgb(230 57 70 / 0.3);
+  transition: background 0.15s;
+}
+.blog-article p > strong:only-child > a:only-child:hover {
+  background: var(--color-primary-600);
+  text-decoration: none;
 }
 
 /* No automatic quotation marks around Arabic blockquotes */

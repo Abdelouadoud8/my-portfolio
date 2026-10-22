@@ -128,7 +128,8 @@ Standalone pages without portfolio chrome go directly in `app/<route>/`.
    `cover` (image in `public/blog/<slug>/`), `reel` (Instagram URL → "Watch the reel"), `keyword`, `draft: true`.
 3. Drafts show in `npm run dev` (or `BLOG_SHOW_DRAFTS=1`), never in production builds. Remove `draft` to publish.
 4. Body: Markdown + GFM, rendered RTL with the Arabic font; code blocks keep the Arabic font (prompts) and pick
-   each line's direction (`.blog-article` rules in app/index.css). Category names, sidebar titles and empty states are in Darija (font-arabic); the rest of the UI (meta, buttons) stays English.
+   each line's direction (`.blog-article` rules in app/index.css). A paragraph that is only a bold link
+   (`**[text](url)**`) renders as a red call-to-action button (e.g. a link to another reel). Category names, sidebar titles and empty states are in Darija (font-arabic); the rest of the UI (meta, buttons) stays English.
 - Links for Instagram auto-DMs: `/blog/<slug>?utm_source=instagram&utm_campaign=<keyword>` (visit source tracking).
 - Blog pages use `revalidate = 900` (live follower counts in the Follow me section).
 
