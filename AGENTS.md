@@ -323,6 +323,9 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - Social links are duplicated in `components/shared/footer.tsx`, `data/portfolio/general.ts`, and contact page.
 - Large mp4 files in `public/` count against the repo and Vercel deploy size; prefer external hosting for video.
 - Vercel Hobby limits: serverless function timeouts, and Vercel Analytics data retention is short with no export.
+- `next` / `eslint-config-next` are pinned to exactly `15.5.27`: 15.5.28 returns 404 (`NoFallbackError`) for every
+  page with `revalidate` + `dynamicParams = false` (all `/blog/<slug>` and `/blog/category/<category>` pages).
+  Before upgrading, run `npm run build && npx next start` and check a blog article returns 200.
 
 ## Planned direction (from owner, Sept 2026)
 - ~~Long-retention analytics~~: Umami integrated (code done; hosting = self-hosted Umami on Vercel + free Postgres recommended). Remove `@vercel/analytics` once Umami is trusted.
