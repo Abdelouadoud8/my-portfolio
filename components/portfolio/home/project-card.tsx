@@ -29,6 +29,7 @@ export default function ProjectCard({
           src={coverUrl}
           alt={title}
           fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover w-full h-full transition-all duration-300 ease-out"
         />
 

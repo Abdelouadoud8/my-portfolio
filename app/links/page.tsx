@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   description: `${linksProfile.tagline} by ${linksProfile.name}: socials and featured reels with detailed steps.`,
 };
 
-// Re-read the live follower counts (public igstats/fbstats endpoints) at most every 15 minutes
-export const revalidate = 900;
+// Re-read the live follower counts (public igstats/fbstats endpoints) twice a day (counts change once a day)
+export const revalidate = 43200;
 
 // Link-in-bio page. Lives outside the (site) group: no portfolio header, but keeps the footer.
 export default async function LinksPage() {

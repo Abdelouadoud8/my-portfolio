@@ -10,8 +10,8 @@ import { IconInstagram } from "@/components/shared/icons/icon-instagram";
 import { DYNAMIC_EVENTS, eventAttributes } from "@/lib/analytics";
 import { getAllPosts, getPost, getPostsByCategory } from "@/lib/blog";
 
-// Re-read the live follower counts (public igstats/fbstats endpoints) at most every 15 minutes
-export const revalidate = 900;
+// Re-read the live follower counts (public igstats/fbstats endpoints) twice a day (counts change once a day)
+export const revalidate = 43200;
 export const dynamicParams = false;
 
 type Props = { params: Promise<{ slug: string }> };

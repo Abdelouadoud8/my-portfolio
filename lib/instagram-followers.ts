@@ -12,9 +12,9 @@ const LIVE_FOLLOWERS_URLS: Partial<Record<SocialPlatform, string>> = {
     "https://br-steep-resonance-b1bwn48v-fbstats.compute.c-5.eu-central-1.aws.neon.tech/public/facebook",
 };
 
-// Counts change once a day (23:59), so a 15-minute cache shows them soon after while keeping
-// pages fast and not calling the functions on every visit
-export const FOLLOWERS_CACHE_SECONDS = 900;
+// Counts change once a day (23:59): refreshing twice a day (12 h) is enough and keeps
+// page regenerations and function calls low
+export const FOLLOWERS_CACHE_SECONDS = 43200;
 
 // The visible social links (hidden ones removed) with live daily counts, for /links and /blog
 export async function getVisibleSocials(socials: SocialLink[]) {
@@ -37,7 +37,7 @@ export async function getLiveFollowers(platform: SocialPlatform): Promise<number
   if (!url) return undefined;
   try {
     // Next's data cache outlives deployments: keying it by commit makes every deploy fetch the
-    // current count, then the 15-minute revalidation applies
+    // current count, then the 12-hour revalidation applies
     const cacheKey = process.env.VERCEL_GIT_COMMIT_SHA ?? "local";
     const res = await fetch(`${url}?deploy=${cacheKey}`, {
       next: { revalidate: FOLLOWERS_CACHE_SECONDS },

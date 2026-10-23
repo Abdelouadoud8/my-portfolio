@@ -3,8 +3,8 @@ import PostList from "@/components/blog/post-list";
 import SectionTitle from "@/components/blog/section-title";
 import { getAllPosts } from "@/lib/blog";
 
-// Re-read the live follower counts (public igstats/fbstats endpoints) at most every 15 minutes
-export const revalidate = 900;
+// Re-read the live follower counts (public igstats/fbstats endpoints) twice a day (counts change once a day)
+export const revalidate = 43200;
 
 export default function BlogPage() {
   const posts = getAllPosts();

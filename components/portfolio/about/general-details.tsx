@@ -8,6 +8,7 @@ function GeneralDetails() {
           src="/portfolio/about-picture.jpg"
           alt="Portfolio cover"
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover rounded-md"
         />
       </div>

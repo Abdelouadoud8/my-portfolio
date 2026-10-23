@@ -13,7 +13,7 @@ Mostly static content, no database, no CMS. All content lives in TypeScript file
 - **Tailwind CSS v4** (CSS-first config in `app/index.css` via `@theme`; there is no `tailwind.config.*`)
 - **shadcn/ui** (style `new-york`, base `zinc`, `components.json`), only `button`, `input`, `label`, `textarea` installed
 - `lucide-react` icons (plus custom SVG icon components in `components/shared/icons/`)
-- **Umami** analytics (primary, see Analytics section) + `@vercel/analytics` (`<Analytics />`, legacy, kept during transition)
+- **Umami** analytics (see Analytics section); `@vercel/analytics` was removed 2026-10-23 (duplicate, saves requests)
 - `nodemailer` (Gmail SMTP) for the contact form
 - Font: **Plus Jakarta Sans** via `next/font/google` (the variable is misleadingly named `poppins` / `--font-poppins`)
 - **npm only** (`package-lock.json`; `yarn.lock` removed). `overrides.postcss` forces Next's bundled PostCSS to the
@@ -33,7 +33,7 @@ Code used by more than one area lives in `components/shared/`, `public/shared/`,
 Old public URLs (`/img/…`, `/files/…`, `/homepicture.jpg`) redirect to the new folders (`redirects()` in next.config.ts).
 ```
 app/
-  layout.tsx                 Root layout: html/body, metadata/SEO/OpenGraph, font, <Analytics/>, <UmamiAnalytics/>
+  layout.tsx                 Root layout: html/body, metadata/SEO (no OpenGraph: only the home page has a link preview), font, <UmamiAnalytics/>
   index.css                  Tailwind v4 theme tokens (colors, shadows) + shadcn CSS vars
   (portfolio)/               Route group = portfolio pages WITH header/footer (group name not in URL)
     layout.tsx               <Header/>, <main container>, <Footer/>
@@ -73,7 +73,7 @@ components/
   links/                     links-profile, total-followers
   shared/
     footer.tsx               Footer with social links (hardcoded), used by portfolio, blog and links
-    analytics/umami-analytics.tsx  Loads Umami script + global link-click & scroll-depth tracking
+    analytics/umami-analytics.tsx  Loads Umami script + global link-click tracking
     social/                  social-link-button (platform→icon map), reel-card, collaborate-button: used by /links
                              and the blog; all take a `location` prop for analytics ("links" default, "blog" in the blog)
     icons/                   SVG React components (Icon*), icons/logos/ = client logos
@@ -131,7 +131,7 @@ Standalone pages without portfolio chrome go directly in `app/<route>/`.
    each line's direction (`.blog-article` rules in app/index.css). A paragraph that is only a bold link
    (`**[text](url)**`) renders as a red call-to-action button (e.g. a link to another reel). Category names, sidebar titles and empty states are in Darija (font-arabic); the rest of the UI (meta, buttons) stays English.
 - Links for Instagram auto-DMs: `/blog/<slug>?utm_source=instagram&utm_campaign=<keyword>` (visit source tracking).
-- Blog pages use `revalidate = 900` (live follower counts in the Follow me section).
+- Blog pages use `revalidate = 43200` (12 h: live follower counts in the Follow me section, twice a day).
 
 ### Update the /links page (link in bio)
 Everything is in `data/links/links.ts`:
@@ -139,11 +139,11 @@ Everything is in `data/links/links.ts`:
   `followers` (number, optional) is shown compact on the right (6606 → 6.6K); updated by hand, EXCEPT Instagram and
   Facebook (live from igstats / fbstats, the data/links/links.ts value is only the fallback):
   `/links` fetches the latest daily count from igstats' public `GET /public/instagram` (`lib/instagram-followers.ts`,
-  15-minute cache: `revalidate = 900` on the fetch and the page, 5 s timeout) and falls back to the value in
-  `data/links/links.ts` on failure. New 23:59 counts show up within 15 minutes (refreshed only on visits); no secret
+  12-hour cache: `revalidate = 43200` on the fetch and the page, 5 s timeout) and falls back to the value in
+  `data/links/links.ts` on failure. New 23:59 counts show up within 12 hours (refreshed only on visits; kept low to save Vercel usage); no secret
   or webhook involved. The fetch URL carries
   `?deploy=<VERCEL_GIT_COMMIT_SHA>` because Next's data cache survives deployments: each deploy gets the current count.
-  To force a fresh count: `automations/instagram-stats/run.sh --save` (shows on /links within 15 minutes).
+  To force a fresh count: `automations/instagram-stats/run.sh --save` (shows on /links within 12 hours, or right after a deploy).
   Public counts readable without API: Instagram (og:description with a link-preview user agent), TikTok
   (`followerCount` in page JSON). Snapchat count is hidden (0) and LinkedIn blocks bots (HTTP 999).
   New platform: add it to `SocialPlatform` (data/types.ts) and to `platformIcons` in
@@ -172,7 +172,7 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - Page views (incl. client-side navigation) are automatic once the script loads.
 - `components/shared/analytics/umami-analytics.tsx` auto-tracks, for ANY link without `data-umami-event`:
   `outbound-link-click` {url, domain, text}, `email-click`, `phone-click`, `file-download` {file};
-  plus `scroll-depth` {depth: 50|100} per page.
+  (`scroll-depth` was removed 2026-10-23 to cut Umami function calls.)
 - Per-item events (built by `DYNAMIC_EVENTS` in `lib/analytics.ts`, names max 50 chars):
   - `<location>-<platform>-click` for social links, e.g. `links-instagram-click`, `footer-x-click`,
     `about-github-click` (props: platform, location)
@@ -323,13 +323,17 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - `openGraph.url` / `authors.url` lack the `https://` protocol; the OG image points at a 256px `_next/image` URL.
 - Social links are duplicated in `components/shared/footer.tsx`, `data/portfolio/general.ts`, and contact page.
 - Large mp4 files in `public/` count against the repo and Vercel deploy size; prefer external hosting for video.
-- Vercel Hobby limits: serverless function timeouts, and Vercel Analytics data retention is short with no export.
+- Vercel Hobby limits are per 30 days and shared by all 3 projects (portfolio, umami-mcp, content-creation-management):
+  100 GB Fast Data Transfer, 1M CDN requests, 4 h Active CPU, 1M invocations, 5,000 image transformations.
+  Keep media light: project images are WebP (max 2000px wide), animations are MP4 (rendered as looping <video>),
+  section images lazy-load, and every `fill` <Image> needs a `sizes` prop. Firewall (2026-10-23): managed rules
+  AI bots = deny, Bot protection = challenge.
 - `next` / `eslint-config-next` are pinned to exactly `15.5.27`: 15.5.28 returns 404 (`NoFallbackError`) for every
   page with `revalidate` + `dynamicParams = false` (all `/blog/<slug>` and `/blog/category/<category>` pages).
   Before upgrading, run `npm run build && npx next start` and check a blog article returns 200.
 
 ## Planned direction (from owner, Sept 2026)
-- ~~Long-retention analytics~~: Umami integrated (code done; hosting = self-hosted Umami on Vercel + free Postgres recommended). Remove `@vercel/analytics` once Umami is trusted.
+- ~~Long-retention analytics~~: Umami integrated (code done; hosting = self-hosted Umami on Vercel + free Postgres recommended). `@vercel/analytics` removed 2026-10-23.
 - ~~Blog~~: done at `/blog` (Markdown in content/blog). Not linked from the portfolio header yet (Arabic audience).
 - ~~Link-in-bio page~~: done at `/links` (data/links/links.ts).
 - ~~Media kit~~: done at `/media-kit` (generated by media-kit/, Oct 2026).

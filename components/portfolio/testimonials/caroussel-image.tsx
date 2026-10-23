@@ -15,6 +15,7 @@ export default function CarousselImage({ imageUrl }: CarousselImageProps) {
           src={imageUrl}
           alt="Portrait"
           fill
+          sizes="300px"
           className="rounded-md object-cover"
         />
       </div>

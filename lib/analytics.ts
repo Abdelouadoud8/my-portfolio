@@ -20,7 +20,6 @@ export const EVENTS = {
   emailClick: "email-click",
   phoneClick: "phone-click",
   fileDownload: "file-download",
-  scrollDepth: "scroll-depth",
   collaborateClick: "collaborate-click",
 } as const;
 

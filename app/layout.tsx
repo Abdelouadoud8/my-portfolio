@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./index.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import UmamiAnalytics from "@/components/shared/analytics/umami-analytics";
 
 const poppins = Plus_Jakarta_Sans({
@@ -51,7 +50,6 @@ export default function RootLayout({
     <html lang="en" className={poppins.className}>
       <body className="background-white">
         {children}
-        <Analytics />
         <UmamiAnalytics />
       </body>
     </html>

@@ -2,7 +2,6 @@
 
 import Script from "next/script";
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { DYNAMIC_EVENTS, EVENTS, trackEvent } from "@/lib/analytics";
 
 const scriptUrl = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL;
@@ -12,7 +11,6 @@ const domains = process.env.NEXT_PUBLIC_UMAMI_DOMAINS;
 // Set automatically by Vercel ("production" | "preview" | "development"); undefined locally.
 const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV;
 
-const SCROLL_MILESTONES = [50, 100];
 const VISIT_SOURCE_KEY = "visit-source-tracked";
 
 // In-app browsers (Instagram, TikTok...) usually send no referrer, but identify themselves in the user agent
@@ -122,34 +120,8 @@ function useLinkTracking() {
   }, []);
 }
 
-// Fires once per milestone per page visit.
-function useScrollDepth(pathname: string) {
-  useEffect(() => {
-    const reached = new Set<number>();
-
-    const onScroll = () => {
-      const scrollable =
-        document.documentElement.scrollHeight - window.innerHeight;
-      if (scrollable <= 0) return;
-      const percent = (window.scrollY / scrollable) * 100;
-
-      for (const milestone of SCROLL_MILESTONES) {
-        if (percent >= milestone - 2 && !reached.has(milestone)) {
-          reached.add(milestone);
-          trackEvent(EVENTS.scrollDepth, { depth: milestone });
-        }
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [pathname]);
-}
-
 export default function UmamiAnalytics() {
-  const pathname = usePathname();
   useLinkTracking();
-  useScrollDepth(pathname);
 
   if (!scriptUrl || !websiteId) return null;
   // Never count preview deployments

@@ -38,6 +38,7 @@ export default async function ProjectPage({ params }: Props) {
         alt={`${project.title} cover`}
         width={1920}
         height={1080}
+        sizes="100vw"
         className="object-cover w-full"
       />
 
