@@ -29,23 +29,6 @@ export const metadata: Metadata = {
   authors: [
     { name: "Mahdaoui Abdelouadoud", url: "abdelouadoud-portfolio.vercel.app" },
   ],
-  openGraph: {
-    title: "Abdelouadoud's Portfolio",
-    description:
-      "Hey it is Abdelouadoud, I’m a Software Engineer & freelance UI/UX designer with over 4 years experience in building brands and digital experiences.",
-    url: "abdelouadoud-portfolio.vercel.app",
-    siteName: "Abdelouadoud's Portfolio",
-    images: [
-      {
-        url: "https://abdelouadoud-portfolio.vercel.app/_next/image?url=%2Fshared%2Fhomepicture.jpg&w=256&q=75",
-        width: 1200,
-        height: 630,
-        alt: "Preview of My Portfolio",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
   robots: {
     index: true,
     follow: true,

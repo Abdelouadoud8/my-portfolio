@@ -140,9 +140,6 @@ export function web(t, { history, fbHistory, reels, ages, gender, ICONS, MAIL, L
 <meta name="color-scheme" content="light">
 <title>Abdelouadoud Mahdaoui · Media Kit</title>
 <meta name="description" content="${desc}">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Abdelouadoud Mahdaoui · Media Kit">
-<meta property="og:description" content="${desc}">
 <link rel="icon" href="${BASE}/img/me.jpg">
 <link rel="canonical" href="${SITE}${langs.find((l) => l.lang === t.lang).href}">
 ${langs.map((l) => `<link rel="alternate" hreflang="${l.lang}" href="${SITE}${l.href}">`).join("\n")}

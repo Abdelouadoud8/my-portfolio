@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { testimonials } from "@/data/portfolio/testimonials";
 import { IconLeftArrow } from "@/components/shared/icons/icon-arrow-left";
