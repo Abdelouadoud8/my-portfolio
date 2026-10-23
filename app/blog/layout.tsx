@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import Footer from "@/components/shared/footer";
 import BlogHeader from "@/components/blog/blog-header";
+import { sitePreviewImage } from "@/lib/link-preview";
 
 // Arabic articles: Plus Jakarta Sans has no Arabic glyphs
 const arabic = IBM_Plex_Sans_Arabic({
@@ -18,6 +19,12 @@ export const metadata: Metadata = {
   },
   description:
     "Detailed steps for the AI tips and tutorials shared in Abdelouadoud's Instagram reels.",
+  // General preview image, so shared blog links don't show a random reel cover from the page
+  openGraph: {
+    siteName: "Abdelouadoud's Blog",
+    images: [sitePreviewImage],
+    type: "website",
+  },
 };
 
 // Blog chrome: its own light header (not the portfolio menu) + the shared footer

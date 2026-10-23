@@ -9,6 +9,7 @@ import SectionTitle from "@/components/blog/section-title";
 import { IconInstagram } from "@/components/shared/icons/icon-instagram";
 import { DYNAMIC_EVENTS, eventAttributes } from "@/lib/analytics";
 import { getAllPosts, getPost, getPostsByCategory } from "@/lib/blog";
+import { sitePreviewImage } from "@/lib/link-preview";
 
 // Re-read the live follower counts (public igstats/fbstats endpoints) twice a day (counts change once a day)
 export const revalidate = 43200;
@@ -27,6 +28,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.title,
     description: post.description,
+    // Replaces the layout's openGraph entirely, so the image is repeated here
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      siteName: "Abdelouadoud's Blog",
+      images: [sitePreviewImage],
+      type: "article",
+    },
   };
 }
 

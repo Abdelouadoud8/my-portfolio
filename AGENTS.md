@@ -33,7 +33,7 @@ Code used by more than one area lives in `components/shared/`, `public/shared/`,
 Old public URLs (`/img/…`, `/files/…`, `/homepicture.jpg`) redirect to the new folders (`redirects()` in next.config.ts).
 ```
 app/
-  layout.tsx                 Root layout: html/body, metadata/SEO (no OpenGraph: only the home page has a link preview), font, <UmamiAnalytics/>
+  layout.tsx                 Root layout: html/body, metadata/SEO (no OpenGraph: only the home page and the blog have a link preview, all with `sitePreviewImage` from lib/link-preview.ts = profile photo at 256px, ~6 KB; pages without og:image let Meta pick a random image from the page), font, <UmamiAnalytics/>
   index.css                  Tailwind v4 theme tokens (colors, shadows) + shadcn CSS vars
   (portfolio)/               Route group = portfolio pages WITH header/footer (group name not in URL)
     layout.tsx               <Header/>, <main container>, <Footer/>

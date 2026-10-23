@@ -90,13 +90,4 @@ export const featuredReels: FeaturedReel[] = [
   //   tag: "AI",
   //   stats: { views: 106000, likes: 2808, comments: 411 },
   // },
-  // {
-  //   id: "DdkE4G5IkeH",
-  //   title: "واش يعرف chatgpt عليك",
-  //   description: "جرب هاذ الصورة مع البرومبت و بارطاجي معانا النتيجة تاعك",
-  //   imageUrl: "/links/reels/HSeqknYXYAAqWxd.jpg",
-  //   href: "https://www.instagram.com/reel/DdkE4G5IkeH/",
-  //   tag: "AI",
-  //   stats: { views: 92100, likes: 3047, comments: 149 },
-  // },
 ];
