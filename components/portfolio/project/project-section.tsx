@@ -26,15 +26,31 @@ export default function ProjectSection({
         </p>
 
         <div className="space-y-16 sm:space-y-8 mt-16">
-          {images.map((image, index) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={index}
-              src={image}
-              alt="Details"
-              className="w-full h-auto object-cover"
-            />
-          ))}
+          {images.map((image, index) =>
+            // Animations are MP4s (much lighter than GIFs), played like a GIF
+            image.endsWith(".mp4") ? (
+              <video
+                key={index}
+                src={image}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="w-full h-auto object-cover"
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={index}
+                src={image}
+                alt="Details"
+                loading="lazy"
+                decoding="async"
+                className="w-full h-auto object-cover"
+              />
+            )
+          )}
         </div>
       </div>
     </div>

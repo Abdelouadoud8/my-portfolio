@@ -9,7 +9,7 @@ export const projects: Project[] = [
     link: "https://www.spinetnfc.com",
     description:
       "Empower your networking with a simple and easy digital way to instantly share your contact information or get others' contact information all at once. Build your network and grow your business using our NFC based features.",
-    coverUrl: "/portfolio/projects/spinet-nfc/1.png",
+    coverUrl: "/portfolio/projects/spinet-nfc/1.webp",
     slug: "spinet-nfc",
     topics: [
       { title: "Dates", content: "May 2021 - June 2024" },
@@ -53,9 +53,9 @@ export const projects: Project[] = [
         description:
           "Here, you will find key design elements from each application: the two mobile apps and the business web app. You’ll notice that we focused on maintaining strong consistency across all platforms by applying the same design style and unified visual identity, using a shared graphic system and typography to ensure a cohesive brand experience.",
         images: [
-          "/portfolio/projects/spinet-nfc/5.png",
-          "/portfolio/projects/spinet-nfc/6.png",
-          "/portfolio/projects/spinet-nfc/7.png",
+          "/portfolio/projects/spinet-nfc/5.webp",
+          "/portfolio/projects/spinet-nfc/6.webp",
+          "/portfolio/projects/spinet-nfc/7.webp",
         ],
       },
       {
@@ -64,7 +64,7 @@ export const projects: Project[] = [
         subtitle: "How did we manage components between apps?",
         description:
           "We ensured consistency and efficiency by creating a shared design system that unified components across the two mobile apps and the business web app. By reusing key elements such as buttons, input fields, icons, and typography, we maintained a cohesive user experience while reducing design and development time. This approach allowed us to keep the same visual language across all platforms while adapting specific components to meet the unique needs of each application.",
-        images: ["/portfolio/projects/spinet-nfc/8.png"],
+        images: ["/portfolio/projects/spinet-nfc/8.webp"],
       },
     ],
     quote: {
@@ -80,7 +80,7 @@ export const projects: Project[] = [
     subtitle: "Control your medical life & health from your home",
     description:
       "Medicol is a mobile application dedicated to all users that want to control their medical life including their medical folders, appointments with doctors, access to all pharmacies and also a space for exchange with doctors and people. If you are a dad or a mom, Medicol allows you to follow your son's vaccination and the follow-up with his doctor",
-    coverUrl: "/portfolio/projects/medicol/1.png",
+    coverUrl: "/portfolio/projects/medicol/1.webp",
     slug: "medicol",
     topics: [
       { title: "Date", content: "May - Juin 2021" },
@@ -119,7 +119,7 @@ export const projects: Project[] = [
         subtitle: "What does the UI kit includes?",
         description:
           "The UI kit includes 6 main parts organized -welcome and authentification-, -Doctors, appointments & pharmacies-, -Medical folder-, -chat-, -BLog & discussion space-, -Fitness & body-, all parts are high organized and consistent by providing various choices with quality design.",
-        images: ["/portfolio/projects/medicol/7.png", "/portfolio/projects/medicol/8.png"],
+        images: ["/portfolio/projects/medicol/7.webp", "/portfolio/projects/medicol/8.webp"],
       },
     ],
     quote: {
@@ -135,7 +135,7 @@ export const projects: Project[] = [
     subtitle: "Simplest way to track & control all your daily tasks in one app",
     description:
       "We all have a busy day from work to shopping to home obligations, managing all these stuff together without forgetting any task is way too hard to maintain, the best solution is TODO lists! but with the advancement of the world and technology it is not practicle to take a book or a list with you everywhere!! Here where our todo app comes! In this research we will take a deep look on our users needs and best solutions we can provide, let’s roll into it!",
-    coverUrl: "/portfolio/projects/todo-app/1.png",
+    coverUrl: "/portfolio/projects/todo-app/1.webp",
     slug: "todo-app",
     topics: [
       { title: "Date", content: "June 2022" },
@@ -153,7 +153,7 @@ export const projects: Project[] = [
         subtitle: "Why we did this work?",
         description:
           "This to do app is a part from my training at the Lasting Dynamics academy before joining the team, this was my final task to conduct a complete UX research followed by the UI design of a to do application. The task was guided by some guidlines and requirements that should be respected",
-        images: ["/portfolio/projects/todo-app/1.png"],
+        images: ["/portfolio/projects/todo-app/1.webp"],
       },
       {
         id: "2",
@@ -161,7 +161,7 @@ export const projects: Project[] = [
         subtitle: "Our user persona",
         description:
           "To better understand our user persona and requirement and identify our enduser, we created a user persona that includes a bio, psychographics and a user story to identify our main functionalities and get out with an end goal",
-        images: ["/portfolio/projects/todo-app/2.png"],
+        images: ["/portfolio/projects/todo-app/2.webp"],
       },
       {
         id: "3",
@@ -169,7 +169,7 @@ export const projects: Project[] = [
         subtitle: "A detailed UX research about product",
         description:
           "To better identify our functionalities, a detailed UX research has been made including our user problems, goals and the common points and we get with some possible solution. After brainstorming we selected the best solution to implement. We also studied the market and our competitors, the strengths and weaknesses to better improve our user experience in our application.",
-        images: ["/portfolio/projects/todo-app/3.png"],
+        images: ["/portfolio/projects/todo-app/3.webp"],
       },
       {
         id: "4",
@@ -201,7 +201,7 @@ export const projects: Project[] = [
         subtitle: "Let's talk about UI now",
         description:
           "After finishing the wireframes and the approval from the team, we start implementing these screens and turning them to high fidelity mockups that will be presented for the final review, the application includ both mobile and web versions",
-        images: ["/portfolio/projects/todo-app/7.png"],
+        images: ["/portfolio/projects/todo-app/7.webp"],
       },
       {
         id: "8",
@@ -225,7 +225,7 @@ export const projects: Project[] = [
     subtitle: "Revise your lessons, try exams and rock your studies",
     description:
       "Medecin Quiz is a web application dedicated for dental students, it contains all years modules including lectures and exams which allows student to revise and prepare their exams, the plateform provide an essaie version before paying to unlock all exams and content.",
-    coverUrl: "/portfolio/projects/medecin-quiz/1.png",
+    coverUrl: "/portfolio/projects/medecin-quiz/1.webp",
     slug: "medecin-quiz",
     topics: [
       { title: "Date", content: "December 2021 - January 2022" },
@@ -243,7 +243,7 @@ export const projects: Project[] = [
         subtitle: "Why we did this work?",
         description:
           "The company offers an educational system and she decided to automate it by creating a solution that allows student to revise or even test their capacities before the real exam and always keep track of their progress, and here our web app comes as a solution!",
-        images: ["/portfolio/projects/medecin-quiz/1.png"],
+        images: ["/portfolio/projects/medecin-quiz/1.webp"],
       },
       {
         id: "2",
@@ -259,7 +259,7 @@ export const projects: Project[] = [
         subtitle: "A modern minimalist landing page",
         description:
           "The landing page has been designed to attract the student, showcase what the website offers, multiple modules included, pricing, some clients testimonials, FAQ and most important why to choose us!",
-        images: ["/portfolio/projects/medecin-quiz/3.png"],
+        images: ["/portfolio/projects/medecin-quiz/3.webp"],
       },
       {
         id: "4",
@@ -268,8 +268,8 @@ export const projects: Project[] = [
         description:
           "The user has the ability to sign in and sign up to his account and also to reset his password.",
         images: [
-          "/portfolio/projects/medecin-quiz/3_1.png",
-          "/portfolio/projects/medecin-quiz/3_2.png",
+          "/portfolio/projects/medecin-quiz/3_1.webp",
+          "/portfolio/projects/medecin-quiz/3_2.webp",
         ],
       },
       {
@@ -287,7 +287,7 @@ export const projects: Project[] = [
           "/portfolio/projects/medecin-quiz/9.png",
           "/portfolio/projects/medecin-quiz/11.png",
           "/portfolio/projects/medecin-quiz/12.png",
-          "/portfolio/projects/medecin-quiz/10.png",
+          "/portfolio/projects/medecin-quiz/10.webp",
         ],
       },
     ],
@@ -305,7 +305,7 @@ export const projects: Project[] = [
     link: "https://apps.apple.com/fr/app/momyz/id6444957052?l=en-GB",
     description:
       "Momyz is a set of applications made to link the stores, delivery and clients together in one service, it businesses to manage their stores, products and sales. It also facilitate the work of delivery men with guaranteed service. It is also destinated for user, who want to purchase prizes of gifts and send it someone with just an online service.",
-    coverUrl: "/portfolio/projects/momyz/1.png",
+    coverUrl: "/portfolio/projects/momyz/1.webp",
     slug: "momyz",
     topics: [
       { title: "Date", content: "March - April 2022" },
@@ -324,7 +324,7 @@ export const projects: Project[] = [
         subtitle: "Applications overview",
         description:
           "Momyz is a project composed of 3 mobile applications related to perform a specific service, all 3 applications have a similar UX to help multiple users adapt with them, whether you are a store owner, a delivery man or a client, we found solutions for your problems, below you will find common problems and the solution we found for each problem.",
-        images: ["/portfolio/projects/momyz/2.png"],
+        images: ["/portfolio/projects/momyz/2.webp"],
       },
       {
         id: "2",
@@ -348,7 +348,7 @@ export const projects: Project[] = [
         subtitle: "What to do before design?",
         description:
           "After finishing our UX research and User Flow, we started the wireframe to determine the structure of our screens, the items places and how to organize and keep consistency throw the pages, the wireframing part is just to show a general and minimal idea about the project before the design phase.",
-        images: ["/portfolio/projects/momyz/5.png"],
+        images: ["/portfolio/projects/momyz/5.webp"],
       },
       {
         id: "5",
@@ -364,7 +364,7 @@ export const projects: Project[] = [
         subtitle: "UI Screens & parts",
         description:
           "Here you will find some parts of the design of each application, you will notice that we made our best to keep consistency between applications by applying the same design style with same graphic chart.",
-        images: ["/portfolio/projects/momyz/7.png"],
+        images: ["/portfolio/projects/momyz/7.webp"],
       },
       {
         id: "7",
@@ -372,7 +372,7 @@ export const projects: Project[] = [
         subtitle: "What about components?",
         description:
           "To facilitate our work and make it easier to collaborate, we started by implementing a design system including all important components, after finishing design we added some additional components, here you will find an overview with some components from our design system.",
-        images: ["/portfolio/projects/momyz/8.png"],
+        images: ["/portfolio/projects/momyz/8.webp"],
       },
     ],
     quote: {
@@ -452,7 +452,7 @@ export const projects: Project[] = [
     subtitle: "Balouta zari3a, the sunflower seed that awakens every flavor.",
     description:
       "Balouta landing page introduces Balouta zari3a, a sunflower seed snack crafted not just for children but for every savory palate. While the page is primarily built to ease the contact with suppliers/distributors, we made sure to weave in the Balouta caracter (Zaki's Rb incfluencer) identity throughout by blending it with the product's specificities, like its range of flavors, so it feels less like a spec sheet and more like an introduction to the brand itself.",
-    coverUrl: "/portfolio/projects/balouta-landing-page/1.png",
+    coverUrl: "/portfolio/projects/balouta-landing-page/1.webp",
     slug: "balouta-landing-page",
     topics: [
       { title: "Date", content: "February - March 2026" },
@@ -471,7 +471,7 @@ export const projects: Project[] = [
         subtitle: "Why we did this work?",
         description:
           "The idea for this landing page was born when influencer Zaki rb decided to launch his own sunflower seed product. With over 5 million followers, reaching and managing suppliers across the country the old-fashioned way was simply not scalable for him and his team. This landing page was created to put the product and its flavors in the spotlight, attract suppliers, and make it easy to get in touch through a dedicated contact page, all while carrying through the fun, quirky Balouta character and values the influencer is known for in his series.",
-        images: ["/portfolio/projects/balouta-landing-page/2.png"],
+        images: ["/portfolio/projects/balouta-landing-page/2.webp"],
       },
       {
         id: "2",
@@ -488,8 +488,8 @@ export const projects: Project[] = [
         description:
           "Knowing that sunflower seeds are mostly consumed by children, we wanted the website to feel as vivid and lively as possible, using vibrant colors for each flavor along with plenty of fun transitions and animations. At the same time, we kept things a bit formal to speak to suppliers, aiming for a mix that captures the fun, playful spirit of the product while still coming across as a serious, money-making opportunity.",
         images: [
-          "/portfolio/projects/balouta-landing-page/4.png",
-          "/portfolio/projects/balouta-landing-page/5.gif",
+          "/portfolio/projects/balouta-landing-page/4.webp",
+          "/portfolio/projects/balouta-landing-page/5.mp4",
         ],
       },
       {
@@ -507,10 +507,10 @@ export const projects: Project[] = [
         description:
           "In this section, we showcase several sections of the landing page, along with the responsive mobile version and the adjustments it required. We also had fun putting together some of the animations we used to highlight the flavors.",
         images: [
-          "/portfolio/projects/balouta-landing-page/7.gif",
-          "/portfolio/projects/balouta-landing-page/8.png",
-          "/portfolio/projects/balouta-landing-page/9.gif",
-          "/portfolio/projects/balouta-landing-page/10.png",
+          "/portfolio/projects/balouta-landing-page/7.mp4",
+          "/portfolio/projects/balouta-landing-page/8.webp",
+          "/portfolio/projects/balouta-landing-page/9.mp4",
+          "/portfolio/projects/balouta-landing-page/10.webp",
         ],
       },
     ],
@@ -528,7 +528,7 @@ export const projects: Project[] = [
     link: "https://www.sdztravel.com",
     description:
       "This web application is made to help a company specialized in getting visa and help students get accpeted in other countries, by facilitating the process to the very low level and manage complicated applications.",
-    coverUrl: "/portfolio/projects/said-etudes/1.png",
+    coverUrl: "/portfolio/projects/said-etudes/1.webp",
     slug: "said-etudes",
     topics: [
       { title: "Date", content: "December 2021 - January 2022" },
@@ -546,7 +546,7 @@ export const projects: Project[] = [
         subtitle: "Why we did this work?",
         description:
           "After making a huge success, the company decided to change from social media and automate their work system, since managing clients throw social media is not such a professional way, this is why we made this plateform where all agents can work together and also company can keep track of all process between students and agents and also process of application of students alone.",
-        images: ["/portfolio/projects/said-etudes/1.png"],
+        images: ["/portfolio/projects/said-etudes/1.webp"],
       },
       {
         id: "2",
@@ -562,7 +562,7 @@ export const projects: Project[] = [
         subtitle: "A modern minimalist landing page",
         description:
           " The landing page has been designed to attract the student, showcase what the website offers, multiple destinations and programs included, pricing, some clients testimonials and also an explanation video.",
-        images: ["/portfolio/projects/said-etudes/3.png"],
+        images: ["/portfolio/projects/said-etudes/3.webp"],
       },
       {
         id: "4",
@@ -594,9 +594,9 @@ export const projects: Project[] = [
           "The design include both user and admin side, in the next section, we will present the user side workflow including the mail functionnalities and path to follow to finish the basic tasks. Main goal of the user is to login, find a program and apply for it, after finishing the payment, the user will have a chat support from the agent until finishing all application process.",
         images: [
           "/portfolio/projects/said-etudes/8.png",
-          "/portfolio/projects/said-etudes/9.png",
-          "/portfolio/projects/said-etudes/10.png",
-          "/portfolio/projects/said-etudes/11.png",
+          "/portfolio/projects/said-etudes/9.webp",
+          "/portfolio/projects/said-etudes/10.webp",
+          "/portfolio/projects/said-etudes/11.webp",
           "/portfolio/projects/said-etudes/12.png",
           "/portfolio/projects/said-etudes/13.png",
           "/portfolio/projects/said-etudes/14.png",
@@ -660,7 +660,7 @@ export const projects: Project[] = [
         subtitle: "What about fonts? colors?",
         description:
           "The colors are choosed regarding the company's identity and logos to keep consistancy and branding. For the typography, for the english version we used the Poppins and for the arabic the choice was on IBM Plex Sans Arabic.",
-        images: ["/portfolio/projects/smart-trans/2.png"],
+        images: ["/portfolio/projects/smart-trans/2.webp"],
       },
       {
         id: "3",
@@ -669,10 +669,10 @@ export const projects: Project[] = [
         description:
           "The application UI was inspired from PAYSERA mobile app, In general, the app consists on banking transactions and exchanges by offering 6 main functionnalities between offices and also between customers (deposit, withdrawal, remittances, reports, currency exchange and inventory), and here we can see each part in details.",
         images: [
-          "/portfolio/projects/smart-trans/3.png",
-          "/portfolio/projects/smart-trans/4.png",
-          "/portfolio/projects/smart-trans/5.png",
-          "/portfolio/projects/smart-trans/6.png",
+          "/portfolio/projects/smart-trans/3.webp",
+          "/portfolio/projects/smart-trans/4.webp",
+          "/portfolio/projects/smart-trans/5.webp",
+          "/portfolio/projects/smart-trans/6.webp",
           "/portfolio/projects/smart-trans/7.png",
         ],
       },
