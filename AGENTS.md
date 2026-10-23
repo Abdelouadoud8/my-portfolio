@@ -148,7 +148,7 @@ Everything is in `data/links/links.ts`:
   (`followerCount` in page JSON). Snapchat count is hidden (0) and LinkedIn blocks bots (HTTP 999).
   New platform: add it to `SocialPlatform` (data/types.ts) and to `platformIcons` in
   `components/shared/social/social-link-button.tsx` (icons are Phosphor duotone, viewBox 256).
-- `featuredReels`: newest first; thumbnail in `public/links/reels/` (9:16 portrait); section hidden when empty.
+- `featuredReels`: newest first; thumbnail in `public/links/reels/` (9:16 portrait, JPEG 720px wide, under 100 KB); section hidden when empty.
   Vertical cards (single reel = centered half-width). Optional `stats` {views, likes, comments, shares},
   each hidden when missing; views overlay the image, the others show under the title (lucide icons).
   Only likes/comments are public on Instagram; views/shares come from the owner's insights.
@@ -325,7 +325,7 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - Large mp4 files in `public/` count against the repo and Vercel deploy size; prefer external hosting for video.
 - Vercel Hobby limits are per 30 days and shared by all 3 projects (portfolio, umami-mcp, content-creation-management):
   100 GB Fast Data Transfer, 1M CDN requests, 4 h Active CPU, 1M invocations, 5,000 image transformations.
-  Keep media light: project images are WebP (max 2000px wide), animations are MP4 (rendered as looping <video>),
+  Keep media light (2026-10-24: Meta's link-preview bot `facebookexternalhit` fetched one 2 MB reel PNG ~1,000×/hour = 27 GB in 12 h; any image that may appear in a link preview must be small): project images are WebP (max 2000px wide), animations are MP4 (rendered as looping <video>),
   section images lazy-load, and every `fill` <Image> needs a `sizes` prop. Firewall (2026-10-23): managed rules
   AI bots = deny, Bot protection = challenge.
 - `next` / `eslint-config-next` are pinned to exactly `15.5.27`: 15.5.28 returns 404 (`NoFallbackError`) for every

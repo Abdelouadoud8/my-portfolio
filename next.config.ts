@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
       { source: "/files/:path*", destination: "/portfolio/files/:path*", permanent: true },
       { source: "/img/projects/:path*", destination: "/portfolio/projects/:path*", permanent: true },
       { source: "/img/testimonials/:path*", destination: "/portfolio/testimonials/:path*", permanent: true },
+      // Reel thumbnails were 2 MB PNGs until 2026-10-24; Meta's link-preview bot still fetches the
+      // old .png URLs ~1,000 times an hour, so they point at the small JPEGs (must stay above /img/reels)
+      { source: "/:dir(img|links)/reels/:id([^/.]+).png", destination: "/links/reels/:id.jpg", permanent: true },
       { source: "/img/reels/:path*", destination: "/links/reels/:path*", permanent: true },
       { source: "/img/:file(about-picture.jpg|contactctabg.png)", destination: "/portfolio/:file", permanent: true },
       { source: "/mypicture2.jpeg", destination: "/portfolio/mypicture2.jpeg", permanent: true },
