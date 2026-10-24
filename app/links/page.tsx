@@ -12,10 +12,18 @@ import {
 } from "@/data/links/links";
 import { getVisibleSocials } from "@/lib/instagram-followers";
 import Footer from "@/components/shared/footer";
+import { sitePreviewImage } from "@/lib/link-preview";
 
+// The Instagram bio link: without an og:image Meta's preview bot picked a reel cover (65 KB) and
+// fetched it about once a minute
 export const metadata: Metadata = {
   title: "Links",
   description: `${linksProfile.tagline} by ${linksProfile.name}: socials and featured reels with detailed steps.`,
+  openGraph: {
+    siteName: "Abdelouadoud's Portfolio",
+    images: [sitePreviewImage],
+    type: "website",
+  },
 };
 
 // Re-read the live follower counts (public igstats/fbstats endpoints) twice a day (counts change once a day)

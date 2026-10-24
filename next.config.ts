@@ -2,6 +2,20 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {},
+  // Public files are served with max-age=0 by default, so browsers re-request every image on each
+  // visit (each one counts as a CDN request). Media is replaced under a new name, so cache it 7 days;
+  // PDFs keep their name when regenerated, so 1 day.
+  async headers() {
+    const days = (n: number) => [{ key: "Cache-Control", value: `public, max-age=${n * 86400}` }];
+    return [
+      { source: "/favicon.ico", headers: days(7) },
+      { source: "/:dir(portfolio|shared|blog)/:file(.+\\.(?:jpg|jpeg|png|webp|gif|svg|mp4))", headers: days(7) },
+      { source: "/links/reels/:path*", headers: days(7) },
+      { source: "/media-kit/img/:path*", headers: days(7) },
+      { source: "/portfolio/files/:path*", headers: days(1) },
+      { source: "/media-kit/pdf/:path*", headers: days(1) },
+    ];
+  },
   // Media kit web pages are generated static files (media-kit/build.mjs → public/media-kit/*.html)
   async rewrites() {
     return [
