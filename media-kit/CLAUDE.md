@@ -35,7 +35,9 @@ table links to for outreach DMs: after a render, remind them to upload new versi
   over the last 30 complete days; interactions, saves, shares = sums of the latest `IgMediaInsight` per post,
   engagement rate = Σ totalInteractions / Σ reach; "98% don't follow me" = unique 30-day reach (`IgDemographic`
   audience `reached`, ~1.85M) vs IG followers; countries = IG followers % and FB % weighted by each platform's
-  followers; age/gender = IG followers (Meta's follower breakdown has been frozen at ~6.6K followers since Oct 16).
+  followers; age/gender = IG followers (`IgDemographic` audience `followers`; it covers ~all followers again since Oct 25,
+  after being frozen at ~6.6K from Oct 16).
+  Follower `history`: the nightly ~01:00 Paris snapshot counts for the previous day; the newest day = latest reading.
 - Old: Neon project `winter-forest-95717998`, `social_stats.instagram_daily` / `facebook_daily`.
 - Views, reach, engagement, age, gender, countries, top city: screenshots in `assets/` or given by the owner.
 - Reel views/likes/comments: from the owner (Instagram only shows likes/comments publicly, and they lag).
