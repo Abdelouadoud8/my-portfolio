@@ -41,7 +41,8 @@ export const linksSocials: SocialLink[] = [
     platform: "tiktok",
     label: "TikTok",
     handle: "@abdelouadoud_8",
-    href: "https://www.tiktok.com/@abdelouadoud_8",
+    // Hidden for now (no href = hidden), so the training card sits higher on /links
+    // href: "https://www.tiktok.com/@abdelouadoud_8",
     followers: +1000,
   },
   // {

@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import LinksProfile from "@/components/links/links-profile";
 import SocialLinkButton from "@/components/shared/social/social-link-button";
-import ReelCard from "@/components/shared/social/reel-card";
+import TrainingCard from "@/components/links/training-card";
 import CollaborateButton from "@/components/shared/social/collaborate-button";
 import TotalFollowers from "@/components/links/total-followers";
 import {
   collaboration,
-  featuredReels,
   linksProfile,
   linksSocials,
 } from "@/data/links/links";
+import { trainings } from "@/data/trainings/trainings";
 import { getVisibleSocials } from "@/lib/instagram-followers";
 import Footer from "@/components/shared/footer";
 import { sitePreviewImage } from "@/lib/link-preview";
@@ -18,7 +18,7 @@ import { sitePreviewImage } from "@/lib/link-preview";
 // fetched it about once a minute
 export const metadata: Metadata = {
   title: "Links",
-  description: `${linksProfile.tagline} by ${linksProfile.name}: socials and featured reels with detailed steps.`,
+  description: `${linksProfile.tagline} by ${linksProfile.name}: socials and free trainings.`,
   openGraph: {
     siteName: "Abdelouadoud's Portfolio",
     images: [sitePreviewImage],
@@ -55,28 +55,17 @@ export default async function LinksPage() {
             ))}
           </section>
 
-          {featuredReels.length > 0 && (
-            <section
-              aria-labelledby="featured-reels"
-              className="flex flex-col gap-4"
-            >
+          {trainings.length > 0 && (
+            <section aria-labelledby="trainings" className="flex flex-col gap-4">
               <h2
-                id="featured-reels"
+                id="trainings"
                 className="text-center text-sm font-bold uppercase tracking-wide text-primary"
               >
-                Featured reels
+                Trainings
               </h2>
-              <div
-                className={
-                  featuredReels.length === 1
-                    ? "mx-auto w-1/2"
-                    : "grid grid-cols-2 gap-4"
-                }
-              >
-                {featuredReels.map((reel) => (
-                  <ReelCard key={reel.id} {...reel} />
-                ))}
-              </div>
+              {trainings.map((training) => (
+                <TrainingCard key={training.id} {...training} />
+              ))}
             </section>
           )}
         </div>

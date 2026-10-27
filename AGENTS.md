@@ -20,13 +20,14 @@ Mostly static content, no database, no CMS. All content lives in TypeScript file
   patched top-level version. Check `npm audit --omit=dev` after dependency changes. Scripts: `dev`, `build`, `start`, `lint`
 
 ## Directory map
-The site has four areas, kept apart at every level (route, components, data, public files):
+The site has five areas, kept apart at every level (route, components, data, public files):
 
 | Area | URL | app/ | components/ | data/ | public/ |
 |---|---|---|---|---|---|
 | Portfolio (UI/UX work) | `/`, `/about`, `/contact`, `/testimonials`, `/projects/:slug` | `(portfolio)/` | `portfolio/` | `portfolio/` | `portfolio/` |
 | Blog | `/blog…` | `blog/` | `blog/` | `blog/` (+ `content/blog/`) | `blog/` |
 | Links (link in bio) | `/links` | `links/` | `links/` | `links/` | `links/` |
+| Trainings | `/trainings/:id` | `trainings/` | `trainings/` (+ `links/training-card`) | `trainings/` | (none) |
 | Media kit | `/media-kit`, `/media-kit/en`, `/media-kit/darja` | (none: static files + rewrites) | (none) | `media-kit/build.mjs` | `media-kit/` |
 
 Code used by more than one area lives in `components/shared/`, `public/shared/`, `data/types.ts` and `lib/`.
@@ -56,6 +57,10 @@ app/
                              hideComments`). English text inside RTL: use dir="auto" + text-right so punctuation
                              stays at the end; direction-aware styles (border-s, text-start, rtl:) keep /links unchanged.); on mobile categories are chips on top and Follow me
                              goes below.
+  trainings/[id]/page.tsx    "/trainings/:id": training details page (RTL Darja, IBM Plex Sans Arabic loaded in
+                             trainings/layout.tsx, no header, shared footer), SSG from data/trainings/trainings.ts,
+                             dynamicParams=false; every block (facts, outcomes, program, audience, requirements, FAQ)
+                             hidden when its field is empty; reviews show an empty-state line until the first session
   links/page.tsx             "/links": link-in-bio page (no portfolio header, keeps <Footer/>), content from data/links/links.ts
 components/
   portfolio/
@@ -153,6 +158,11 @@ Everything is in `data/links/links.ts`:
   each hidden when missing; views overlay the image, the others show under the title (lucide icons).
   Only likes/comments are public on Instagram; views/shares come from the owner's insights.
   `formatCompact()` in `lib/utils.ts` formats all counts (6606 → 6.6K).
+- Trainings (`data/trainings/trainings.ts`, shown on /links instead of the reels; the blog still shows the reels):
+  card `components/links/training-card.tsx` (title, description, date, time, platform, Phosphor duotone icons) whose
+  "تفاصيل الدورة" button opens `/trainings/<id>` (`training-details-click` {training, location}); the page's sign-up
+  button links to `signupHref` (greyed "التسجيل يتفتح قريبا" without it; `training-signup-click` {training, location =
+  bottom}). Empty array hides the /links section. Google Meet free accounts cut group calls at 60 min.
 - Total followers block under the profile (`components/links/total-followers.tsx`): sum of every visible link's
   `followers` (Instagram = live count): big number, red "Total followers" label, then the counted platforms'
   icons in a row; hidden when no counts. /links only.
@@ -187,7 +197,7 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - Current named events: `nav-click` {item, location}, `project-card-click` {project, location},
   `project-live-site-click` {project}, `cta-click` {name, location},
   `cv-download` {location}, `contact-form-start`, `contact-form-submit` {status}, `testimonial-navigate` {direction},
-  `collaborate-click` {location} (deliberately NOT `links-…-click`, which the Umami Links tab counts as a social link).
+  `collaborate-click` {location}, `training-details-click` / `training-signup-click` {training, location} (deliberately NOT `links-…-click`, which the Umami Links tab counts as a social link).
   (Before 2026-09-25 social/reel clicks were logged as `social-click` / `reel-click` with the same props.)
 - Event data keys must be lowercase kebab-case (they become `data-umami-event-<key>`).
 - Renders nothing if env vars are missing, or on Vercel preview deployments.

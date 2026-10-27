@@ -92,6 +92,50 @@ type CollaborationCta = {
   subject: string;
 };
 
+// A training / workshop: card on /links + details page at /trainings/<id>
+type TrainingModule = {
+  title: string;
+  // e.g. "30 دقيقة"
+  duration: string;
+  points: string[];
+};
+
+type TrainingReview = {
+  name: string;
+  text: string;
+  // 1 to 5
+  rating?: number;
+};
+
+type TrainingFaq = {
+  question: string;
+  answer: string;
+};
+
+type Training = {
+  // Also the URL: /trainings/<id>
+  id: string;
+  title: string;
+  description?: string;
+  date?: string;
+  time?: string;
+  // e.g. "Google Meet"
+  platform?: string;
+  // Details page only: every field below is optional, its block is hidden when missing/empty
+  price?: string;
+  level?: string;
+  maxParticipants?: number;
+  // Who it's for / what you'll be able to do / what to bring
+  audience?: string[];
+  outcomes?: string[];
+  requirements?: string[];
+  program?: TrainingModule[];
+  reviews?: TrainingReview[];
+  faq?: TrainingFaq[];
+  // Sign-up form (Google Forms, Tally, ...); no href → "التسجيل يتفتح قريبا" button that isn't clickable
+  signupHref?: string;
+};
+
 type LinksProfile = {
   name: string;
   tagline: string;
@@ -111,4 +155,8 @@ export type {
   ReelStats,
   LinksProfile,
   CollaborationCta,
+  Training,
+  TrainingModule,
+  TrainingReview,
+  TrainingFaq,
 };

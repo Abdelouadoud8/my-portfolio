@@ -21,6 +21,8 @@ export const EVENTS = {
   phoneClick: "phone-click",
   fileDownload: "file-download",
   collaborateClick: "collaborate-click",
+  trainingDetailsClick: "training-details-click",
+  trainingSignupClick: "training-signup-click",
 } as const;
 
 // "LinkedIn" -> "linkedin", "X (Twitter)" -> "x-twitter"
