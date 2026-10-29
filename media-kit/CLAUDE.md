@@ -20,9 +20,10 @@ img/               me.jpg (profile), <reel shortcode>.jpg covers (600 px wide JP
 assets/            analytics screenshots the numbers come from (git-ignored: private, the repo is public)
 setup.sh           installs Playwright's Chromium on a new Mac
 ```
-Public files: the PDF buttons on the web pages link to `/media-kit/pdf/…` (always the deployed version). The owner
-also keeps copies in the pro account's Drive folder "Media Kit" (anyone with the link), which the app's MediaKit
-table links to for outreach DMs: after a render, remind them to upload new versions there (Manage versions).
+Public files: the PDFs are served only from the portfolio, `https://abdelouadoud-portfolio.vercel.app/media-kit/pdf/…`
+(always the deployed version). Both the web pages' PDF buttons and the app's `MediaKit` table (outreach DMs; rows
+fr→FR, en→EN, ar→Darja) link there, so commit + deploy is the whole publish step. The old Drive copies are no longer used.
+curl gets a 429 bot challenge from Vercel on these URLs; check them in a browser instead.
 
 ## Data sources
 - Main source since Oct 19, 2026: the owner's app `~/Desktop/content-creation-management` (Neon project
