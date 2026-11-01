@@ -200,6 +200,22 @@
   unicode-bidi: plaintext;
 }
 
+/* Violet accent for /links and the trainings pages (red felt too pushy for learning offers).
+   Utilities read var(--color-primary…), so redefining them here recolors the whole subtree. */
+.theme-links {
+  --color-primary: #7f5de1;
+  --color-primary-900: #2f1d68;
+  --color-primary-800: #432a91;
+  --color-primary-700: #5636b8;
+  --color-primary-600: #6a47d4;
+  --color-primary-500: #8f72e6;
+  --color-primary-400: #a28aea;
+  --color-primary-300: #b5a1ee;
+  --color-primary-200: #c8b9f3;
+  --color-primary-100: #dbd0f7;
+  --color-primary-50: #ece6fb;
+}
+
 /* A paragraph that is only a bold link (**[text](url)**) renders as a red call-to-action button */
 .blog-article p > strong:only-child > a:only-child {
   display: inline-block;

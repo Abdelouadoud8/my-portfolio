@@ -160,9 +160,26 @@ Everything is in `data/links/links.ts`:
   `formatCompact()` in `lib/utils.ts` formats all counts (6606 → 6.6K).
 - Trainings (`data/trainings/trainings.ts`, shown on /links instead of the reels; the blog still shows the reels):
   card `components/links/training-card.tsx` (title, description, date, time, platform, Phosphor duotone icons) whose
-  "تفاصيل الدورة" button opens `/trainings/<id>` (`training-details-click` {training, location}); the page's sign-up
-  button links to `signupHref` (greyed "التسجيل يتفتح قريبا" without it; `training-signup-click` {training, location =
-  bottom}). Empty array hides the /links section. Google Meet free accounts cut group calls at 60 min.
+  "تفاصيل الدورة" button opens `/trainings/<id>` (`training-details-click` {training, location}). Empty array hides the
+  /links section. Google Meet free accounts cut group calls at 60 min.
+  Details page sections after the sessions: "كيفاش تسجل" (`registrationSteps`, a "coming soon" line while empty),
+  "طرق الدفع" (`paymentMethods` {kind: baridimob | post-office, title, description}). Refund rule lives in the
+  FAQ. Trainer card links to Instagram (`training-instagram-click`) with the live follower count (igstats, page
+  `revalidate = 43200`). "عندك سؤال؟" block after the FAQ opens `questionsHref` (Telegram username link
+  t.me/abdelouadoud_mahdaoui; never use a t.me/+<phone> link, it publishes the number; event `training-question-click`
+  {training}).
+  `components/trainings/sticky-register-bar.tsx`: bottom bar (phones + desktop) with the next open session's
+  date, time and price; "تسجيل" scrolls to the sessions; hidden near the top and while the sessions are on screen.
+  Details page: `sessions` [{date, time?, seats, seatsLeft, price, oldPrice?, signupHref?}], keep them sorted by date
+  (shown in data order) = cards in "الحصص" (`components/trainings/session-cards.tsx`). `variant` "horizontal": date
+  + details (participants, places left, duration = the training's `time`, price; icons; 2×2, one row with fixed
+  columns from md up) and a fixed-width button zone from sm up; "vertical": side by side / swipe on phones. Badges on
+  the top edge: "-N%" (from oldPrice/price), grey "مكتملة" (seatsLeft 0) or
+  outlined "التسجيل يتفتح قريبا" (no link). The "تسجيل" button only shows when booking is open (the session's
+  signupHref, else the training's); phones also show a greyed "تسجيل" before it opens; click event
+  `training-signup-click` {training, location: session-N}.
+  `components/trainings/section-nav.tsx` = sticky section links on the right (lg+) / sticky chip row on phones,
+  highlights the section being read; a new section needs an `id` + an entry in the page's `sections` list.
 - Total followers block under the profile (`components/links/total-followers.tsx`): sum of every visible link's
   `followers` (Instagram = live count): big number, red "Total followers" label, then the counted platforms'
   icons in a row; hidden when no counts. /links only.
@@ -197,7 +214,7 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - Current named events: `nav-click` {item, location}, `project-card-click` {project, location},
   `project-live-site-click` {project}, `cta-click` {name, location},
   `cv-download` {location}, `contact-form-start`, `contact-form-submit` {status}, `testimonial-navigate` {direction},
-  `collaborate-click` {location}, `training-details-click` / `training-signup-click` {training, location} (deliberately NOT `links-…-click`, which the Umami Links tab counts as a social link).
+  `collaborate-click` {location}, `training-details-click` / `training-signup-click` {training, location}, `training-question-click` {training} (deliberately NOT `links-…-click`, which the Umami Links tab counts as a social link).
   (Before 2026-09-25 social/reel clicks were logged as `social-click` / `reel-click` with the same props.)
 - Event data keys must be lowercase kebab-case (they become `data-umami-event-<key>`).
 - Renders nothing if env vars are missing, or on Vercel preview deployments.
@@ -305,6 +322,10 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - Design tokens (in `app/index.css` `@theme`): `primary` (#e63946 red) with `primary-50…900`,
   `neutral-5…100` (neutral-100 = #312e43 main text), `secondary-light/medium/dark`, `shadow-top-light`.
   Use these classes (`text-neutral-100`, `bg-primary`, `text-neutral-70`), not raw hex.
+- **/links and /trainings are violet** (`#7F5DE1`): their root wrappers have the `theme-links` class, which
+  redefines `--color-primary` and `primary-50…900` (app/index.css). Shared components there (social links, footer,
+  reel cards) turn violet automatically; the blog and portfolio stay red. Accent glows use
+  `color-mix(in_srgb,var(--color-primary)_N%,transparent)`, never a hardcoded red rgba, so they follow the theme.
 - Light mode only (dark scheme forced to light).
 - Layout container is in `layout.tsx`: `container mx-auto px-8 sm:px-4 lg:px-16 pt-6 pb-24`.
 - Sections on home separated with `flex flex-col gap-32`.

@@ -107,6 +107,29 @@ type TrainingReview = {
   rating?: number;
 };
 
+// One open date of a training (big cards in the "الحصص" section)
+type TrainingSession = {
+  // e.g. "السبت 15 نوفمبر"
+  date: string;
+  // e.g. "20:00 - 22:00"
+  time?: string;
+  seats: number;
+  seatsLeft: number;
+  // e.g. "1500 DA"
+  price: string;
+  // Price before the discount, shown struck through next to `price`
+  oldPrice?: string;
+  // Register link for this date; falls back to the training's signupHref
+  signupHref?: string;
+};
+
+// "طرق الدفع" section: the icon is picked from `kind`
+type TrainingPaymentMethod = {
+  kind: "baridimob" | "post-office";
+  title: string;
+  description: string;
+};
+
 type TrainingFaq = {
   question: string;
   answer: string;
@@ -124,14 +147,20 @@ type Training = {
   // Details page only: every field below is optional, its block is hidden when missing/empty
   price?: string;
   level?: string;
-  maxParticipants?: number;
+  maxParticipants?: string; // e.g. "20-25"
   // Who it's for / what you'll be able to do / what to bring
   audience?: string[];
   outcomes?: string[];
   requirements?: string[];
+  sessions?: TrainingSession[];
+  // "كيفاش تسجل" steps; the section shows a "coming soon" line while empty
+  registrationSteps?: string[];
+  paymentMethods?: TrainingPaymentMethod[];
   program?: TrainingModule[];
   reviews?: TrainingReview[];
   faq?: TrainingFaq[];
+  // "عندك سؤال؟" button (Telegram/WhatsApp chat link); block hidden when missing
+  questionsHref?: string;
   // Sign-up form (Google Forms, Tally, ...); no href → "التسجيل يتفتح قريبا" button that isn't clickable
   signupHref?: string;
 };
@@ -158,5 +187,7 @@ export type {
   Training,
   TrainingModule,
   TrainingReview,
+  TrainingSession,
+  TrainingPaymentMethod,
   TrainingFaq,
 };

@@ -15,7 +15,9 @@ export const linksProfile: LinksProfile = {
 };
 
 export const collaboration: CollaborationCta = {
-  email: "abdelouadoud.mahdaoui.pro@gmail.com",
+  // Hidden for now (spam). Put the address back to show the button again.
+  // email: "abdelouadoud.mahdaoui.pro@gmail.com",
+  email: "",
   label: "Collaborate with me",
   subject: "Collaboration request",
 };

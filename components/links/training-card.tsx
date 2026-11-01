@@ -24,7 +24,7 @@ export default function TrainingCard({
   ].filter((item) => item.value);
 
   return (
-    <article className="flex flex-col gap-4 rounded-xl border border-neutral-20 bg-white p-5 shadow-[0_6px_20px_rgba(230,57,70,0.08)]">
+    <article className="flex flex-col gap-4 rounded-xl border border-neutral-20 bg-white p-5 shadow-[0_6px_20px_color-mix(in_srgb,var(--color-primary)_8%,transparent)]">
       {/* dir="rtl": Arabic title, icon on the right */}
       <div dir="rtl" className="flex items-center gap-3">
         <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary">

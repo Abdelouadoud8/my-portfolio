@@ -24,10 +24,10 @@ export const metadata: Metadata = {
   },
 };
 
-// Training pages: no portfolio header (reached from /links), shared footer
+// Training pages: no portfolio header (reached from /links), shared footer, violet accent like /links
 export default function TrainingsLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className={`${arabic.variable} flex min-h-dvh flex-col bg-white`}>
+    <div className={`${arabic.variable} theme-links flex min-h-dvh flex-col bg-white`}>
       <main className="flex-1">{children}</main>
       <Footer />
     </div>

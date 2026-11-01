@@ -46,7 +46,7 @@ export default function ReelCard({
       dir={isHorizontal ? "rtl" : undefined}
       className={`group flex gap-2 ${
         isHorizontal
-          ? "flex-row items-stretch gap-3 rounded-lg border border-neutral-20 bg-white p-2 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-primary hover:shadow-[0_6px_20px_rgba(230,57,70,0.12)]"
+          ? "flex-row items-stretch gap-3 rounded-lg border border-neutral-20 bg-white p-2 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-primary hover:shadow-[0_6px_20px_color-mix(in_srgb,var(--color-primary)_12%,transparent)]"
           : "flex-col"
       }`}
       {...eventAttributes(DYNAMIC_EVENTS.reelClick(id), {

@@ -29,13 +29,13 @@ export const metadata: Metadata = {
 // Re-read the live follower counts (public igstats/fbstats endpoints) twice a day (counts change once a day)
 export const revalidate = 43200;
 
-// Link-in-bio page. Lives outside the (site) group: no portfolio header, but keeps the footer.
+// Link-in-bio page (violet accent: .theme-links in app/index.css). Lives outside the (site) group: no portfolio header, but keeps the footer.
 export default async function LinksPage() {
   const socials = await getVisibleSocials(linksSocials);
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <main className="flex-1 bg-[radial-gradient(70%_35%_at_50%_0%,rgba(230,57,70,0.08),transparent)]">
+    <div className="theme-links flex min-h-dvh flex-col">
+      <main className="flex-1 bg-[radial-gradient(70%_35%_at_50%_0%,color-mix(in_srgb,var(--color-primary)_8%,transparent),transparent)]">
         <div className="mx-auto flex w-full max-w-md flex-col gap-10 px-4 pb-10 pt-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
           <LinksProfile {...linksProfile} />
 
@@ -48,12 +48,6 @@ export default async function LinksPage() {
               encodedEmail={Buffer.from(collaboration.email).toString("base64")}
             />
           )}
-
-          <section aria-label="Social links" className="flex flex-col gap-3">
-            {socials.map((link) => (
-              <SocialLinkButton key={link.platform} {...link} />
-            ))}
-          </section>
 
           {trainings.length > 0 && (
             <section aria-labelledby="trainings" className="flex flex-col gap-4">
@@ -68,6 +62,12 @@ export default async function LinksPage() {
               ))}
             </section>
           )}
+
+          <section aria-label="Social links" className="flex flex-col gap-3">
+            {socials.map((link) => (
+              <SocialLinkButton key={link.platform} {...link} />
+            ))}
+          </section>
         </div>
       </main>
       <Footer />

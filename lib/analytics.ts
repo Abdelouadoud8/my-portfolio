@@ -23,6 +23,7 @@ export const EVENTS = {
   collaborateClick: "collaborate-click",
   trainingDetailsClick: "training-details-click",
   trainingSignupClick: "training-signup-click",
+  trainingQuestionClick: "training-question-click",
 } as const;
 
 // "LinkedIn" -> "linkedin", "X (Twitter)" -> "x-twitter"

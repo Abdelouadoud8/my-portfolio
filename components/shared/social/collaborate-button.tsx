@@ -27,7 +27,7 @@ export default function CollaborateButton({
     <button
       type="button"
       onClick={handleClick}
-      className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3.5 font-semibold text-white shadow-[0_6px_20px_rgba(230,57,70,0.25)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-600 cursor-pointer"
+      className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3.5 font-semibold text-white shadow-[0_6px_20px_color-mix(in_srgb,var(--color-primary)_25%,transparent)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-600 cursor-pointer"
     >
       <Mail className="size-5" />
       {label}

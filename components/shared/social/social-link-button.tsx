@@ -86,7 +86,7 @@ export default function SocialLinkButton({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group ${baseClassName} transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-primary hover:shadow-[0_6px_20px_rgba(230,57,70,0.12)]`}
+      className={`group ${baseClassName} transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-primary hover:shadow-[0_6px_20px_color-mix(in_srgb,var(--color-primary)_12%,transparent)]`}
       {...eventAttributes(DYNAMIC_EVENTS.socialClick(platform, location), {
         platform: label,
         location,

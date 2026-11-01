@@ -6,71 +6,92 @@ import { Training } from "@/data/types";
 export const trainings: Training[] = [
   {
     id: "ai-essentials",
-    title: "أتعلم أساسيات الذكاء الإصطناعي مع ودود",
+    title: "أتعلم أساسيات الذكاء الإصطناعي مع ودود في ساعتين",
     description:
       "ساعتين كاملين راح نعلمك فيهم كامل واش تحتاج تعرف على الذكاء الإصطناعي، واش هو الذكاء الإصطناعي؟ كيفاش تستخدمو باش تسهل حياتك؟ و حتى كيفاش تدخل بيه دراهم",
-    date: "قريبا",
+    date: "ثلاث حصص مفتوحة",
     time: "ساعتين",
     // Free Google accounts cut group calls at 60 min: a 2-hour session needs Google Workspace / Google One
     platform: "Google Meet",
     price: "دورة مدفوعة",
     level: "مبتدئين",
-    maxParticipants: 30,
+    maxParticipants: "20-25",
+    // "لمن هاد التكوين؟": who it's for and what you need, summed up in a few ticks
     audience: [
-      "لي سمع بالذكاء الإصطناعي و حاب يفهم واش هو بالضبط",
-      "الطلبة لي حابين يقراو و يحضرو خير و أسرع",
-      "الخدامين لي حابين يربحو الوقت في الخدمة",
-      "لي حاب يبدا يدخل دراهم بالذكاء الإصطناعي",
+      "للمبتدئين: لي حاب يفهم الذكاء الإصطناعي و يستعملو صح",
+      "للطلبة و الخدامين لي حابين يربحو الوقت، و لي حاب يدخل بيه دراهم",
+      "تحتاج غير PC ولا تيليفون مع كونيكسيون مليحة",
+      "حساب Google و حساب مجاني في ChatGPT ولا Gemini ولا Claude",
     ],
     outcomes: [
-      "تفهم واش هو الذكاء الإصطناعي و كيفاش يخدم، بلا كلام معقد",
+      "تفهم واش هو الذكاء الاصطناعي وكيفاش يخدم خلف الكواليس بطريقة بسيطة",
       "تعرف واش يقدر يدير و واش ما يقدرش، و كيفاش تشوف الأخطاء تاعو",
-      "تكتب prompts ملاح بطريقة بسيطة تخدم مع أي أداة",
-      "تستعمل ChatGPT و Gemini و Claude في القراية، الخدمة و التنظيم",
-      "تعرف خدمات تقدر تبيعها بالذكاء الإصطناعي و كيفاش تبدا",
+      "تكتب prompt ملاح بطريقة بسيطة تخدم مع أي أداة: ChatGPT و Claude و Gemini",
+      "نعلمك كيفاه تستعمل هاذ الأدوات في القراية تاعك، الخدمة ولا كيفاش تطور البيزنس تاعك",
+      "تتعرف على خدمات تقدر تبيعها بالذكاء الاصطناعي وكيفاش تبدا (graphic design, social media management) و العديد من الخدمات الرقمية",
+    ],
+    // Seats are placeholders. seatsLeft 0 shows "مكتملة" instead of the price.
+    sessions: [
+      { date: "السبت 7 نوفمبر", time: "20:00 - 22:00", seats: 25, seatsLeft: 0, price: "1500 DA", oldPrice: "3000 DA" },
+      {
+        date: "السبت 28 نوفمبر",
+        time: "20:00 - 22:00",
+        // Placeholder: put the real sign-up form link here (it opens booking for this date)
+        signupHref: "https://forms.gle/REPLACE_ME",
+        seats: 25,
+        seatsLeft: 25,
+        price: "1500 DA",
+        oldPrice: "3000 DA",
+      },
+      { date: "السبت 12 ديسمبر", time: "20:00 - 22:00", seats: 25, seatsLeft: 25, price: "1500 DA", oldPrice: "3000 DA" },
+    ],
+    // Filled once the registration flow is decided (Telegram bot, form, ...)
+    registrationSteps: [],
+    paymentMethods: [
+      {
+        kind: "baridimob",
+        title: "BaridiMob",
+        description: "تحويل من تطبيق BaridiMob لحساب CCP",
+      },
+      {
+        kind: "post-office",
+        title: "Algérie Poste",
+        description: "دفع نقدي في أي مكتب بريد وتاخذ وصل",
+      },
     ],
     program: [
       {
         title: "واش هو الذكاء الإصطناعي؟",
         duration: "30 دقيقة",
         points: [
-          "كيفاش يخدم ChatGPT و أمثالو",
+          "كيفاش تخدم أدوات الذكاء الإصطناعي كيما ChatGPT و Claude... إلخ",
           "واش يقدر يدير و واش ما يقدرش",
-          "الأخطاء تاعو و كيفاش تتأكد من المعلومات",
+          "الأخطاء تاعو و كيفاش تتأكد من المعلومات لي يمدهملك",
         ],
       },
       {
         title: "كيفاش تهدر معاه: الـ prompt",
         duration: "30 دقيقة",
         points: [
-          "طريقة بسيطة باش تكتب prompt مليح",
-          "أمثلة قبل و بعد",
-          "تطبيق مباشر مع بعض",
+          "أفضل الطرق باش تكتب prompt مليح يوصلك لأفضل نتيجة ممكنة",
+          "أمثلة قبل و بعد إستعمال البرومبت",
+          "تطبيق مباشر مع بعض على عدة أمثلة يومية",
         ],
       },
       {
         title: "سهّل حياتك بالذكاء الإصطناعي",
         duration: "30 دقيقة",
         points: [
-          "الكتابة، التلخيص و الترجمة",
-          "القراية و التحضير للإمتحانات",
+          "كيفاش تستعمل الأدوات باش تسهل المهام اليومية تاعك",
+          "إستعمال الأدوات في الدراسة و التحضير، في تسهيل العمل و حتى تسيير البيزنس تاعك",
           "أدوات مجانية لي تربحلك الوقت",
         ],
       },
       {
         title: "كيفاش تدخل بيه دراهم",
         duration: "30 دقيقة",
-        points: [
-          "خدمات تقدر تبيعها (كتابة، تصميم، فيديو...)",
-          "كيفاش تلقى أول كليان",
-          "أسئلة و أجوبة",
-        ],
+        points: ["خدمات تقدر تبيعها (كتابة، تصميم، فيديو...)", "كيفاش تلقى أول زبون", "أسئلة و أجوبة"],
       },
-    ],
-    requirements: [
-      "PC ولا تيليفون مع كونيكسيون مليحة",
-      "حساب Google باش تدخل لـ Google Meet",
-      "حساب مجاني في ChatGPT (ولا Gemini ولا Claude) باش تطبق معانا",
     ],
     // Add real attendee reviews after the first session, e.g. { name: "Amine", text: "...", rating: 5 }
     reviews: [],
@@ -82,11 +103,11 @@ export const trainings: Training[] = [
       },
       {
         question: "لازم يكون عندي مستوى في الذكاء الاصطناعي؟",
-        answer: "لا، التكوين للمبتدئين. إلا تعرف تستعمل التيليفون ولا PC يكفي.",
+        answer: "لا، التكوين للمبتدئين. إذا تعرف تستعمل التيليفون ولا PC يكفي.",
       },
       {
         question: "بأي لغة يكون التكوين؟",
-        answer: "بالدارجة، و الكلمات التقنية نشرحوهم.",
+        answer: "بالدارجة، و الكلمات التقنية نشرحوهم و نبسطوا أي موضوع معقد.",
       },
       {
         question: "كيفاش ندخل نهار التكوين؟",
@@ -95,9 +116,16 @@ export const trainings: Training[] = [
       },
       {
         question: "علاش عدد الأماكن محدود؟",
-        answer: "باش نقدرو نجاوبو على الأسئلة تاع كامل الناس و نطبقو مع بعض.",
+        answer:
+          "باش نظمنوا فرصة أكبر للتعلم في مجموعات صغيرة لي راح تقدروا تسقسوا فيها كيما تحبوا و نقدرو نجاوبو على الأسئلة تاع كامل الناس و نطبقو مع بعض.",
+      },
+      {
+        question: "واش يصرا إذا خلصت وما قدرتش نحضر؟",
+        answer: "ماكاش مشكل: إذا خلصت وما قدرتش تحضر، نحولوك للحصة اللي من بعد بلا ما تخلص مرة أخرى.",
       },
     ],
+    // Telegram username link (never a t.me/+<phone> link: it would publish the number)
+    questionsHref: "https://t.me/abdelouadoud_mahdaoui",
     // signupHref: "https://forms.gle/...",
   },
 ];
