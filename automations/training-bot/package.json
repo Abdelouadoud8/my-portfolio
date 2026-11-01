@@ -1,0 +1,20 @@
+{
+  "name": "training-bot",
+  "private": true,
+  "type": "module",
+  "description": "Neon Function (slug trainbot): Telegram bot for paid training sessions (registration, receipts, approval, group access, reminders)",
+  "scripts": {
+    "bundle": "esbuild index.ts --bundle --platform=node --target=node24 --format=esm --minify --banner:js=\"import{createRequire as ___cr}from'module';const require=___cr(import.meta.url);\" --outfile=dist/index.mjs",
+    "zip": "cd dist && rm -f ../function.zip && zip -q ../function.zip index.mjs",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "@types/node": "^26.6.3",
+    "hono": "^4.13.9"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "typescript": "^5"
+  }
+}

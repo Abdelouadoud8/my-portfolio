@@ -12,6 +12,8 @@ type SessionCardsProps = {
   sessions: TrainingSession[];
   // Used when a session has no signupHref of its own
   signupHref?: string;
+  // Registration bot username: open sessions (bookingOpen) link to t.me/<bot>?start=<trainingId>_<sessionId>
+  telegramBot?: string;
   // Length of one session, e.g. "ساعتين" (the training's `time`)
   duration?: string;
   // "horizontal": one wide card per row (all on one line from sm up), "vertical": cards side by side
@@ -28,12 +30,18 @@ export default function SessionCards({
   trainingId,
   sessions,
   signupHref,
+  telegramBot,
   duration,
   variant = "horizontal",
 }: SessionCardsProps) {
   const nextDate = sessions.find((s) => !isFull(s))?.date;
-  const hrefOf = (session: TrainingSession) =>
-    isFull(session) ? undefined : (session.signupHref ?? signupHref);
+  const hrefOf = (session: TrainingSession) => {
+    if (isFull(session)) return undefined;
+    if (session.signupHref) return session.signupHref;
+    if (session.bookingOpen && telegramBot)
+      return `https://t.me/${telegramBot}?start=${trainingId}_${session.id}`;
+    return signupHref;
+  };
   // Keep the button column in every card as soon as one card has a button, so the cards stay aligned
   const anyButton = sessions.some(hrefOf);
 
@@ -57,7 +65,7 @@ export default function SessionCards({
     );
     return (
       <article
-        key={session.date}
+        key={session.id}
         aria-label={session.date}
         className={cn(
           "relative rounded-xl border bg-white p-4",

@@ -30,20 +30,38 @@ export const trainings: Training[] = [
       "نعلمك كيفاه تستعمل هاذ الأدوات في القراية تاعك، الخدمة ولا كيفاش تطور البيزنس تاعك",
       "تتعرف على خدمات تقدر تبيعها بالذكاء الاصطناعي وكيفاش تبدا (graphic design, social media management) و العديد من الخدمات الرقمية",
     ],
-    // Seats are placeholders. seatsLeft 0 shows "مكتملة" instead of the price.
+    // seatsLeft is the fallback: once telegramBot is set, the page shows the bot's live count (paid + held seats).
+    // seatsLeft 0 shows "مكتملة". Keep sessions in date order.
     sessions: [
-      { date: "السبت 7 نوفمبر", time: "20:00 - 22:00", seats: 25, seatsLeft: 0, price: "1500 DA", oldPrice: "3000 DA" },
       {
+        id: "2026-11-07",
+        date: "السبت 7 نوفمبر",
+        time: "20:00 - 22:00",
+        seats: 25,
+        seatsLeft: 0,
+        reservedSeats: 25,
+        price: "1500 DA",
+        oldPrice: "3000 DA",
+      },
+      {
+        id: "2026-11-28",
         date: "السبت 28 نوفمبر",
         time: "20:00 - 22:00",
-        // Placeholder: put the real sign-up form link here (it opens booking for this date)
-        signupHref: "https://forms.gle/REPLACE_ME",
+        bookingOpen: true,
         seats: 25,
         seatsLeft: 25,
         price: "1500 DA",
         oldPrice: "3000 DA",
       },
-      { date: "السبت 12 ديسمبر", time: "20:00 - 22:00", seats: 25, seatsLeft: 25, price: "1500 DA", oldPrice: "3000 DA" },
+      {
+        id: "2026-12-12",
+        date: "السبت 12 ديسمبر",
+        time: "20:00 - 22:00",
+        seats: 25,
+        seatsLeft: 25,
+        price: "1500 DA",
+        oldPrice: "3000 DA",
+      },
     ],
     // Filled once the registration flow is decided (Telegram bot, form, ...)
     registrationSteps: [],
@@ -124,6 +142,8 @@ export const trainings: Training[] = [
         answer: "ماكاش مشكل: إذا خلصت وما قدرتش تحضر، نحولوك للحصة اللي من بعد بلا ما تخلص مرة أخرى.",
       },
     ],
+    // Registration bot (automations/training-bot); without it, open sessions show "التسجيل يتفتح قريبا"
+    telegramBot: "LearnAiWithOuadoudBot",
     // Telegram username link (never a t.me/+<phone> link: it would publish the number)
     questionsHref: "https://t.me/abdelouadoud_mahdaoui",
     // signupHref: "https://forms.gle/...",

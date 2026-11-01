@@ -109,17 +109,23 @@ type TrainingReview = {
 
 // One open date of a training (big cards in the "الحصص" section)
 type TrainingSession = {
+  // Stable id, e.g. "2026-11-28": the bot's session is "<trainingId>_<id>" (never change it once people registered)
+  id: string;
   // e.g. "السبت 15 نوفمبر"
   date: string;
   // e.g. "20:00 - 22:00"
   time?: string;
   seats: number;
   seatsLeft: number;
+  // Seats sold outside the Telegram bot (counted as taken by the bot's live count)
+  reservedSeats?: number;
   // e.g. "1500 DA"
   price: string;
   // Price before the discount, shown struck through next to `price`
   oldPrice?: string;
-  // Register link for this date; falls back to the training's signupHref
+  // Booking open: the "تسجيل" button opens the Telegram bot (training's telegramBot) on this session
+  bookingOpen?: boolean;
+  // Register link for this date that overrides the bot (e.g. a form); falls back to the training's signupHref
   signupHref?: string;
 };
 
@@ -161,6 +167,8 @@ type Training = {
   faq?: TrainingFaq[];
   // "عندك سؤال؟" button (Telegram/WhatsApp chat link); block hidden when missing
   questionsHref?: string;
+  // Username of the registration bot (no @), see automations/training-bot
+  telegramBot?: string;
   // Sign-up form (Google Forms, Tally, ...); no href → "التسجيل يتفتح قريبا" button that isn't clickable
   signupHref?: string;
 };

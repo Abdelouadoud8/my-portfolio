@@ -176,7 +176,8 @@ Everything is in `data/links/links.ts`:
   columns from md up) and a fixed-width button zone from sm up; "vertical": side by side / swipe on phones. Badges on
   the top edge: "-N%" (from oldPrice/price), grey "مكتملة" (seatsLeft 0) or
   outlined "التسجيل يتفتح قريبا" (no link). The "تسجيل" button only shows when booking is open (the session's
-  signupHref, else the training's); phones also show a greyed "تسجيل" before it opens; click event
+  signupHref, else the Telegram bot for `bookingOpen` sessions when the training has `telegramBot`, else the training's
+  signupHref; sessions need a stable `id`); phones also show a greyed "تسجيل" before it opens; click event
   `training-signup-click` {training, location: session-N}.
   `components/trainings/section-nav.tsx` = sticky section links on the right (lg+) / sticky chip row on phones,
   highlights the section being read; a new section needs an `id` + an entry in the page's `sections` list.
@@ -296,6 +297,25 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
   (prints permissions/Pages, never tokens; saves the Page token encrypted; needs `TOKEN_ENCRYPTION_KEY` and the owner
   `STATS_DATABASE_URL`), then remove FB_USER_TOKEN.
 - Insights lag ~3 days (follows/unfollows of the latest complete Facebook day). Countries still available (2026-10).
+
+## Automations: training registration bot (`automations/training-bot/`, 2026-11-01)
+- Neon Function **`trainbot`** (Frankfurt project `portfolio-automations`, same branch as igstats/fbstats) = webhook of a
+  Telegram bot that handles paid sessions with no email: `/start <trainingId>_<sessionId>` (the page's "تسجيل" button links
+  to `t.me/<telegramBot>?start=...` for sessions with `bookingOpen`) → name → phone via Telegram's share-contact button
+  (own number only) → payment details (`PAYMENT_DETAILS`) + seat held 48 h → receipt photo forwarded to the admin with
+  قبول / رفض buttons → accepted: invite link of the session's private group. The group link needs approval and the bot
+  approves join requests only for Telegram accounts that paid that session (declines and DMs everyone else).
+  Admin (TELEGRAM_ADMIN_CHAT_ID only): `/list [session]`, `/remind <session> <text>`, `/sendlinks <session>`,
+  `/setgroup <session>` (inside the group; bot must be admin with "invite users"; sends the link to already-paid people).
+- Data: its own database (Frankfurt `neondb`, schema `training_bot`: `sessions`, `registrations`), NOT the London Umami
+  DB (near its compute cap). Least-privilege role `training_bot` (SELECT/INSERT/UPDATE on that schema only).
+  `GET /public/seats/<trainingId>` → `{ seatsLeft: { "<trainingId>_<sessionId>": n } }` (sold outside the bot via
+  `reservedSeats`, paid, under review, held); the training page uses it once `telegramBot` is set (`lib/training-seats.ts`,
+  5-min cache), else the data file's `seatsLeft`.
+- Scripts (read `.env.local`, never print secrets): `node setup-db.mjs` (tables + role, writes TRAINING_BOT_DATABASE_URL and
+  TELEGRAM_WEBHOOK_SECRET), `node sync-sessions.mjs` (copies sessions from data/trainings/trainings.ts: run after editing
+  them), `./deploy.sh` (env: token, webhook secret, admin id, payment details, DB URL), `node telegram-setup.mjs admin |
+  webhook | info`. Session ids are stable: never rename one that has registrations.
 
 ## Automations: security (igstats + fbstats, 2026-10-17)
 - **Least-privilege DB role `stats_automation`** (London DB): the functions log in with it, never as `neondb_owner`.

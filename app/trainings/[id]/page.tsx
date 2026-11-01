@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { trainings } from "@/data/trainings/trainings";
 import { linksProfile, linksSocials } from "@/data/links/links";
 import { getInstagramFollowers } from "@/lib/instagram-followers";
+import { getLiveSeats } from "@/lib/training-seats";
 import { DYNAMIC_EVENTS, EVENTS, eventAttributes } from "@/lib/analytics";
 import { formatCompact } from "@/lib/utils";
 import { IconInstagram } from "@/components/shared/icons/icon-instagram";
@@ -78,7 +79,7 @@ export default async function TrainingPage({ params }: Props) {
     audience = [],
     outcomes = [],
     requirements = [],
-    sessions = [],
+    sessions: dataSessions = [],
     registrationSteps = [],
     paymentMethods = [],
     program = [],
@@ -86,7 +87,15 @@ export default async function TrainingPage({ params }: Props) {
     faq = [],
     signupHref,
     questionsHref,
+    telegramBot,
   } = training;
+
+  // Once the registration bot is live, seats left come from it (paid + held), else from the data file
+  const liveSeats = telegramBot ? await getLiveSeats(id) : undefined;
+  const sessions = dataSessions.map((session) => ({
+    ...session,
+    seatsLeft: liveSeats?.[`${id}_${session.id}`] ?? session.seatsLeft,
+  }));
 
   // Trainer section: Instagram link + live follower count (falls back to the count in data/links/links.ts)
   const instagram = linksSocials.find((social) => social.platform === "instagram");
@@ -183,6 +192,7 @@ export default async function TrainingPage({ params }: Props) {
                 trainingId={id}
                 sessions={sessions}
                 signupHref={signupHref}
+                telegramBot={telegramBot}
                 duration={time}
                 variant="horizontal"
               />
