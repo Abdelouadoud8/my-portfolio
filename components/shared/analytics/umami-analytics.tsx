@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { DYNAMIC_EVENTS, EVENTS, trackEvent } from "@/lib/analytics";
 
@@ -10,6 +11,11 @@ const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 const domains = process.env.NEXT_PUBLIC_UMAMI_DOMAINS;
 // Set automatically by Vercel ("production" | "preview" | "development"); undefined locally.
 const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV;
+
+// Tracking is off on /links (most visited page): every event wakes the Neon database behind Umami,
+// and the steady trickle kept its compute awake 24/7 until the free compute hours ran out (2026-11-01).
+// Set back to false to re-enable.
+const DISABLE_ON_LINKS = true;
 
 const VISIT_SOURCE_KEY = "visit-source-tracked";
 
@@ -81,8 +87,9 @@ const FILE_EXTENSIONS = /\.(pdf|zip|docx?|pptx?|xlsx?)$/i;
 
 // Tracks every mailto/tel/download/external link on the site without tagging each one.
 // Links that already carry data-umami-event are left to Umami itself.
-function useLinkTracking() {
+function useLinkTracking(enabled: boolean) {
   useEffect(() => {
+    if (!enabled) return;
     const onClick = (e: MouseEvent) => {
       const link = (e.target as Element | null)?.closest?.("a");
       if (!link || link.closest("[data-umami-event]")) return;
@@ -117,13 +124,15 @@ function useLinkTracking() {
     document.addEventListener("click", onClick, { capture: true });
     return () =>
       document.removeEventListener("click", onClick, { capture: true });
-  }, []);
+  }, [enabled]);
 }
 
 export default function UmamiAnalytics() {
-  useLinkTracking();
+  const pathname = usePathname();
+  const paused = DISABLE_ON_LINKS && pathname?.startsWith("/links");
+  useLinkTracking(!paused);
 
-  if (!scriptUrl || !websiteId) return null;
+  if (paused || !scriptUrl || !websiteId) return null;
   // Never count preview deployments
   if (vercelEnv && vercelEnv !== "production") return null;
 

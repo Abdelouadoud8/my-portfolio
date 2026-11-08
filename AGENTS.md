@@ -259,6 +259,9 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
   (Before 2026-09-25 social/reel clicks were logged as `social-click` / `reel-click` with the same props.)
 - Event data keys must be lowercase kebab-case (they become `data-umami-event-<key>`).
 - Renders nothing if env vars are missing, or on Vercel preview deployments.
+- **Tracking is paused on `/links`** (2026-11-01, `DISABLE_ON_LINKS` in `umami-analytics.tsx`): Umami's Neon DB hit its free
+  compute-hours cap because the steady event trickle (almost all from /links) kept the compute awake 24/7. The Umami "Links page"
+  tab shows nothing new until it is set back to `false`.
 - Umami records the hostname per visit: `/metrics?type=hostname` compares the portfolio's aliases.
 
 ### Umami instance & API
