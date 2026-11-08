@@ -16,6 +16,10 @@ const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV;
 // and the steady trickle kept its compute awake 24/7 until the free compute hours ran out (2026-11-01).
 // Set back to false to re-enable.
 const DISABLE_ON_LINKS = true;
+// ...except clicks on the offer card and the "منين تحب تبدا؟" rows: each one is sent straight to Umami's
+// /api/send (no script, no page view), so only a click wakes the database. Country, device and browser are
+// still recorded (Umami reads them from the request).
+const LINKS_CLICK_EVENTS = new Set<string>([EVENTS.trainingDetailsClick, EVENTS.serviceDetailsClick]);
 
 const VISIT_SOURCE_KEY = "visit-source-tracked";
 
@@ -127,11 +131,58 @@ function useLinkTracking(enabled: boolean) {
   }, [enabled]);
 }
 
+// Same request the Umami script makes for an event, sent once without loading the script
+function sendEvent(name: string, data: Record<string, string>) {
+  if (!scriptUrl || !websiteId) return;
+  const { hostname, pathname, search } = window.location;
+  if (domains && !domains.split(",").map((d) => d.trim()).includes(hostname)) return;
+  const payload = {
+    website: websiteId,
+    hostname,
+    language: navigator.language,
+    screen: `${window.screen.width}x${window.screen.height}`,
+    title: document.title,
+    url: pathname + search,
+    referrer: document.referrer,
+    name,
+    data,
+  };
+  fetch(new URL("/api/send", scriptUrl), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ type: "event", payload }),
+    keepalive: true,
+    credentials: "omit",
+  }).catch(() => {});
+}
+
+// Paused pages: only the LINKS_CLICK_EVENTS links are tracked, read from their data-umami-event attributes
+function useClickOnlyTracking(enabled: boolean) {
+  useEffect(() => {
+    if (!enabled) return;
+    const onClick = (e: MouseEvent) => {
+      const el = (e.target as Element | null)?.closest?.("[data-umami-event]");
+      const name = el?.getAttribute("data-umami-event");
+      if (!el || !name || !LINKS_CLICK_EVENTS.has(name)) return;
+      const data: Record<string, string> = {};
+      for (const { name: attr, value } of Array.from(el.attributes)) {
+        if (attr.startsWith("data-umami-event-")) data[attr.slice(17)] = value;
+      }
+      const { source } = detectVisitSource();
+      sendEvent(name, { ...data, source });
+    };
+    document.addEventListener("click", onClick, { capture: true });
+    return () => document.removeEventListener("click", onClick, { capture: true });
+  }, [enabled]);
+}
+
 export default function UmamiAnalytics() {
   const pathname = usePathname();
   // /links and its English/French copies (/en/links, /fr/links)
   const paused = DISABLE_ON_LINKS && /^\/((en|fr)\/)?links(\/|$)/.test(pathname ?? "");
+  const production = !vercelEnv || vercelEnv === "production";
   useLinkTracking(!paused);
+  useClickOnlyTracking(paused && production);
 
   if (paused || !scriptUrl || !websiteId) return null;
   // Never count preview deployments

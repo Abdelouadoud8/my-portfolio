@@ -262,6 +262,10 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - **Tracking is paused on `/links`, `/en/links` and `/fr/links`** (2026-11-01, `DISABLE_ON_LINKS` in `umami-analytics.tsx`): Umami's Neon DB hit its free
   compute-hours cap because the steady event trickle (almost all from /links) kept the compute awake 24/7. The Umami "Links page"
   tab shows nothing new until it is set back to `false`.
+  Exception (2026-11-09): clicks on the offer card and the "منين تحب تبدا؟" rows (`training-details-click`,
+  `service-details-click`, list `LINKS_CLICK_EVENTS`) are POSTed straight to Umami's `/api/send` (no script, no page
+  view; props from the link's data-umami-event-* + `source`). Only those clicks wake the Neon DB; country/device/browser
+  are still recorded. Add an event name to `LINKS_CLICK_EVENTS` to track another /links link this way.
 - Umami records the hostname per visit: `/metrics?type=hostname` compares the portfolio's aliases.
 
 ### Umami instance & API
