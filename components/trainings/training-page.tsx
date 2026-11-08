@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { sitePreviewImage } from "@/lib/link-preview";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -42,7 +43,14 @@ export function trainingMetadata(id: string, locale: Locale): Metadata {
     title: training.title,
     description: training.description,
     alternates: languageAlternates(`/trainings/${id}`),
-    openGraph: { locale: localeMeta[locale].ogLocale },
+    // Full openGraph block: a page's openGraph replaces the layout's one (not merged), so the small preview image
+    // must be repeated here or Meta picks a random image from the page
+    openGraph: {
+      siteName: "Abdelouadoud's Portfolio",
+      images: [sitePreviewImage],
+      type: "website",
+      locale: localeMeta[locale].ogLocale,
+    },
   };
 }
 

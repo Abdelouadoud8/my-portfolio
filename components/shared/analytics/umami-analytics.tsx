@@ -129,7 +129,8 @@ function useLinkTracking(enabled: boolean) {
 
 export default function UmamiAnalytics() {
   const pathname = usePathname();
-  const paused = DISABLE_ON_LINKS && pathname?.startsWith("/links");
+  // /links and its English/French copies (/en/links, /fr/links)
+  const paused = DISABLE_ON_LINKS && /^\/((en|fr)\/)?links(\/|$)/.test(pathname ?? "");
   useLinkTracking(!paused);
 
   if (paused || !scriptUrl || !websiteId) return null;
