@@ -28,6 +28,7 @@ The site has five areas, kept apart at every level (route, components, data, pub
 | Blog | `/blog…` | `blog/` | `blog/` | `blog/` (+ `content/blog/`) | `blog/` |
 | Links (link in bio) | `/links` | `links/` | `links/` | `links/` | `links/` |
 | Trainings | `/trainings/:id` | `trainings/` | `trainings/` (+ `links/training-card`) | `trainings/` | (none) |
+| Services (1:1, companies) | `/services/:id` | `services/` | `links/start-paths` | `services/` | (none) |
 | Media kit | `/media-kit`, `/media-kit/en`, `/media-kit/darja` | (none: static files + rewrites) | (none) | `media-kit/build.mjs` | `media-kit/` |
 
 Code used by more than one area lives in `components/shared/`, `public/shared/`, `data/types.ts` and `lib/`.
@@ -61,6 +62,14 @@ app/
                              trainings/layout.tsx, no header, shared footer), SSG from data/trainings/trainings.ts,
                              dynamicParams=false; every block (facts, outcomes, program, audience, requirements, FAQ)
                              hidden when its field is empty; reviews show an empty-state line until the first session
+  services/[id]/page.tsx     "/services/one-to-one" (1:1 call, modelled on withrssle's /consultation) and "/services/business"
+                             (AI audit + automation for companies): RTL Darja like the training page, content in
+                             data/services/services.ts (each list hidden when empty), one request button = Telegram
+                             username link (`service-request-click` {service, location}), SSG, dynamicParams=false
+  [lang]/                    English + French copies of /links and its pages: /en|fr/links, /en|fr/trainings/:id,
+                             /en|fr/services/:id (dynamicParams=false, only "en"/"fr"; Darja keeps the plain URLs).
+                             Every route file is thin: the page itself is components/links/links-page.tsx,
+                             components/trainings/training-page.tsx, components/services/service-page.tsx ({id, locale}).
   links/page.tsx             "/links": link-in-bio page (no portfolio header, keeps <Footer/>), content from data/links/links.ts
 components/
   portfolio/
@@ -158,10 +167,17 @@ Everything is in `data/links/links.ts`:
   each hidden when missing; views overlay the image, the others show under the title (lucide icons).
   Only likes/comments are public on Instagram; views/shares come from the owner's insights.
   `formatCompact()` in `lib/utils.ts` formats all counts (6606 → 6.6K).
-- Trainings (`data/trainings/trainings.ts`, shown on /links instead of the reels; the blog still shows the reels):
-  card `components/links/training-card.tsx` (title, description, date, time, platform, Phosphor duotone icons) whose
-  "تفاصيل الدورة" button opens `/trainings/<id>` (`training-details-click` {training, location}). Empty array hides the
-  /links section. Google Meet free accounts cut group calls at 60 min.
+- /links funnel (2026-11-07, modelled on withrssle.com's structure, Arabic, IBM Plex Sans Arabic loaded in the page):
+  profile → total followers (its platform icons ARE the social links now: no list of social buttons on /links) →
+  "الدورات" offer card (`components/links/training-card.tsx`: badges, next session date +
+  time, platform, places left, price + struck old price, "تفاصيل الدورة" → `/trainings/<id>`, `training-details-click`
+  {training, location: links | links-path}) → "منين تحب تبدا؟" (`components/links/start-paths.tsx`:
+  training page / free content anchor `#free` / Telegram question) → (2026-11-08) no free content section any more:
+  "الدورات" = training card only (no note under it); the services are only rows of "منين تحب تبدا؟" (training, 1:1,
+  companies, Telegram question; `service-details-click` {service, location: links-path}). Booking rules shared in `lib/trainings.ts` (withLiveSeats, sessionSignupHref, nextSession,
+  discountPercent) by the card, the details page's price box (`components/trainings/booking-box.tsx`: price, places,
+  next session, "سجّل في الحصة" = `training-signup-click` location hero, reassurance line, total followers) and the
+  session cards. Empty trainings array hides the /links section. Google Meet free accounts cut group calls at 60 min.
   Details page sections after the sessions: "كيفاش تسجل" (`registrationSteps`, a "coming soon" line while empty),
   "طرق الدفع" (`paymentMethods` {kind: baridimob | post-office, title, description}). Refund rule lives in the
   FAQ. Trainer card links to Instagram (`training-instagram-click`) with the live follower count (igstats, page
@@ -183,7 +199,8 @@ Everything is in `data/links/links.ts`:
   highlights the section being read; a new section needs an `id` + an entry in the page's `sections` list.
 - Total followers block under the profile (`components/links/total-followers.tsx`): sum of every visible link's
   `followers` (Instagram = live count): big number, red "Total followers" label, then the counted platforms'
-  icons in a row; hidden when no counts. /links only.
+  icons in a row, each a link to the profile (`links-<platform>-click`, so the Umami Links tab keeps counting them);
+  hidden when no counts. /links only.
 - `collaboration` {email, label, subject}: red "Collaborate with me" button under the profile
   (`components/shared/social/collaborate-button.tsx`), hidden while `email` is empty. Opens `mailto:` with the subject; the
   address is passed base64-encoded and decoded on click, so it never appears in the HTML (anti-scraping).
@@ -195,6 +212,21 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 (no React, no shared layout): Umami is loaded by a script tag in `media-kit/web.mjs` (same website ID,
 `data-domains` keeps localhost out) and the PDF/email buttons fire `media-kit-pdf-download` / `media-kit-email-click`
 {lang}. `/media-kit*` are `rewrites()` in next.config.ts to `public/media-kit/{fr,en,darja}.html`.
+
+### Languages of /links, /trainings and /services (2026-11-08)
+- Darja (`ar`, default, RTL, IBM Plex Sans Arabic) at the plain URLs; English and French (LTR, site font) under
+  `/en/…` and `/fr/…` (`app/[lang]/`). Helpers in `lib/i18n.ts`: `localePath()`, `localePaths()`,
+  `languageAlternates()` (hreflang), `formatDay()`, and `ui[locale]` = every interface string (buttons, section
+  titles, badges, seat counts). Components take a `locale` prop (default "ar").
+- Content: Darja stays in `data/trainings/trainings.ts` and `data/services/services.ts`; English/French text in
+  `data/trainings/translations.ts` and `data/services/translations.ts` (merged by `lib/localize.ts`; a missing field
+  falls back to Darja). **When you change a text in the Darja data, change it in the translations too.**
+- Session dates in English/French come from each session's `day` (YYYY-MM-DD): when a session moves, change `date`
+  AND `day`.
+- Header on all these pages (`components/links/site-header.tsx`): name → /links, menu (training, 1:1, companies),
+  language switcher (same page in the other language). Not sticky (the pages' section bar is sticky on phones).
+- The Telegram bot and its messages stay in Darja. The Umami Links tab only counts path `/links`, not `/en|fr/links`.
+- Dev server gotcha: a route folder created while `npm run dev` runs can 404 until its file is touched/saved again.
 
 ## Analytics (Umami)
 - Page views (incl. client-side navigation) are automatic once the script loads.
@@ -315,7 +347,7 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - Scripts (read `.env.local`, never print secrets): `node setup-db.mjs` (tables + role, writes TRAINING_BOT_DATABASE_URL and
   TELEGRAM_WEBHOOK_SECRET), `node sync-sessions.mjs` (copies sessions from data/trainings/trainings.ts: run after editing
   them), `./deploy.sh` (env: token, webhook secret, admin id, payment details, DB URL), `node telegram-setup.mjs admin |
-  webhook | info`. Session ids are stable: never rename one that has registrations.
+  webhook | info`. Session ids are stable keys, not dates: when a session moves, change only `date` (2026-11-28 is now on 21 Nov, 2026-12-12 on 5 Dec).
 
 ## Automations: security (igstats + fbstats, 2026-10-17)
 - **Least-privilege DB role `stats_automation`** (London DB): the functions log in with it, never as `neondb_owner`.

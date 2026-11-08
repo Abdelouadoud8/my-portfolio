@@ -1,76 +1,11 @@
-import type { Metadata } from "next";
-import LinksProfile from "@/components/links/links-profile";
-import SocialLinkButton from "@/components/shared/social/social-link-button";
-import TrainingCard from "@/components/links/training-card";
-import CollaborateButton from "@/components/shared/social/collaborate-button";
-import TotalFollowers from "@/components/links/total-followers";
-import {
-  collaboration,
-  linksProfile,
-  linksSocials,
-} from "@/data/links/links";
-import { trainings } from "@/data/trainings/trainings";
-import { getVisibleSocials } from "@/lib/instagram-followers";
-import Footer from "@/components/shared/footer";
-import { sitePreviewImage } from "@/lib/link-preview";
+import LinksPageContent, { linksMetadata } from "@/components/links/links-page";
 
-// The Instagram bio link: without an og:image Meta's preview bot picked a reel cover (65 KB) and
-// fetched it about once a minute
-export const metadata: Metadata = {
-  title: "Links",
-  description: `${linksProfile.tagline} by ${linksProfile.name}: socials and free trainings.`,
-  openGraph: {
-    siteName: "Abdelouadoud's Portfolio",
-    images: [sitePreviewImage],
-    type: "website",
-  },
-};
+// Darja version (the Instagram bio link). English and French: app/[lang]/links
+export const metadata = linksMetadata("ar");
 
 // Re-read the live follower counts (public igstats/fbstats endpoints) twice a day (counts change once a day)
 export const revalidate = 43200;
 
-// Link-in-bio page (violet accent: .theme-links in app/index.css). Lives outside the (site) group: no portfolio header, but keeps the footer.
-export default async function LinksPage() {
-  const socials = await getVisibleSocials(linksSocials);
-
-  return (
-    <div className="theme-links flex min-h-dvh flex-col">
-      <main className="flex-1 bg-[radial-gradient(70%_35%_at_50%_0%,color-mix(in_srgb,var(--color-primary)_8%,transparent),transparent)]">
-        <div className="mx-auto flex w-full max-w-md flex-col gap-10 px-4 pb-10 pt-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
-          <LinksProfile {...linksProfile} />
-
-          <TotalFollowers socials={socials} />
-
-          {collaboration.email && (
-            <CollaborateButton
-              label={collaboration.label}
-              subject={collaboration.subject}
-              encodedEmail={Buffer.from(collaboration.email).toString("base64")}
-            />
-          )}
-
-          {trainings.length > 0 && (
-            <section aria-labelledby="trainings" className="flex flex-col gap-4">
-              <h2
-                id="trainings"
-                className="text-center text-sm font-bold uppercase tracking-wide text-primary"
-              >
-                Trainings
-              </h2>
-              {trainings.map((training) => (
-                <TrainingCard key={training.id} {...training} />
-              ))}
-            </section>
-          )}
-
-          <section aria-label="Social links" className="flex flex-col gap-3">
-            {socials.map((link) => (
-              <SocialLinkButton key={link.platform} {...link} />
-            ))}
-          </section>
-        </div>
-      </main>
-      <Footer />
-    </div>
-  );
+export default function LinksPage() {
+  return <LinksPageContent locale="ar" />;
 }

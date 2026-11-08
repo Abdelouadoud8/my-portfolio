@@ -111,8 +111,10 @@ type TrainingReview = {
 type TrainingSession = {
   // Stable id, e.g. "2026-11-28": the bot's session is "<trainingId>_<id>" (never change it once people registered)
   id: string;
-  // e.g. "السبت 15 نوفمبر"
+  // Darja label, e.g. "السبت 15 نوفمبر"
   date: string;
+  // Same day as YYYY-MM-DD: the English and French pages format it ("Saturday 15 November"). Change it with `date`.
+  day?: string;
   // e.g. "20:00 - 22:00"
   time?: string;
   seats: number;
@@ -173,6 +175,42 @@ type Training = {
   signupHref?: string;
 };
 
+// Paid services next to the trainings (/services/<id>): 1:1 call, business automation. Every list is optional
+// (its block is hidden when empty). The request button opens `requestHref` (Telegram username link).
+type ServiceFact = {
+  label: string;
+  value: string;
+};
+
+type Service = {
+  // Also the URL: /services/<id>
+  id: string;
+  // Short badge on top and on the /links card, e.g. "1:1"
+  badge: string;
+  // Card on /links
+  cardTitle: string;
+  cardDescription: string;
+  title: string;
+  description: string;
+  // Shown on the /links card and in the price box
+  price: string;
+  priceNote?: string;
+  duration?: string;
+  facts?: ServiceFact[];
+  // "واش تخرج بيه" / "واش نديرو"
+  includedTitle?: string;
+  included?: string[];
+  steps?: string[];
+  forWho?: string[];
+  notFor?: string[];
+  honestNote?: string;
+  faq?: TrainingFaq[];
+  requestLabel: string;
+  requestHref: string;
+  // Second, outlined button (e.g. LinkedIn for companies)
+  secondary?: { label: string; href: string };
+};
+
 type LinksProfile = {
   name: string;
   tagline: string;
@@ -198,4 +236,6 @@ export type {
   TrainingSession,
   TrainingPaymentMethod,
   TrainingFaq,
+  Service,
+  ServiceFact,
 };

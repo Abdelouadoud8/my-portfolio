@@ -1,6 +1,8 @@
 import type { TrainingSession } from "@/data/types";
 import { EVENTS, eventAttributes } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import { discountPercent, isFull, sessionSignupHref } from "@/lib/trainings";
+import { localeMeta, ui, type Locale, type UiStrings } from "@/lib/i18n";
 import { IconCalendar } from "@/components/shared/icons/icon-calendar";
 import { IconUsers } from "@/components/shared/icons/icon-users";
 import { IconCheckCircle } from "@/components/shared/icons/icon-check-circle";
@@ -18,6 +20,7 @@ type SessionCardsProps = {
   duration?: string;
   // "horizontal": one wide card per row (all on one line from sm up), "vertical": cards side by side
   variant?: "horizontal" | "vertical";
+  locale?: Locale;
 };
 
 // At or under this many places left, "available places" turns into a red "only N left" warning
@@ -33,15 +36,13 @@ export default function SessionCards({
   telegramBot,
   duration,
   variant = "horizontal",
+  locale = "ar",
 }: SessionCardsProps) {
+  const t = ui[locale];
+  const rtl = localeMeta[locale].dir === "rtl";
   const nextDate = sessions.find((s) => !isFull(s))?.date;
-  const hrefOf = (session: TrainingSession) => {
-    if (isFull(session)) return undefined;
-    if (session.signupHref) return session.signupHref;
-    if (session.bookingOpen && telegramBot)
-      return `https://t.me/${telegramBot}?start=${trainingId}_${session.id}`;
-    return signupHref;
-  };
+  const hrefOf = (session: TrainingSession) =>
+    sessionSignupHref({ id: trainingId, telegramBot, signupHref }, session);
   // Keep the button column in every card as soon as one card has a button, so the cards stay aligned
   const anyButton = sessions.some(hrefOf);
 
@@ -52,7 +53,13 @@ export default function SessionCards({
     const href = hrefOf(session);
     // The button only exists while booking is open; otherwise the status is a badge on the top edge
     const button = href && (
-      <RegisterButton href={href} trainingId={trainingId} location={`session-${index + 1}`} emphasis={next} />
+      <RegisterButton
+        href={href}
+        trainingId={trainingId}
+        location={`session-${index + 1}`}
+        emphasis={next}
+        label={t.register}
+      />
     );
     // Phones only: a greyed "تسجيل" while booking isn't open yet (desktop shows just the badge)
     const soonButton = !full && !href && (
@@ -60,7 +67,7 @@ export default function SessionCards({
         aria-disabled="true"
         className="flex min-h-11 w-full cursor-default items-center justify-center rounded-lg bg-neutral-10 px-3 py-3 text-sm font-semibold text-neutral-60 sm:hidden"
       >
-        تسجيل
+        {t.register}
       </span>
     );
     return (
@@ -81,7 +88,7 @@ export default function SessionCards({
       >
         <div className="absolute -top-3 start-4 flex gap-1.5">
           {full ? (
-            <Badge muted>مكتملة</Badge>
+            <Badge muted>{t.full}</Badge>
           ) : (
             <>
               {discount && (
@@ -89,7 +96,7 @@ export default function SessionCards({
                   <span dir="ltr">-{discount}%</span>
                 </Badge>
               )}
-              {!href && <Badge outline>التسجيل يتفتح قريبا</Badge>}
+              {!href && <Badge outline>{t.bookingSoon}</Badge>}
             </>
           )}
         </div>
@@ -97,7 +104,7 @@ export default function SessionCards({
           <>
             <div className="flex min-w-0 flex-1 flex-col gap-4 sm:gap-3">
               <SessionDate session={session} />
-              <Details session={session} duration={duration} row />
+              <Details session={session} duration={duration} t={t} rtl={rtl} row />
             </div>
             {(anyButton || soonButton) && (
               <div
@@ -115,7 +122,7 @@ export default function SessionCards({
         ) : (
           <>
             <SessionDate session={session} />
-            <Details session={session} duration={duration} />
+            <Details session={session} duration={duration} t={t} rtl={rtl} />
             {(button || soonButton) && <div className="mt-auto">{button || soonButton}</div>}
           </>
         )}
@@ -132,19 +139,6 @@ export default function SessionCards({
       {cards}
     </div>
   );
-}
-
-function isFull(session: TrainingSession) {
-  return session.seatsLeft <= 0;
-}
-
-// "2000 DA" + "1500 DA" → 25 (whole percent), undefined when either isn't a number
-function discountPercent(session: TrainingSession) {
-  const toNumber = (value?: string) => Number(value?.replace(/[^\d.]/g, "") || NaN);
-  const before = toNumber(session.oldPrice);
-  const now = toNumber(session.price);
-  if (!before || !now || now >= before) return undefined;
-  return Math.round(((before - now) / before) * 100);
 }
 
 function SessionDate({ session }: { session: TrainingSession }) {
@@ -197,23 +191,23 @@ function Badge({
 function Details({
   session,
   duration,
+  t,
+  rtl,
   row = false,
 }: {
   session: TrainingSession;
   duration?: string;
+  t: UiStrings;
+  rtl: boolean;
   row?: boolean;
 }) {
   const full = isFull(session);
   const few = !full && session.seatsLeft <= FEW_SEATS;
   const items = [
-    { Icon: IconUsers, text: `${session.seats} مشارك` },
+    { Icon: IconUsers, text: t.participants(session.seats) },
     {
       Icon: IconCheckCircle,
-      text: full
-        ? "مكتملة"
-        : few
-          ? `غير ${session.seatsLeft} بلايص باقيين!`
-          : `باقي ${session.seatsLeft} بلاصة`,
+      text: full ? t.full : few ? t.fewSeats(session.seatsLeft) : t.seatsLeft(session.seatsLeft),
       className: full ? "text-neutral-70" : few ? "font-bold text-primary" : undefined,
     },
     ...(duration ? [{ Icon: IconClock, text: duration }] : []),
@@ -223,7 +217,11 @@ function Details({
     <ul
       className={cn(
         "grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm text-neutral-100",
-        row && "md:grid-cols-[5.25rem_6.5rem_4.5rem_minmax(0,1fr)] md:gap-x-3",
+        // Fixed columns so every card lines up (Latin text is wider than the Darja one)
+        row &&
+          (rtl
+            ? "md:grid-cols-[5.25rem_6.5rem_4.5rem_minmax(0,1fr)] md:gap-x-3"
+            : "md:grid-cols-[5rem_7rem_4.75rem_minmax(0,1fr)] md:gap-x-3"),
       )}
     >
       {items.map(({ Icon, text, className, ltr, oldPrice }) => (
@@ -238,7 +236,7 @@ function Details({
           {/* Price: the old price struck through next to the new one */}
           {oldPrice && (
             <s dir="ltr" className="shrink-0 text-xs text-neutral-70">
-              <span className="sr-only">بدل </span>
+              <span className="sr-only">{t.insteadOf}</span>
               {oldPrice}
             </s>
           )}
@@ -253,12 +251,14 @@ function RegisterButton({
   trainingId,
   location,
   emphasis,
+  label,
 }: {
   href: string;
   trainingId: string;
   location: string;
   // The next session gets the filled button, the later ones an outlined one
   emphasis: boolean;
+  label: string;
 }) {
   return (
     <a
@@ -273,7 +273,7 @@ function RegisterButton({
       )}
       {...eventAttributes(EVENTS.trainingSignupClick, { training: trainingId, location })}
     >
-      تسجيل
+      {label}
     </a>
   );
 }

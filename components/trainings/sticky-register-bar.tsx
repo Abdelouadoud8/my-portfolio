@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { ui, type Locale } from "@/lib/i18n";
 
 type StickyRegisterBarProps = {
   // Next session that still has places
@@ -11,11 +12,20 @@ type StickyRegisterBarProps = {
   oldPrice?: string;
   // id of the sessions section: the button scrolls there, and the bar hides while it is on screen
   targetId: string;
+  locale?: Locale;
 };
 
 // Bottom bar on phones and desktop: next date + price + "تسجيل". Shows once the visitor has scrolled past the top,
 // hides while the sessions (which have their own buttons) are visible.
-export default function StickyRegisterBar({ date, time, price, oldPrice, targetId }: StickyRegisterBarProps) {
+export default function StickyRegisterBar({
+  date,
+  time,
+  price,
+  oldPrice,
+  targetId,
+  locale = "ar",
+}: StickyRegisterBarProps) {
+  const t = ui[locale];
   const [scrolled, setScrolled] = useState(false);
   const [targetVisible, setTargetVisible] = useState(false);
 
@@ -59,13 +69,13 @@ export default function StickyRegisterBar({ date, time, price, oldPrice, targetI
               </span>
               {oldPrice && (
                 <s dir="ltr" className="text-sm text-neutral-70">
-                  <span className="sr-only">بدل </span>
+                  <span className="sr-only">{t.insteadOf}</span>
                   {oldPrice}
                 </s>
               )}
             </div>
             <p className="whitespace-nowrap text-xs text-neutral-70">
-              <span className="hidden sm:inline">الحصة الجاية: </span>
+              <span className="hidden sm:inline">{t.nextSession}: </span>
               {date}
               {time && (
                 <>
@@ -81,7 +91,7 @@ export default function StickyRegisterBar({ date, time, price, oldPrice, targetI
             tabIndex={visible ? 0 : -1}
             className="min-h-11 shrink-0 cursor-pointer rounded-lg bg-primary px-8 text-sm font-semibold text-white transition-colors hover:bg-primary-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            تسجيل
+            {t.register}
           </button>
         </div>
       </div>

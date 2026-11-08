@@ -24,6 +24,8 @@ export const EVENTS = {
   trainingDetailsClick: "training-details-click",
   trainingSignupClick: "training-signup-click",
   trainingQuestionClick: "training-question-click",
+  serviceDetailsClick: "service-details-click",
+  serviceRequestClick: "service-request-click",
 } as const;
 
 // "LinkedIn" -> "linkedin", "X (Twitter)" -> "x-twitter"
@@ -45,9 +47,7 @@ export const DYNAMIC_EVENTS = {
   visitFrom: (source: string) => `visit-from-${toSlug(source)}` as const,
 };
 
-type DynamicEventName = ReturnType<
-  (typeof DYNAMIC_EVENTS)[keyof typeof DYNAMIC_EVENTS]
->;
+type DynamicEventName = ReturnType<(typeof DYNAMIC_EVENTS)[keyof typeof DYNAMIC_EVENTS]>;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS] | DynamicEventName;
 
@@ -63,10 +63,7 @@ export function trackEvent(event: EventName, data?: EventData) {
 // Declarative tracking: spread onto an <a>/<button>, Umami tracks the click itself.
 // eventAttributes("cta-click", { name: "book-a-call" })
 //   -> { "data-umami-event": "cta-click", "data-umami-event-name": "book-a-call" }
-export function eventAttributes(
-  event: EventName,
-  data: Record<string, string | number> = {},
-) {
+export function eventAttributes(event: EventName, data: Record<string, string | number> = {}) {
   const attributes: { [key: `data-${string}`]: string } = {
     "data-umami-event": event.slice(0, MAX_EVENT_NAME_LENGTH),
   };

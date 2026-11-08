@@ -39,7 +39,7 @@ type Message = {
   document?: { mime_type?: string };
 };
 type CallbackQuery = { id: string; from: User; data?: string; message?: Message };
-type ChatJoinRequest = { chat: Chat; from: User; user_chat_id: number };
+type ChatJoinRequest = { chat: Chat; from: User; user_chat_id: number; invite_link?: { invite_link: string } };
 type Update = { message?: Message; callback_query?: CallbackQuery; chat_join_request?: ChatJoinRequest };
 
 type Session = {
@@ -459,7 +459,10 @@ async function handleJoinRequest(request: ChatJoinRequest) {
   const [session] = (await sql`
     SELECT id, label, price, seats, reserved_seats, booking_open, group_chat_id, invite_link
     FROM training_bot.sessions WHERE group_chat_id = ${request.chat.id}`) as Session[];
-  const reg = session && (await getRegistration(session.id, request.from.id));
+  // Only requests made through the bot's own link of a linked group. Any other request (a group the bot was
+  // just added to, a link the admin created by hand) stays pending for the admin to handle.
+  if (!session?.invite_link || request.invite_link?.invite_link !== session.invite_link) return;
+  const reg = await getRegistration(session.id, request.from.id);
   if (reg?.status === "paid") {
     await tg("approveChatJoinRequest", { chat_id: request.chat.id, user_id: request.from.id });
     await sql`UPDATE training_bot.registrations SET joined_at = now(), updated_at = now() WHERE id = ${reg.id}`;

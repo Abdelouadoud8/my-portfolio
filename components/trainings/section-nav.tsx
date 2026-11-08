@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { ui, type Locale } from "@/lib/i18n";
 
 export type NavSection = { id: string; label: string };
 
@@ -9,10 +10,12 @@ type SectionNavProps = {
   sections: NavSection[];
   // "side": sticky list next to the content (desktop), "bar": sticky row of chips on top (phone)
   variant: "side" | "bar";
+  locale?: Locale;
 };
 
 // Training details page: jump to a section; the section being read is highlighted
-export default function SectionNav({ sections, variant }: SectionNavProps) {
+export default function SectionNav({ sections, variant, locale = "ar" }: SectionNavProps) {
+  const t = ui[locale];
   const [active, setActive] = useState(sections[0]?.id);
   const barRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +65,7 @@ export default function SectionNav({ sections, variant }: SectionNavProps) {
   if (variant === "bar") {
     return (
       <nav
-        aria-label="أقسام الصفحة"
+        aria-label={t.pageSections}
         className="sticky top-0 z-10 -mx-4 border-b border-neutral-20 bg-white/90 backdrop-blur lg:hidden"
       >
         <div ref={barRef} className="flex gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none]">
@@ -86,8 +89,8 @@ export default function SectionNav({ sections, variant }: SectionNavProps) {
   }
 
   return (
-    <nav aria-label="أقسام الصفحة" className="sticky top-8 hidden lg:block">
-      <p className="mb-3 text-xs font-bold text-primary">في هاد الصفحة</p>
+    <nav aria-label={t.pageSections} className="sticky top-8 hidden lg:block">
+      <p className="mb-3 text-xs font-bold text-primary">{t.onThisPage}</p>
       <ul className="flex flex-col border-s border-neutral-20">
         {sections.map(({ id, label }) => (
           <li key={id}>

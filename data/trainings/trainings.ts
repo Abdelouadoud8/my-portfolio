@@ -36,6 +36,7 @@ export const trainings: Training[] = [
       {
         id: "2026-11-07",
         date: "السبت 7 نوفمبر",
+        day: "2026-11-07",
         time: "20:00 - 22:00",
         seats: 25,
         seatsLeft: 0,
@@ -44,8 +45,10 @@ export const trainings: Training[] = [
         oldPrice: "3000 DA",
       },
       {
+        // id = the bot's key (first planned date), kept when the date moves: never change it
         id: "2026-11-28",
-        date: "السبت 28 نوفمبر",
+        date: "السبت 21 نوفمبر",
+        day: "2026-11-21",
         time: "20:00 - 22:00",
         bookingOpen: true,
         seats: 25,
@@ -55,7 +58,8 @@ export const trainings: Training[] = [
       },
       {
         id: "2026-12-12",
-        date: "السبت 12 ديسمبر",
+        date: "السبت 5 ديسمبر",
+        day: "2026-12-05",
         time: "20:00 - 22:00",
         seats: 25,
         seatsLeft: 25,
@@ -63,8 +67,13 @@ export const trainings: Training[] = [
         oldPrice: "3000 DA",
       },
     ],
-    // Filled once the registration flow is decided (Telegram bot, form, ...)
-    registrationSteps: [],
+    // "كيفاش تسجل": the Telegram bot flow (automations/training-bot)
+    registrationSteps: [
+      "اضغط على «تسجيل» في الحصة اللي تناسبك: يتفتحلك البوت تاعنا في تيليغرام",
+      "ابعث اسمك و رقم التيليفون (بزر واحد)، و البلاصة تتحجزلك 48 ساعة",
+      "خلّص بـ BaridiMob ولا في مكتب البريد، و ابعث صورة الوصل في البوت",
+      "نأكدو الدفع و تاخذ رابط المجموعة الخاصة: فيها كامل التفاصيل و رابط الحصة",
+    ],
     paymentMethods: [
       {
         kind: "baridimob",
