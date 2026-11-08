@@ -125,6 +125,10 @@ type TrainingSession = {
   price: string;
   // Price before the discount, shown struck through next to `price`
   oldPrice?: string;
+  // Places left shown on the website instead of the bot's live count (display only: the bot keeps its real count)
+  displaySeatsLeft?: number;
+  // Not shown on the website (cards, /links, price box) while true; the bot keeps it (closed unless bookingOpen)
+  hidden?: boolean;
   // Booking open: the "تسجيل" button opens the Telegram bot (training's telegramBot) on this session
   bookingOpen?: boolean;
   // Register link for this date that overrides the bot (e.g. a form); falls back to the training's signupHref
@@ -152,12 +156,16 @@ type Training = {
   time?: string;
   // e.g. "Google Meet"
   platform?: string;
+  // Chip at the top of the details page (falls back to `price`), e.g. "دورة للمبتدئين"
+  badge?: string;
   // Details page only: every field below is optional, its block is hidden when missing/empty
   price?: string;
   level?: string;
   maxParticipants?: string; // e.g. "20-25"
   // Who it's for / what you'll be able to do / what to bring
   audience?: string[];
+  // "ماشي ليك إذا:" card under the audience ticks
+  notFor?: string[];
   outcomes?: string[];
   requirements?: string[];
   sessions?: TrainingSession[];
@@ -166,6 +174,9 @@ type Training = {
   paymentMethods?: TrainingPaymentMethod[];
   program?: TrainingModule[];
   reviews?: TrainingReview[];
+  // Screenshots of participants' messages (public/links/<…>/), shown as a masonry grid in "آراء المشاركين".
+  // Crop out profile photos before adding one (originals stay in the git-ignored private/ folder).
+  feedbackImages?: { src: string; width: number; height: number }[];
   faq?: TrainingFaq[];
   // "عندك سؤال؟" button (Telegram/WhatsApp chat link); block hidden when missing
   questionsHref?: string;
@@ -180,6 +191,8 @@ type Training = {
 type ServiceFact = {
   label: string;
   value: string;
+  // Duotone icon of the fact card (same set as the training page's facts)
+  icon?: "clock" | "video" | "user" | "file" | "tag";
 };
 
 type Service = {
@@ -207,6 +220,8 @@ type Service = {
   faq?: TrainingFaq[];
   requestLabel: string;
   requestHref: string;
+  // Not linked from /links nor the header while true (the page still exists at /services/<id>)
+  unlisted?: boolean;
   // Second, outlined button (e.g. LinkedIn for companies)
   secondary?: { label: string; href: string };
 };

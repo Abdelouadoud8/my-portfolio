@@ -36,7 +36,7 @@ export default function TrainingCard({
     session && {
       key: "seats",
       Icon: IconUsers,
-      text: full ? t.full : t.seatsLeft(session.seatsLeft),
+      text: full ? t.full : t.seatsLeft(session.seatsLeft, session.seats),
       strong: !full,
     },
   ].filter(Boolean) as {
@@ -118,6 +118,7 @@ export default function TrainingCard({
           </span>
         </div>
         <Link
+          prefetch={false}
           href={localePath(locale, `/trainings/${id}`)}
           className="flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-primary px-5 font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-600"
           {...eventAttributes(EVENTS.trainingDetailsClick, { training: id, location: "links" })}

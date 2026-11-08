@@ -66,6 +66,9 @@ app/
                              (AI audit + automation for companies): RTL Darja like the training page, content in
                              data/services/services.ts (each list hidden when empty), one request button = Telegram
                              username link (`service-request-click` {service, location}), SSG, dynamicParams=false
+                             Same look as the training page: Phosphor duotone icons only (components/shared/icons, no
+                             lucide here), fact cards with an icon (`facts[].icon`), steps = primary number on a
+                             primary-50 circle.
   [lang]/                    English + French copies of /links and its pages: /en|fr/links, /en|fr/trainings/:id,
                              /en|fr/services/:id (dynamicParams=false, only "en"/"fr"; Darja keeps the plain URLs).
                              Every route file is thin: the page itself is components/links/links-page.tsx,
@@ -174,10 +177,15 @@ Everything is in `data/links/links.ts`:
   {training, location: links | links-path}) → "منين تحب تبدا؟" (`components/links/start-paths.tsx`:
   training page / free content anchor `#free` / Telegram question) → (2026-11-08) no free content section any more:
   "الدورات" = training card only (no note under it); the services are only rows of "منين تحب تبدا؟" (training, 1:1,
-  companies, Telegram question; `service-details-click` {service, location: links-path}). Booking rules shared in `lib/trainings.ts` (withLiveSeats, sessionSignupHref, nextSession,
+  companies; `service-details-click` {service, location: links-path}). A service with `unlisted: true`
+  (data/services/services.ts) is left out of these rows and of the header menu (companies = unlisted since 2026-11-08;
+  its page still works by URL). No Telegram "question" row on /links (spam); the training page keeps its question block. Booking rules shared in `lib/trainings.ts` (withLiveSeats, sessionSignupHref, nextSession,
   discountPercent) by the card, the details page's price box (`components/trainings/booking-box.tsx`: price, places,
   next session, "سجّل في الحصة" = `training-signup-click` location hero, reassurance line, total followers) and the
   session cards. Empty trainings array hides the /links section. Google Meet free accounts cut group calls at 60 min.
+  "آراء المشاركين" (after the trainer card, like withrssle's feedback wall): `feedbackImages` = cropped screenshots of
+  participants' messages in `public/links/ai-session/` (WebP, ~900px wide), masonry `columns-1 sm:columns-2`. Crop
+  out profile photos and reaction avatars before publishing; the originals live in the git-ignored `private/` folder.
   Details page sections after the sessions: "كيفاش تسجل" (`registrationSteps`, a "coming soon" line while empty),
   "طرق الدفع" (`paymentMethods` {kind: baridimob | post-office, title, description}). Refund rule lives in the
   FAQ. Trainer card links to Instagram (`training-instagram-click`) with the live follower count (igstats, page
@@ -334,15 +342,19 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - Neon Function **`trainbot`** (Frankfurt project `portfolio-automations`, same branch as igstats/fbstats) = webhook of a
   Telegram bot that handles paid sessions with no email: `/start <trainingId>_<sessionId>` (the page's "تسجيل" button links
   to `t.me/<telegramBot>?start=...` for sessions with `bookingOpen`) → name → phone via Telegram's share-contact button
-  (own number only) → payment details (`PAYMENT_DETAILS`) + seat held 48 h → receipt photo forwarded to the admin with
+  (own number only) → payment details (`PAYMENT_DETAILS`) → receipt photo forwarded to the admin with
   قبول / رفض buttons → accepted: invite link of the session's private group. The group link needs approval and the bot
   approves join requests only for Telegram accounts that paid that session (declines and DMs everyone else).
   Admin (TELEGRAM_ADMIN_CHAT_ID only): `/list [session]`, `/remind <session> <text>`, `/sendlinks <session>`,
   `/setgroup <session>` (inside the group; bot must be admin with "invite users"; sends the link to already-paid people).
+- Participant messages (steps 1-3, payment confirmed) are sent as Telegram HTML (`sendHtml`): bold dates/prices,
+  emojis, RIP in `<code>` (tap to copy). Escape anything from people or the DB with `esc()`. `PAYMENT_DETAILS` in
+  .env.local is HTML too (name in <b>, RIP in <code>, `\n` for new lines); redeploy (`./deploy.sh`) after editing it.
 - Data: its own database (Frankfurt `neondb`, schema `training_bot`: `sessions`, `registrations`), NOT the London Umami
   DB (near its compute cap). Least-privilege role `training_bot` (SELECT/INSERT/UPDATE on that schema only).
   `GET /public/seats/<trainingId>` → `{ seatsLeft: { "<trainingId>_<sessionId>": n } }` (sold outside the bot via
-  `reservedSeats`, paid, under review, held); the training page uses it once `telegramBot` is set (`lib/training-seats.ts`,
+  `reservedSeats`, paid, under review, held); a session's `displaySeatsLeft` overrides it on the website only (display
+  number, e.g. 12 on 21 Nov; the bot keeps its real count); the training page uses it once `telegramBot` is set (`lib/training-seats.ts`,
   5-min cache), else the data file's `seatsLeft`.
 - Scripts (read `.env.local`, never print secrets): `node setup-db.mjs` (tables + role, writes TRAINING_BOT_DATABASE_URL and
   TELEGRAM_WEBHOOK_SECRET), `node sync-sessions.mjs` (copies sessions from data/trainings/trainings.ts: run after editing
@@ -412,6 +424,22 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
   2400px PNG), `headers()` in next.config.ts caches public media 7 days and PDFs 1 day (default is max-age=0),
   section images lazy-load, and every `fill` <Image> needs a `sizes` prop. Firewall (2026-10-23): managed rules
   AI bots = deny, Bot protection = challenge.
+- **Image Optimization / traffic hardening (2026-11-08)** — read before adding images or links:
+  - `images` in next.config.ts: `qualities: [75]` only (Next 15 otherwise accepts any q=1..100 = 100× the
+    transformations a script can mint), `deviceSizes` [640, 828, 1080, 1920] + `imageSizes` [64, 96, 128, 256, 384]
+    (any other w → 400), `localPatterns` = only /portfolio, /blog, /links, /shared and no query strings (media-kit,
+    files and remote URLs → 400), `minimumCacheTTL` 31 days. Worst case if someone crawls every variant:
+    ~126 images × 9 widths ≈ 1.1K transformations/month (limit 5K). Don't add `quality=` props or widths without
+    adding them here.
+  - /links, /trainings, /services (+ /en, /fr) use **no** optimized images: the avatar is `public/shared/avatar-256.webp`
+    (5 KB, `linksProfile.imageUrl`) and the feedback screenshots are pre-compressed WebP, all `unoptimized` (plain
+    static files, browser-cached 7 days by `headers()`: the regex covers portfolio|shared|blog|links). New images on
+    these pages: export a small WebP (≤ ~900px, < 100 KB) and use `unoptimized`.
+  - `prefetch={false}` on every `<Link>` of those pages (header, language switcher, start paths, training card, back
+    links): otherwise each visit preloads up to ~8 other pages.
+  - Live seats refresh every 6 h (`SEATS_CACHE_SECONDS` = 21600 in lib/training-seats.ts); the lowest fetch revalidate
+    sets the page's ISR interval, so /links + the training page (3 languages) rebuild at most every 6 h on traffic.
+  - og:image stays the 11 KB `sitePreviewImage` on every page (link-preview bots fetch it on every share).
 - `next` / `eslint-config-next` are pinned to exactly `15.5.27`: 15.5.28 returns 404 (`NoFallbackError`) for every
   page with `revalidate` + `dynamicParams = false` (all `/blog/<slug>` and `/blog/category/<category>` pages).
   Before upgrading, run `npm run build && npx next start` and check a blog article returns 200.

@@ -2,7 +2,15 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Building2, CheckCircle2, UserRound, XCircle } from "lucide-react";
+import { IconUser } from "@/components/shared/icons/icon-user";
+import { IconBuildings } from "@/components/shared/icons/icon-buildings";
+import { IconCheckCircle } from "@/components/shared/icons/icon-check-circle";
+import { IconXCircle } from "@/components/shared/icons/icon-x-circle";
+import { IconClock } from "@/components/shared/icons/icon-clock";
+import { IconVideoCamera } from "@/components/shared/icons/icon-video-camera";
+import { IconFileText } from "@/components/shared/icons/icon-file-text";
+import { IconTag } from "@/components/shared/icons/icon-tag";
+import type { ServiceFact } from "@/data/types";
 import { services } from "@/data/services/services";
 import { linksProfile } from "@/data/links/links";
 import { EVENTS, eventAttributes } from "@/lib/analytics";
@@ -26,9 +34,18 @@ export function serviceMetadata(id: string, locale: Locale): Metadata {
   };
 }
 
-const serviceIcons: Record<string, typeof UserRound> = {
-  "one-to-one": UserRound,
-  business: Building2,
+// Same Phosphor duotone set as the training page
+const serviceIcons: Record<string, typeof IconUser> = {
+  "one-to-one": IconUser,
+  business: IconBuildings,
+};
+
+const factIcons: Record<NonNullable<ServiceFact["icon"]>, typeof IconUser> = {
+  clock: IconClock,
+  video: IconVideoCamera,
+  user: IconUser,
+  file: IconFileText,
+  tag: IconTag,
 };
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
@@ -65,7 +82,7 @@ export default function ServicePageContent({ id, locale }: { id: string; locale:
     requestHref,
     secondary,
   } = service;
-  const Icon = serviceIcons[id] ?? UserRound;
+  const Icon = serviceIcons[id] ?? IconUser;
 
   const sections = [
     { id: "included", label: includedTitle, show: included.length > 0 },
@@ -109,6 +126,7 @@ export default function ServicePageContent({ id, locale }: { id: string; locale:
 
         <div className="flex min-w-0 max-w-2xl flex-col gap-12">
           <Link
+            prefetch={false}
             href={localePath(locale, "/links")}
             className="self-start text-sm font-medium text-neutral-70 transition-colors hover:text-primary"
           >
@@ -118,7 +136,7 @@ export default function ServicePageContent({ id, locale }: { id: string; locale:
           <header className="flex flex-col gap-5">
             <div className="flex items-center gap-3">
               <span className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary">
-                <Icon size={26} strokeWidth={1.75} />
+                <Icon width={28} height={28} />
               </span>
               <span
                 dir="auto"
@@ -164,17 +182,22 @@ export default function ServicePageContent({ id, locale }: { id: string; locale:
 
           {facts.length > 0 && (
             <section aria-label={t.keyFacts} className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {facts.map(({ label, value }) => (
-                <div
-                  key={label}
-                  className="flex flex-col gap-1.5 rounded-xl border border-neutral-20 bg-white px-3 py-3 sm:p-4"
-                >
-                  <span className="text-xs font-medium text-neutral-60">{label}</span>
-                  <span dir="auto" className="text-start text-sm font-bold text-neutral-100">
-                    {value}
-                  </span>
-                </div>
-              ))}
+              {facts.map(({ label, value, icon }) => {
+                const FactIcon = icon ? factIcons[icon] : undefined;
+                return (
+                  <div
+                    key={label}
+                    className="flex flex-col gap-2 rounded-xl border border-neutral-20 bg-white px-2.5 py-3 sm:p-4"
+                  >
+                    {FactIcon && <FactIcon width={22} height={22} className="text-primary" />}
+                    <span className="text-xs font-medium text-neutral-60">{label}</span>
+                    {/* Page direction for the alignment; bdi keeps Latin text ("Google Meet") in order */}
+                    <span className="text-start text-sm font-bold text-neutral-100">
+                      <bdi>{value}</bdi>
+                    </span>
+                  </div>
+                );
+              })}
             </section>
           )}
 
@@ -186,7 +209,7 @@ export default function ServicePageContent({ id, locale }: { id: string; locale:
               <ul className="flex flex-col gap-3">
                 {included.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-neutral-100">
-                    <CheckCircle2 size={22} className="mt-0.5 shrink-0 text-primary" />
+                    <IconCheckCircle width={22} height={22} className="mt-0.5 shrink-0 text-primary" />
                     <span className="leading-7">{item}</span>
                   </li>
                 ))}
@@ -199,14 +222,11 @@ export default function ServicePageContent({ id, locale }: { id: string; locale:
               <SectionTitle>{ts.steps}</SectionTitle>
               <ol className="flex flex-col gap-3">
                 {steps.map((step, index) => (
-                  <li
-                    key={step}
-                    className="flex items-start gap-3 rounded-xl border border-neutral-20 bg-white p-4"
-                  >
-                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+                  <li key={step} className="flex items-start gap-3 text-neutral-100">
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary-50 text-sm font-bold text-primary">
                       {index + 1}
                     </span>
-                    <span className="leading-7 text-neutral-100">{step}</span>
+                    <span className="leading-7">{step}</span>
                   </li>
                 ))}
               </ol>
@@ -221,7 +241,7 @@ export default function ServicePageContent({ id, locale }: { id: string; locale:
                   <ul className="flex flex-col gap-3 rounded-xl border border-neutral-20 bg-white p-4">
                     {forWho.map((item) => (
                       <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-neutral-100">
-                        <CheckCircle2 size={18} className="mt-1 shrink-0 text-primary" />
+                        <IconCheckCircle width={18} height={18} className="mt-1 shrink-0 text-primary" />
                         {item}
                       </li>
                     ))}
@@ -233,7 +253,7 @@ export default function ServicePageContent({ id, locale }: { id: string; locale:
                     <ul className="flex flex-col gap-3">
                       {notFor.map((item) => (
                         <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-neutral-70">
-                          <XCircle size={18} className="mt-1 shrink-0 text-neutral-60" />
+                          <IconXCircle width={18} height={18} className="mt-1 shrink-0 text-neutral-60" />
                           {item}
                         </li>
                       ))}
@@ -256,6 +276,7 @@ export default function ServicePageContent({ id, locale }: { id: string; locale:
             <div className="flex items-center gap-4 rounded-xl border border-neutral-20 bg-white p-4">
               <Image
                 src={linksProfile.imageUrl}
+                unoptimized
                 alt={linksProfile.name}
                 width={64}
                 height={64}

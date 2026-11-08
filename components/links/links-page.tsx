@@ -90,11 +90,8 @@ export default async function LinksPageContent({ locale }: { locale: Locale }) {
 
           {/* After the offers: pick a path (training, 1:1, companies, a question) */}
           <div className={textFont}>
-            <StartPaths
-              locale={locale}
-              trainingId={mainTraining?.id}
-              questionsHref={mainTraining?.questionsHref}
-            />
+            {/* No "question on Telegram" row on /links: too much spam (the training page keeps its question block) */}
+            <StartPaths locale={locale} trainingId={mainTraining?.id} />
           </div>
         </div>
       </main>

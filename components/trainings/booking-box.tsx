@@ -2,7 +2,7 @@ import type { Training, TrainingSession } from "@/data/types";
 import { EVENTS, eventAttributes } from "@/lib/analytics";
 import { cn, formatCompact } from "@/lib/utils";
 import { discountPercent, isFull, sessionSignupHref } from "@/lib/trainings";
-import { localeMeta, ui, type Locale } from "@/lib/i18n";
+import { ui, type Locale } from "@/lib/i18n";
 import { IconCalendar } from "@/components/shared/icons/icon-calendar";
 import { IconUsers } from "@/components/shared/icons/icon-users";
 
@@ -20,7 +20,6 @@ type BookingBoxProps = {
 export default function BookingBox({ training, session, totalFollowers, locale = "ar" }: BookingBoxProps) {
   if (!session) return null;
   const t = ui[locale];
-  const rtl = localeMeta[locale].dir === "rtl";
   const href = sessionSignupHref(training, session);
   const discount = discountPercent(session);
   const full = isFull(session);
@@ -28,12 +27,7 @@ export default function BookingBox({ training, session, totalFollowers, locale =
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-4 rounded-2xl border border-primary/30 bg-white p-4 shadow-[0_6px_20px_color-mix(in_srgb,var(--color-primary)_10%,transparent)] sm:p-5">
-        <div
-          className={cn(
-            "grid grid-cols-[minmax(0,1fr)_auto] divide-x divide-neutral-20",
-            rtl && "divide-x-reverse",
-          )}
-        >
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] divide-x divide-neutral-20">
           <div className="flex flex-col gap-1 pe-4">
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-neutral-70">{t.price}</span>
@@ -64,7 +58,7 @@ export default function BookingBox({ training, session, totalFollowers, locale =
               )}
             >
               {full ? t.full : session.seatsLeft}
-              {!full && <span className="text-sm font-medium text-neutral-70">{t.training.left}</span>}
+              {!full && <span className="text-sm font-medium text-neutral-70">{t.training.outOf(session.seats)}</span>}
             </span>
           </div>
         </div>

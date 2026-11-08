@@ -11,8 +11,8 @@ import { languageAlternates, localeMeta, localePath, localePaths, ui, type Local
 import SiteHeader from "@/components/links/site-header";
 import BookingBox from "@/components/trainings/booking-box";
 import { DYNAMIC_EVENTS, EVENTS, eventAttributes } from "@/lib/analytics";
-import { formatCompact } from "@/lib/utils";
-import { IconInstagram } from "@/components/shared/icons/icon-instagram";
+import { cn, formatCompact } from "@/lib/utils";
+import { platformIcons } from "@/components/shared/social/social-link-button";
 import { IconTelegram } from "@/components/shared/icons/icon-telegram";
 import SectionNav, { type NavSection } from "@/components/trainings/section-nav";
 import SessionCards from "@/components/trainings/session-cards";
@@ -26,6 +26,7 @@ import { IconGraduationCap } from "@/components/shared/icons/icon-graduation-cap
 import { IconDeviceMobile } from "@/components/shared/icons/icon-device-mobile";
 import { IconMailbox } from "@/components/shared/icons/icon-mailbox";
 import type { TrainingPaymentMethod } from "@/data/types";
+import { IconXCircle } from "@/components/shared/icons/icon-x-circle";
 
 const paymentIcons: Record<TrainingPaymentMethod["kind"], typeof IconMailbox> = {
   baridimob: IconDeviceMobile,
@@ -81,12 +82,14 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
     price,
     level,
     audience = [],
+    notFor = [],
     outcomes = [],
     requirements = [],
     registrationSteps = [],
     paymentMethods = [],
     program = [],
     reviews = [],
+    feedbackImages = [],
     faq = [],
     signupHref,
     questionsHref,
@@ -96,19 +99,26 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
   // Once the registration bot is live, seats left come from it (paid + held), else from the data file
   const sessions = localizeSessions(await withLiveSeats(base), locale);
 
-  // Live follower counts (fall back to data/links/links.ts): Instagram in the trainer card, total under the price box
+  // Live follower counts (fall back to data/links/links.ts): Instagram + Facebook in the trainer card, total under the price box
   const socials = await getVisibleSocials(linksSocials);
-  const instagram = socials.find((social) => social.platform === "instagram");
-  const instagramFollowers = instagram?.followers;
+  const trainerSocials = (["instagram", "facebook"] as const)
+    .map((platform) => socials.find((social) => social.platform === platform))
+    .filter((social) => social?.href) as typeof socials;
   const totalFollowers = socials.reduce((sum, social) => sum + (social.followers ?? 0), 0);
 
   // Price box + sticky bar: the session people can book now, else the next one with places (none once all are full)
   const pushedSession = nextSession({ id, telegramBot, signupHref }, sessions);
 
   // Date, duration and seats are per session now (see the sessions cards), so only these stay on top
-  const facts = [
+  // Price card: the next session's price with the old one struck through, else the training's price text
+  const facts: { label: string; value?: string; oldValue?: string; Icon: typeof IconTag }[] = [
     { label: tt.place, value: platform, Icon: IconVideoCamera },
-    { label: t.price, value: price, Icon: IconTag },
+    {
+      label: t.price,
+      value: pushedSession?.price ?? price,
+      oldValue: pushedSession?.oldPrice,
+      Icon: IconTag,
+    },
     { label: tt.level, value: level, Icon: IconChartBar },
   ].filter((fact) => fact.value);
 
@@ -117,14 +127,14 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
     { id: "sessions", label: tt.sessions, show: sessions.length > 0 },
     { id: "registration", label: tt.registration, show: true },
     { id: "trainer", label: tt.trainer, show: true },
+    { id: "reviews", label: tt.reviews, show: feedbackImages.length > 0 || reviews.length > 0 },
     { id: "outcomes", label: tt.outcomes, show: outcomes.length > 0 },
     { id: "program", label: tt.program, show: program.length > 0 },
     {
       id: "audience",
       label: tt.audience,
-      show: audience.length > 0 || requirements.length > 0,
+      show: audience.length > 0 || requirements.length > 0 || notFor.length > 0,
     },
-    { id: "reviews", label: tt.reviews, show: reviews.length > 0 },
     { id: "faq", label: t.faq, show: faq.length > 0 },
   ]
     .filter((section) => section.show)
@@ -145,6 +155,7 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
 
         <div className="flex min-w-0 max-w-2xl flex-col gap-12">
           <Link
+            prefetch={false}
             href={localePath(locale, "/links")}
             className="self-start text-sm font-medium text-neutral-70 transition-colors hover:text-primary"
           >
@@ -157,9 +168,9 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
               <span className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary">
                 <IconGraduationCap width={28} height={28} />
               </span>
-              {price && (
+              {(training.badge ?? price) && (
                 <span className="rounded-full bg-primary-50 px-3 py-1 text-sm font-bold text-primary">
-                  {price}
+                  {training.badge ?? price}
                 </span>
               )}
             </div>
@@ -177,15 +188,22 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
           {/* Key facts */}
           {facts.length > 0 && (
             <section aria-label={t.keyFacts} className="grid grid-cols-3 gap-3">
-              {facts.map(({ label, value, Icon }) => (
+              {facts.map(({ label, value, oldValue, Icon }) => (
                 <div
                   key={label}
                   className="flex flex-col gap-2 rounded-xl border border-neutral-20 bg-white px-2.5 py-3 sm:p-4"
                 >
                   <Icon width={22} height={22} className="text-primary" />
                   <span className="text-xs font-medium text-neutral-60">{label}</span>
-                  <span dir="auto" className="text-start text-sm font-bold text-neutral-100">
-                    {value}
+                  {/* Page direction for the alignment (right in Darja, even for "Google Meet"); bdi keeps the Latin text in order */}
+                  <span className="flex flex-wrap items-baseline gap-x-1.5 text-start text-sm font-bold text-neutral-100">
+                    <bdi className="whitespace-nowrap">{value}</bdi>
+                    {oldValue && (
+                      <s className="whitespace-nowrap text-xs font-normal text-neutral-70">
+                        <span className="sr-only">{t.insteadOf}</span>
+                        <bdi>{oldValue}</bdi>
+                      </s>
+                    )}
                   </span>
                 </div>
               ))}
@@ -268,6 +286,7 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
             <div className="flex items-center gap-4 rounded-xl border border-neutral-20 bg-white p-4">
               <Image
                 src={linksProfile.imageUrl}
+                unoptimized
                 alt={linksProfile.name}
                 width={64}
                 height={64}
@@ -276,34 +295,98 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
               <div className="min-w-0">
                 <p className="font-bold text-neutral-100">{t.trainerName}</p>
                 <p className="mt-1 text-sm leading-6 text-neutral-70">{t.trainerBio}</p>
-                {instagram?.href && (
-                  <a
-                    href={instagram.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Instagram ${instagram.handle}`}
-                    className="mt-3 inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-primary-50 px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary-100"
-                    {...eventAttributes(DYNAMIC_EVENTS.socialClick("instagram", "training"), {
-                      platform: "instagram",
-                      location: "training",
+                {/* Instagram + Facebook chips with the live follower counts (phones: icon + count only) */}
+                {trainerSocials.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {trainerSocials.map((social) => {
+                      const Icon = platformIcons[social.platform];
+                      // Instagram shows its @handle, Facebook its name (the page name is too long)
+                      const name = social.platform === "instagram" ? social.handle : social.label;
+                      return (
+                        <a
+                          key={social.platform}
+                          href={social.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${social.label} ${social.handle}`}
+                          className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-primary-50 px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary-100"
+                          {...eventAttributes(DYNAMIC_EVENTS.socialClick(social.platform, "training"), {
+                            platform: social.platform,
+                            location: "training",
+                          })}
+                        >
+                          <Icon width={18} height={18} />
+                          <bdi dir="ltr" className="hidden sm:inline">
+                            {name}
+                          </bdi>
+                          {social.followers ? (
+                            <span className="sm:font-normal sm:text-neutral-70">
+                              <span className="hidden sm:inline">· </span>
+                              <bdi dir="ltr">{formatCompact(social.followers)}</bdi> {t.followers}
+                            </span>
+                          ) : null}
+                        </a>
+                      );
                     })}
-                  >
-                    <IconInstagram width={18} height={18} />
-                    {/* Phones: icon + count only (the handle doesn't fit next to the photo) */}
-                    <bdi dir="ltr" className="hidden sm:inline">
-                      {instagram.handle}
-                    </bdi>
-                    {instagramFollowers && (
-                      <span className="sm:font-normal sm:text-neutral-70">
-                        <span className="hidden sm:inline">· </span>
-                        <bdi dir="ltr">{formatCompact(instagramFollowers)}</bdi> {t.followers}
-                      </span>
-                    )}
-                  </a>
+                  </div>
                 )}
               </div>
             </div>
           </section>
+
+          {/* Participants' feedback (like withrssle): message screenshots as a masonry grid, then text reviews if any */}
+          {(feedbackImages.length > 0 || reviews.length > 0) && (
+            <section id="reviews" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
+              <div className="flex flex-col gap-1">
+                <SectionTitle>{tt.reviews}</SectionTitle>
+                {feedbackImages.length > 0 && (
+                  <p className="text-sm leading-6 text-neutral-70">{tt.reviewsIntro}</p>
+                )}
+              </div>
+              {feedbackImages.length > 0 && (
+                <div className="columns-1 gap-3 sm:columns-2">
+                  {feedbackImages.map((image) => (
+                    <figure
+                      key={image.src}
+                      className="mb-3 break-inside-avoid overflow-hidden rounded-2xl border border-neutral-20 bg-white shadow-xs transition-all hover:border-primary/40 hover:shadow-md"
+                    >
+                      <Image
+                        src={image.src}
+                        alt={tt.feedbackAlt}
+                        width={image.width}
+                        height={image.height}
+                        // Already compressed WebP (~20-50 KB): served as is, so a busy day costs no Image Optimization
+                        unoptimized
+                        className="h-auto w-full"
+                      />
+                    </figure>
+                  ))}
+                </div>
+              )}
+              {reviews.length > 0 && (
+                <div className="flex flex-col gap-3">
+                  {reviews.map((review) => (
+                    <figure
+                      key={review.name + review.text}
+                      className="flex flex-col gap-2 rounded-xl border border-neutral-20 bg-white p-4"
+                    >
+                      {review.rating && (
+                        <div className="flex gap-0.5 text-primary" aria-label={`${review.rating}/5`}>
+                          {Array.from({ length: review.rating }, (_, i) => (
+                            <IconStar key={i} width={16} height={16} />
+                          ))}
+                        </div>
+                      )}
+                      <blockquote className="leading-7 text-neutral-100">{review.text}</blockquote>
+                      <figcaption dir="auto" className="text-start text-sm font-semibold text-neutral-70">
+                        {review.name}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
 
           {outcomes.length > 0 && (
             <section id="outcomes" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
@@ -353,49 +436,39 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
           )}
 
           {/* Who it's for + what you need: one tick list, one item per line */}
-          {(audience.length > 0 || requirements.length > 0) && (
+          {(audience.length > 0 || requirements.length > 0 || notFor.length > 0) && (
             <section id="audience" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
               <SectionTitle>{tt.audience}</SectionTitle>
-              <ul className="flex flex-col gap-3">
-                {[...audience, ...requirements].map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-neutral-100">
-                    <IconCheckCircle width={20} height={20} className="mt-1 shrink-0 text-primary" />
-                    <span className="leading-7">
-                      <WithLatinBrackets text={item} />
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {/* Reviews: hidden until the first ones are added to the data */}
-          {reviews.length > 0 && (
-            <section id="reviews" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
-              <SectionTitle>{tt.reviews}</SectionTitle>
-              <div className="flex flex-col gap-3">
-                {reviews.map((review) => (
-                  <figure
-                    key={review.name + review.text}
-                    className="flex flex-col gap-2 rounded-xl border border-neutral-20 bg-white p-4"
-                  >
-                    {review.rating && (
-                      <div className="flex gap-0.5 text-primary" aria-label={`${review.rating}/5`}>
-                        {Array.from({ length: review.rating }, (_, i) => (
-                          <IconStar key={i} width={16} height={16} />
-                        ))}
-                      </div>
-                    )}
-                    <blockquote className="leading-7 text-neutral-100">{review.text}</blockquote>
-                    <figcaption dir="auto" className="text-start text-sm font-semibold text-neutral-70">
-                      {review.name}
-                    </figcaption>
-                  </figure>
-                ))}
+              {/* Two cards side by side from sm up (one under the other on phones): who it's for | not for you if */}
+              <div className={cn("grid gap-3", notFor.length > 0 && "sm:grid-cols-2")}>
+                <ul className="flex flex-col gap-3 rounded-xl border border-neutral-20 bg-white p-4">
+                  {[...audience, ...requirements].map((item) => (
+                    <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-neutral-100">
+                      <IconCheckCircle width={18} height={18} className="mt-1 shrink-0 text-primary" />
+                      <span>
+                        <WithLatinBrackets text={item} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                {notFor.length > 0 && (
+                  <div className="flex flex-col gap-3 rounded-xl border border-neutral-20 bg-neutral-5 p-4">
+                    <p className="text-sm font-bold text-neutral-100">{tt.notFor}</p>
+                    <ul className="flex flex-col gap-3">
+                      {notFor.map((item) => (
+                        <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-neutral-70">
+                          <IconXCircle width={18} height={18} className="mt-1 shrink-0 text-neutral-60" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </section>
           )}
 
+          {/* Reviews: hidden until the first ones are added to the data */}
           {faq.length > 0 && (
             <section id="faq" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
               <SectionTitle>{t.faq}</SectionTitle>

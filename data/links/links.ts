@@ -1,9 +1,4 @@
-import {
-  CollaborationCta,
-  FeaturedReel,
-  LinksProfile,
-  SocialLink,
-} from "@/data/types";
+import { CollaborationCta, FeaturedReel, LinksProfile, SocialLink } from "@/data/types";
 
 // Content of the /links page (link in bio). Edit this file only, the page updates itself.
 
@@ -11,7 +6,8 @@ export const linksProfile: LinksProfile = {
   name: "Abdelouadoud Mahdaoui",
   tagline: "Content Creator",
   bio: "Salem 👋 Ana Ouadoud, a software engineer living in France and a tech & AI content creator.",
-  imageUrl: "/shared/homepicture.jpg",
+  // 256 px WebP (5 KB) served as is (unoptimized): no Image Optimization use on /links and its pages
+  imageUrl: "/shared/avatar-256.webp",
 };
 
 export const collaboration: CollaborationCta = {

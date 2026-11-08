@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { Building2, UserRound } from "lucide-react";
+import { IconUser } from "@/components/shared/icons/icon-user";
+import { IconBuildings } from "@/components/shared/icons/icon-buildings";
 import { EVENTS, eventAttributes } from "@/lib/analytics";
 import { localeMeta, localePath, ui, type Locale } from "@/lib/i18n";
+import { services } from "@/data/services/services";
+
+// Companies row hidden while the service is `unlisted` (data/services/services.ts)
+const businessUnlisted = services.find((service) => service.id === "business")?.unlisted;
 import { IconGraduationCap } from "@/components/shared/icons/icon-graduation-cap";
 import { IconTelegram } from "@/components/shared/icons/icon-telegram";
 
@@ -45,6 +50,7 @@ export default function StartPaths({ locale = "ar", trainingId, questionsHref }:
 
       {trainingId && (
         <Link
+          prefetch={false}
           href={localePath(locale, `/trainings/${trainingId}`)}
           className={rowClass}
           {...eventAttributes(EVENTS.trainingDetailsClick, { training: trainingId, location: "links-path" })}
@@ -58,28 +64,32 @@ export default function StartPaths({ locale = "ar", trainingId, questionsHref }:
       )}
 
       <Link
+        prefetch={false}
         href={localePath(locale, "/services/one-to-one")}
         className={rowClass}
         {...eventAttributes(EVENTS.serviceDetailsClick, { service: "one-to-one", location: "links-path" })}
       >
         <span className={iconClass}>
-          <UserRound size={22} strokeWidth={1.75} />
+          <IconUser width={22} height={22} />
         </span>
         {text(t.pathOneToOne)}
         {arrow}
       </Link>
 
-      <Link
-        href={localePath(locale, "/services/business")}
-        className={rowClass}
-        {...eventAttributes(EVENTS.serviceDetailsClick, { service: "business", location: "links-path" })}
-      >
-        <span className={iconClass}>
-          <Building2 size={22} strokeWidth={1.75} />
-        </span>
-        {text(t.pathBusiness)}
-        {arrow}
-      </Link>
+      {!businessUnlisted && (
+        <Link
+          prefetch={false}
+          href={localePath(locale, "/services/business")}
+          className={rowClass}
+          {...eventAttributes(EVENTS.serviceDetailsClick, { service: "business", location: "links-path" })}
+        >
+          <span className={iconClass}>
+            <IconBuildings width={22} height={22} />
+          </span>
+          {text(t.pathBusiness)}
+          {arrow}
+        </Link>
+      )}
 
       {questionsHref && (
         <a

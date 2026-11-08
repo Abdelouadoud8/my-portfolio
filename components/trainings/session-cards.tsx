@@ -2,7 +2,7 @@ import type { TrainingSession } from "@/data/types";
 import { EVENTS, eventAttributes } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { discountPercent, isFull, sessionSignupHref } from "@/lib/trainings";
-import { localeMeta, ui, type Locale, type UiStrings } from "@/lib/i18n";
+import { ui, type Locale, type UiStrings } from "@/lib/i18n";
 import { IconCalendar } from "@/components/shared/icons/icon-calendar";
 import { IconUsers } from "@/components/shared/icons/icon-users";
 import { IconCheckCircle } from "@/components/shared/icons/icon-check-circle";
@@ -23,6 +23,14 @@ type SessionCardsProps = {
   locale?: Locale;
 };
 
+// Desktop row: fixed columns (participants, places left, duration, price) so every card lines up; measured per
+// language so "باقي 12 من 25 بلاصة" / "12 of 25 seats left" / "12 sur 25 libres" fit in a 482px card
+const rowColumns: Record<Locale, string> = {
+  ar: "md:grid-cols-[5.25rem_8.75rem_4.25rem_minmax(0,1fr)] md:gap-x-3",
+  en: "md:grid-cols-[5.25rem_8.75rem_4.75rem_minmax(0,1fr)] md:gap-x-3",
+  fr: "md:grid-cols-[5.75rem_8rem_5.25rem_minmax(0,1fr)] md:gap-x-3",
+};
+
 // At or under this many places left, "available places" turns into a red "only N left" warning
 const FEW_SEATS = 5;
 
@@ -39,7 +47,6 @@ export default function SessionCards({
   locale = "ar",
 }: SessionCardsProps) {
   const t = ui[locale];
-  const rtl = localeMeta[locale].dir === "rtl";
   const nextDate = sessions.find((s) => !isFull(s))?.date;
   const hrefOf = (session: TrainingSession) =>
     sessionSignupHref({ id: trainingId, telegramBot, signupHref }, session);
@@ -104,7 +111,7 @@ export default function SessionCards({
           <>
             <div className="flex min-w-0 flex-1 flex-col gap-4 sm:gap-3">
               <SessionDate session={session} />
-              <Details session={session} duration={duration} t={t} rtl={rtl} row />
+              <Details session={session} duration={duration} t={t} locale={locale} row />
             </div>
             {(anyButton || soonButton) && (
               <div
@@ -122,7 +129,7 @@ export default function SessionCards({
         ) : (
           <>
             <SessionDate session={session} />
-            <Details session={session} duration={duration} t={t} rtl={rtl} />
+            <Details session={session} duration={duration} t={t} locale={locale} />
             {(button || soonButton) && <div className="mt-auto">{button || soonButton}</div>}
           </>
         )}
@@ -192,13 +199,13 @@ function Details({
   session,
   duration,
   t,
-  rtl,
+  locale,
   row = false,
 }: {
   session: TrainingSession;
   duration?: string;
   t: UiStrings;
-  rtl: boolean;
+  locale: Locale;
   row?: boolean;
 }) {
   const full = isFull(session);
@@ -207,7 +214,11 @@ function Details({
     { Icon: IconUsers, text: t.participants(session.seats) },
     {
       Icon: IconCheckCircle,
-      text: full ? t.full : few ? t.fewSeats(session.seatsLeft) : t.seatsLeft(session.seatsLeft),
+      text: full
+        ? t.full
+        : few
+          ? t.fewSeats(session.seatsLeft)
+          : t.seatsLeft(session.seatsLeft, session.seats),
       className: full ? "text-neutral-70" : few ? "font-bold text-primary" : undefined,
     },
     ...(duration ? [{ Icon: IconClock, text: duration }] : []),
@@ -218,10 +229,7 @@ function Details({
       className={cn(
         "grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm text-neutral-100",
         // Fixed columns so every card lines up (Latin text is wider than the Darja one)
-        row &&
-          (rtl
-            ? "md:grid-cols-[5.25rem_6.5rem_4.5rem_minmax(0,1fr)] md:gap-x-3"
-            : "md:grid-cols-[5rem_7rem_4.75rem_minmax(0,1fr)] md:gap-x-3"),
+        row && rowColumns[locale],
       )}
     >
       {items.map(({ Icon, text, className, ltr, oldPrice }) => (

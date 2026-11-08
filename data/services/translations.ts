@@ -19,10 +19,10 @@ export const serviceTranslations: Record<PrefixedLocale, Record<string, ServiceT
       priceNote: "per session",
       duration: "45 minutes",
       facts: [
-        { label: "Length", value: "45 minutes" },
-        { label: "Where", value: "Google Meet" },
-        { label: "Who's there", value: "Just you and me" },
-        { label: "You leave with", value: "A written plan" },
+        { label: "Length", value: "45 minutes", icon: "clock" },
+        { label: "Where", value: "Google Meet", icon: "video" },
+        { label: "Who's there", value: "Just you and me", icon: "user" },
+        { label: "You leave with", value: "A written plan", icon: "file" },
       ],
       includedTitle: "What you get",
       included: [
@@ -79,10 +79,10 @@ export const serviceTranslations: Record<PrefixedLocale, Record<string, ServiceT
       priceNote: "First call is free",
       duration: "30 minutes",
       facts: [
-        { label: "First call", value: "30 minutes, free" },
-        { label: "Where", value: "Google Meet" },
-        { label: "You get", value: "A report and a plan" },
-        { label: "Price", value: "Depends on the project" },
+        { label: "First call", value: "30 minutes, free", icon: "clock" },
+        { label: "Where", value: "Google Meet", icon: "video" },
+        { label: "You get", value: "A report and a plan", icon: "file" },
+        { label: "Price", value: "Depends on the project", icon: "tag" },
       ],
       includedTitle: "What we do",
       included: [
@@ -137,10 +137,10 @@ export const serviceTranslations: Record<PrefixedLocale, Record<string, ServiceT
       priceNote: "la session",
       duration: "45 minutes",
       facts: [
-        { label: "Durée", value: "45 minutes" },
-        { label: "Lieu", value: "Google Meet" },
-        { label: "Qui est là", value: "Juste toi et moi" },
-        { label: "Tu repars avec", value: "Un plan écrit" },
+        { label: "Durée", value: "45 minutes", icon: "clock" },
+        { label: "Lieu", value: "Google Meet", icon: "video" },
+        { label: "Qui est là", value: "Juste toi et moi", icon: "user" },
+        { label: "Tu repars avec", value: "Un plan écrit", icon: "file" },
       ],
       includedTitle: "Ce que tu obtiens",
       included: [
@@ -197,10 +197,10 @@ export const serviceTranslations: Record<PrefixedLocale, Record<string, ServiceT
       priceNote: "Premier appel gratuit",
       duration: "30 minutes",
       facts: [
-        { label: "Premier appel", value: "30 minutes, gratuit" },
-        { label: "Lieu", value: "Google Meet" },
-        { label: "Tu obtiens", value: "Un rapport et un plan" },
-        { label: "Prix", value: "Selon le projet" },
+        { label: "Premier appel", value: "30 minutes, gratuit", icon: "clock" },
+        { label: "Lieu", value: "Google Meet", icon: "video" },
+        { label: "Tu obtiens", value: "Un rapport et un plan", icon: "file" },
+        { label: "Prix", value: "Selon le projet", icon: "tag" },
       ],
       includedTitle: "Ce qu'on fait",
       included: [

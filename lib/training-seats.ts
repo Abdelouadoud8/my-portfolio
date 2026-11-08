@@ -4,8 +4,9 @@ const TRAINING_BOT_URL =
   process.env.TRAINING_BOT_URL ??
   "https://br-steep-resonance-b1bwn48v-trainbot.compute.c-5.eu-central-1.aws.neon.tech";
 
-// Seats move during registrations: refresh every 5 minutes (only on visits, like the follower counts)
-export const SEATS_CACHE_SECONDS = 300;
+// Live seats refresh every 6 hours (only on visits, like the follower counts). Each refresh rebuilds the pages that
+// show seats (/links + the training page, in 3 languages), so a long interval keeps Vercel usage low.
+export const SEATS_CACHE_SECONDS = 21600;
 
 // { "<trainingId>_<sessionId>": seatsLeft }, or undefined on any failure (the page keeps the data file's values)
 export async function getLiveSeats(trainingId: string): Promise<Record<string, number> | undefined> {

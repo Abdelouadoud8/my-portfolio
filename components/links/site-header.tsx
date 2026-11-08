@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { linksProfile } from "@/data/links/links";
+import { services } from "@/data/services/services";
 import { LOCALES, localeMeta, localePath, ui, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -24,12 +25,16 @@ export default function SiteHeader({ locale, paths, active, trainingId }: SiteHe
     trainingId && { id: "training", label: t.training, href: `/trainings/${trainingId}` },
     { id: "one-to-one", label: t.oneToOne, href: "/services/one-to-one" },
     { id: "business", label: t.business, href: "/services/business" },
-  ].filter(Boolean) as { id: HeaderPage; label: string; href: string }[];
+  ]
+    // Services marked `unlisted` in data/services/services.ts stay out of the menu
+    .filter((item) => item && !services.find((service) => service.id === item.id)?.unlisted)
+    .filter(Boolean) as { id: HeaderPage; label: string; href: string }[];
 
   const nav = (className: string) => (
     <nav aria-label={t.menu} className={className}>
       {items.map((item) => (
         <Link
+          prefetch={false}
           key={item.id}
           href={localePath(locale, item.href)}
           aria-current={active === item.id ? "page" : undefined}
@@ -53,12 +58,14 @@ export default function SiteHeader({ locale, paths, active, trainingId }: SiteHe
     >
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-3">
         <Link
+          prefetch={false}
           href={localePath(locale, "/links")}
           aria-label={t.home}
           className="flex min-w-0 items-center gap-2.5 font-semibold text-neutral-100"
         >
           <Image
             src={linksProfile.imageUrl}
+            unoptimized
             alt=""
             width={36}
             height={36}
@@ -79,6 +86,7 @@ export default function SiteHeader({ locale, paths, active, trainingId }: SiteHe
         >
           {LOCALES.map((code) => (
             <Link
+              prefetch={false}
               key={code}
               href={paths[code]}
               hrefLang={localeMeta[code].lang}

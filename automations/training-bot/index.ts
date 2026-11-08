@@ -4,7 +4,7 @@
 //   1. The "تسجيل" button on the training page opens t.me/<bot>?start=<sessionId>
 //   2. The bot asks for the name, then the phone number through Telegram's "share contact" button
 //      (the number tied to the account: no typos, no fake numbers)
-//   3. It sends the payment details and holds the seat for HOLD_HOURS
+//   3. It sends the payment details (seat counted as taken for HOLD_HOURS while they pay)
 //   4. The person sends a photo of the receipt; the bot forwards it to the admin with Accept / Reject buttons
 //   5. Accepted → the bot sends the private group's invite link. That link needs approval: the bot approves a join
 //      request only if that Telegram account has paid for that session, so a forwarded link is useless to others
@@ -13,7 +13,7 @@
 // Env: TELEGRAM_BOT_TOKEN, TELEGRAM_WEBHOOK_SECRET (Telegram sends it back in a header on every update),
 //      TELEGRAM_ADMIN_CHAT_ID (the only account allowed to approve and use admin commands),
 //      BOT_DATABASE_URL (least-privilege role "training_bot", schema training_bot),
-//      PAYMENT_DETAILS (CCP / RIP text shown to people at step 3; "\n" for new lines)
+//      PAYMENT_DETAILS (HTML lines shown at step 3 under "معلومات الدفع": name + RIP in <code>; "\n" for new lines)
 import { neon } from "@neondatabase/serverless";
 import { Hono } from "hono";
 
@@ -81,6 +81,15 @@ function send(chatId: number | string, text: string, extra: Record<string, unkno
   return tg<Message>("sendMessage", { chat_id: chatId, text, ...extra });
 }
 
+// Formatted message (<b>, <code>…). Anything coming from people or the DB must go through esc() first.
+function sendHtml(chatId: number | string, text: string, extra: Record<string, unknown> = {}) {
+  return send(chatId, text, { parse_mode: "HTML", ...extra });
+}
+
+function esc(value: string) {
+  return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+
 const removeKeyboard = { reply_markup: { remove_keyboard: true } };
 
 // ---------- Data ----------
@@ -127,52 +136,55 @@ async function setStatus(id: number, status: string) {
 
 // ---------- Messages to participants (Darja) ----------
 
+// Messages below are HTML (sendHtml): bold for the session and price, <code> = tap to copy in Telegram.
+
 // Step 1 (sent by /start): session, price and the name question
 function welcomeText(session: Session) {
   return [
-    "مرحبا! راك تسجل في",
-    `حصة ${session.label}`,
-    `سعر الحصة (${session.price}).`,
+    `👋 مرحبا! راك تسجل في حصة <b>${esc(session.label)}</b>`,
+    `💰 سعر الحصة: <b>${esc(session.price)}</b>`,
     "",
-    "للتسجيل كمل هاذ 3 خطوات",
-    "الخطوة الأولى،",
-    "واش هو اسمك و لقبك؟",
-    "تأكد من صحة كامل المعلومات باش التسجيل تاعك يكون صحيح",
+    "✍️ <b>واش هو اسمك و لقبك؟</b>",
+    "(تأكد أن المعلومات صحيحة 100%)",
   ].join("\n");
 }
 
 // Step 2: phone number through Telegram's share-contact button
 function askPhone(chatId: number) {
   const text = [
-    "الخطوة الثانية:",
-    "ضرك ابعثلنا رقم التيليفون تاعك (إضغط فقط على الزر لي لتحت) باش نتواصلو معاك نهار الحصة و نبعثولك رابط الدخول",
+    "📱 <b>الخطوة الثانية:</b>",
+    "ضرك ابعثلنا رقم التيليفون تاعك (إضغط فقط على الزر لي لتحت 👇) باش ندخلوك في جروب الحصة و نبعثولك رابط الدخول",
   ].join("\n");
-  return send(chatId, text, {
+  return sendHtml(chatId, text, {
     reply_markup: {
-      keyboard: [[{ text: "ابعث رقم التيليفون", request_contact: true }]],
+      keyboard: [[{ text: "📱 ابعث رقم التيليفون", request_contact: true }]],
       resize_keyboard: true,
       one_time_keyboard: true,
     },
   });
 }
 
-// Step 3: payment details, then the receipt
+// Step 3: payment details (PAYMENT_DETAILS = HTML lines from .env.local: name + RIP in <code>), then the receipt
 function paymentText(session: Session) {
   return [
-    "الخطوة الثالثة:",
-    `باش تكمّل التسجيل في حصة ${session.label}:`,
+    "💳 <b>الخطوة الثالثة:</b>",
+    "باش تكمّل التسجيل في الحصة:",
     "",
-    `1. خلّص ${session.price}`,
+    `1️⃣ خلّص <b>${esc(session.price)}</b> عبر BaridiMob ولا Algérie Poste`,
+    "",
+    "<b>معلومات الدفع:</b>",
     PAYMENT_DETAILS,
     "",
-    "2. ابعث هنا صورة الوصل (لقطة شاشة BaridiMob ولا وصل مكتب البريد).",
+    "2️⃣ ابعث هنا صورة الوصل 🧾 (وصل BaridiMob ولا وصل مكتب البريد).",
+    "",
+    "🚨 <b>أي تسجيل بدون إثبات وصل الدفع يرفض مباشرة، لازم يكون الوصل واضح.</b>",
   ].join("\n");
 }
 
 function joinText(session: Session) {
   return session.invite_link
-    ? `تأكد الدفع، مرحبا بيك في حصة ${session.label}!\n\nادخل للمجموعة من هاد الرابط و ابعث طلب الانضمام، راح يتقبل أوتوماتيكيا:\n${session.invite_link}`
-    : `تأكد الدفع، مرحبا بيك في حصة ${session.label}! راح نبعثولك رابط المجموعة هنا قريب.`;
+    ? `✅ <b>تأكد الدفع، مرحبا بيك في حصة ${esc(session.label)}!</b>\n\n👇 ادخل للمجموعة من هاد الرابط و ابعث طلب الانضمام، راح يتقبل أوتوماتيكيا:\n${session.invite_link}`
+    : `✅ <b>تأكد الدفع، مرحبا بيك في حصة ${esc(session.label)}!</b> راح نبعثولك رابط المجموعة هنا قريب.`;
 }
 
 // ---------- Participant flow ----------
@@ -198,13 +210,13 @@ async function startSession(user: User, sessionId: string) {
   }
 
   const existing = await getRegistration(session.id, user.id);
-  if (existing?.status === "paid") return send(user.id, joinText(session));
+  if (existing?.status === "paid") return sendHtml(user.id, joinText(session));
   if (existing?.status === "pending_review") {
     return send(user.id, "الوصل تاعك وصلنا و راهو قيد المراجعة، راح نأكدولك في أقرب وقت.");
   }
   if (existing?.status === "awaiting_phone") return askPhone(user.id);
   if (existing?.status === "awaiting_receipt" || existing?.status === "rejected") {
-    return send(user.id, paymentText(session));
+    return sendHtml(user.id, paymentText(session));
   }
 
   if ((await seatsLeft(session)) <= 0) {
@@ -222,7 +234,7 @@ async function startSession(user: User, sessionId: string) {
       INSERT INTO training_bot.registrations (session_id, tg_user_id, tg_username)
       VALUES (${session.id}, ${user.id}, ${user.username ?? null})`;
   }
-  return send(user.id, welcomeText(session));
+  return sendHtml(user.id, welcomeText(session));
 }
 
 async function handleName(msg: Message, reg: Registration) {
@@ -256,7 +268,7 @@ async function handleContact(msg: Message, reg: Registration) {
         hold_expires_at = now() + make_interval(hours => ${HOLD_HOURS}), updated_at = now()
     WHERE id = ${reg.id}`;
   // One message: step 3 + hide the share-contact keyboard
-  return send(msg.chat.id, paymentText(session), removeKeyboard);
+  return sendHtml(msg.chat.id, paymentText(session), removeKeyboard);
 }
 
 async function handleReceipt(msg: Message, reg: Registration) {
@@ -269,7 +281,7 @@ async function handleReceipt(msg: Message, reg: Registration) {
     await setStatus(reg.id, "cancelled");
     return send(
       msg.chat.id,
-      `سمحلنا، الحجز تاعك فات (${HOLD_HOURS} ساعة) و الحصة تكملت. إذا خلصت، تواصل معانا باش نحولوك للحصة الجاية.`,
+      "سمحلنا، الحصة تكملت. إذا خلصت، تواصل معانا باش نحولوك للحصة الجاية.",
     );
   }
 
@@ -368,13 +380,13 @@ async function paidUsers(sessionId: string) {
     WHERE session_id = ${sessionId} AND status = 'paid'`) as { tg_user_id: string }[];
 }
 
-async function broadcast(chatId: number, sessionId: string, text: (s: Session) => string) {
+async function broadcast(chatId: number, sessionId: string, text: (s: Session) => string, html = false) {
   const session = await getSession(sessionId);
   if (!session) return send(chatId, "ما لقيتش هاد الحصة. شوف /list.");
   let sent = 0;
   for (const { tg_user_id } of await paidUsers(sessionId)) {
     try {
-      await send(tg_user_id, text(session));
+      await (html ? sendHtml : send)(tg_user_id, text(session));
       sent++;
     } catch (error) {
       console.error(`broadcast to ${tg_user_id}: ${(error as Error).message}`);
@@ -393,7 +405,7 @@ async function handleAdminCommand(msg: Message) {
       return broadcast(msg.chat.id, sessionId, () => rest.join(" "));
     case "/sendlinks":
       if (!sessionId) return send(msg.chat.id, "/sendlinks <session>");
-      return broadcast(msg.chat.id, sessionId, joinText);
+      return broadcast(msg.chat.id, sessionId, joinText, true);
     case "/help":
       return send(msg.chat.id, helpText);
     default:
@@ -418,7 +430,7 @@ async function handleSetGroup(msg: Message) {
     WHERE id = ${session.id}`;
   await send(msg.chat.id, `المجموعة تربطت بحصة ${session.label}. البوت راح يقبل غير اللي خلصو.`);
   // People approved before the group existed get the link now (the admin sees the count in private)
-  return broadcast(ADMIN_ID, session.id, () => joinText({ ...session, invite_link: link.invite_link }));
+  return broadcast(ADMIN_ID, session.id, () => joinText({ ...session, invite_link: link.invite_link }), true);
 }
 
 async function handleDecision(query: CallbackQuery) {
@@ -435,7 +447,7 @@ async function handleDecision(query: CallbackQuery) {
     await sql`
       UPDATE training_bot.registrations SET status = 'paid', approved_at = now(), updated_at = now()
       WHERE id = ${reg.id}`;
-    await send(reg.tg_user_id, joinText(session));
+    await sendHtml(reg.tg_user_id, joinText(session));
   } else {
     await setStatus(reg.id, "rejected");
     await send(

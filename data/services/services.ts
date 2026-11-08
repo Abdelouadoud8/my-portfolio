@@ -18,10 +18,10 @@ export const services: Service[] = [
     priceNote: "للحصة",
     duration: "45 دقيقة",
     facts: [
-      { label: "المدة", value: "45 دقيقة" },
-      { label: "المكان", value: "Google Meet" },
-      { label: "شكون يكون", value: "غير أنا و انت" },
-      { label: "تخرج بـ", value: "خطة مكتوبة" },
+      { label: "المدة", value: "45 دقيقة", icon: "clock" },
+      { label: "المكان", value: "Google Meet", icon: "video" },
+      { label: "شكون يكون", value: "غير أنا و انت", icon: "user" },
+      { label: "تخرج بـ", value: "خطة مكتوبة", icon: "file" },
     ],
     includedTitle: "واش تخرج بيه",
     included: [
@@ -33,7 +33,7 @@ export const services: Service[] = [
     steps: [
       "ابعثلي على تيليغرام: شكون انت و واش حاب نخدمو عليه. ما تخلّص والو باش تطلب.",
       "نجاوبك في أقل من 48 ساعة. إذا ما نقدرش نعاونك في الحالة تاعك، نقولهالك بصراحة.",
-      "إذا اتفقنا، نبعثلك معلومات الدفع (BaridiMob و لا Algérie Poste).",
+      "إذا اتفقنا، نبعثلك معلومات الدفع بـ BaridiMob و لا Algérie Poste",
       "تبعث صورة الوصل و نأكدولك في أقل من 24 ساعة.",
       "تختار الوقت اللي يناسبك و نتلاقاو على Google Meet.",
     ],
@@ -69,6 +69,8 @@ export const services: Service[] = [
   },
   {
     id: "business",
+    // Hidden from /links and the header for now (page still reachable by its URL)
+    unlisted: true,
     badge: "للشركات",
     cardTitle: "أتمتة و ذكاء اصطناعي للشركات",
     cardDescription: "نحللو كيفاش تخدم الشركة تاعك، و نأتمتو المهام المتكررة و ندخلو الذكاء الاصطناعي فيها.",
@@ -79,10 +81,10 @@ export const services: Service[] = [
     priceNote: "أول مكالمة بلاش",
     duration: "30 دقيقة",
     facts: [
-      { label: "أول مكالمة", value: "30 دقيقة بلاش" },
-      { label: "المكان", value: "Google Meet" },
-      { label: "تخرج بـ", value: "تقرير و خطة" },
-      { label: "السعر", value: "حسب المشروع" },
+      { label: "أول مكالمة", value: "30 دقيقة بلاش", icon: "clock" },
+      { label: "المكان", value: "Google Meet", icon: "video" },
+      { label: "تخرج بـ", value: "تقرير و خطة", icon: "file" },
+      { label: "السعر", value: "حسب المشروع", icon: "tag" },
     ],
     includedTitle: "واش نديرو",
     included: [

@@ -3,13 +3,15 @@ import { getLiveSeats } from "@/lib/training-seats";
 
 // Booking logic shared by the /links training card, the details page's price box and the session cards
 
-// Sessions with the bot's live seats left once the registration bot is set, else the data file's values
+// Visible sessions (not `hidden`) with the bot's live seats left once the registration bot is set, else the data
+// file's values
 export async function withLiveSeats(training: Training): Promise<TrainingSession[]> {
-  const sessions = training.sessions ?? [];
+  const sessions = (training.sessions ?? []).filter((session) => !session.hidden);
   const live = training.telegramBot ? await getLiveSeats(training.id) : undefined;
   return sessions.map((session) => ({
     ...session,
-    seatsLeft: live?.[`${training.id}_${session.id}`] ?? session.seatsLeft,
+    // displaySeatsLeft (fixed number for the website) > the bot's live count > the data file's seatsLeft
+    seatsLeft: session.displaySeatsLeft ?? live?.[`${training.id}_${session.id}`] ?? session.seatsLeft,
   }));
 }
 

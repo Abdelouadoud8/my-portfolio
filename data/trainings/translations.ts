@@ -11,9 +11,11 @@ type TrainingText = Partial<
     | "description"
     | "time"
     | "platform"
+    | "badge"
     | "price"
     | "level"
     | "audience"
+    | "notFor"
     | "outcomes"
     | "requirements"
     | "registrationSteps"
@@ -30,26 +32,32 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
       description:
         "Two full hours where I teach you everything you need to know about AI: what it is, how to use it to make your life easier, and even how to earn money with it. The session is taught in Algerian Darja.",
       time: "2 hours",
+      badge: "Beginner course",
       price: "Paid course",
       level: "Beginners",
       audience: [
         "Beginners who want to understand AI and use it the right way",
         "Students and workers who want to save time, and anyone who wants to earn money with it",
         "All you need is a computer or a phone with a good connection",
-        "A Google account and a free ChatGPT, Gemini or Claude account",
+      ],
+      notFor: [
+        "You're looking for a magic way to earn money without working",
+        "You already have a lot of experience with AI: this course is for beginners",
+        "You want a plan made for you: the private 1:1 session suits you better",
       ],
       outcomes: [
         "Understand what AI is and how it works behind the scenes, in simple words",
-        "Know what it can and can't do, and how to spot its mistakes",
-        "Write good prompts in a simple way that works with any tool: ChatGPT, Claude and Gemini",
-        "Use these tools for your studies, your job or to grow your business",
+        "Know what it can and can't do, how to spot its mistakes and avoid them",
+        "Learn prompt engineering: how to write the best prompt to get the best possible result with as few tokens as possible",
+        "Learn how to use AI tools like Claude, ChatGPT and Gemini for your studies, your job or to grow your business",
+        "Learn what agents are and how to use them to automate any complex or repetitive task, so an agent does it for you",
         "Discover services you can sell with AI and how to start: graphic design, social media management and many other digital services",
       ],
       registrationSteps: [
         "Click “Register” on the session that suits you: our Telegram bot opens",
-        "Send your name and phone number (one button), and your seat is held for 48 hours",
-        "Pay with BaridiMob or at the post office, then send a photo of the receipt in the bot",
-        "We confirm the payment and you get the private group link, with all the details and the session link",
+        "Send your name and phone number (one button)",
+        "Pay with BaridiMob or at the post office, then send a photo of the receipt in the bot on Telegram",
+        "Once you send the receipt photo, I confirm your registration within 24 hours after checking it, and add you to the group with all the details and the session link",
       ],
       paymentMethods: [
         {
@@ -74,27 +82,28 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
           ],
         },
         {
-          title: "How to talk to it: the prompt",
+          title: "How to talk to it: prompt engineering",
           duration: "30 min",
           points: [
-            "The best ways to write a good prompt that gets you the best possible result",
+            "The best ways to write a good prompt that gets the best possible result with as few tokens as possible",
             "Examples before and after using the prompt",
-            "Live practice together on everyday examples",
+            "Live practice together on everyday examples in ChatGPT and Gemini",
           ],
         },
         {
-          title: "Make your life easier with AI",
+          title: "Make your life easier with agents and automations",
           duration: "30 min",
           points: [
-            "How to use the tools to make your daily tasks easier",
-            "Using them to study, to make your work easier and even to run your business",
-            "Free tools that save you time",
+            "A full, simple explanation of agents and how they work",
+            "How to use agents to finish repetitive or complex tasks",
+            "Live practice with several examples in Claude Code and Cowork",
           ],
         },
         {
           title: "How to earn money with it",
           duration: "30 min",
           points: [
+            "The best AI tools for each field",
             "Services you can sell (writing, design, video...)",
             "How to find your first client",
             "Questions and answers",
@@ -103,9 +112,9 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
       ],
       faq: [
         {
-          question: "Why is the course paid?",
+          question: "Course price",
           answer:
-            "To be fully transparent, the price is symbolic: it covers the time and effort I put into sharing this knowledge and helping young people in my country grow.",
+            "The course has a symbolic price that covers the time and effort it takes me to prepare the session in the best conditions, so I can share this knowledge with you and help young people in my country grow.",
         },
         {
           question: "Do I need to know anything about AI?",
@@ -138,26 +147,32 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
       description:
         "Deux heures complètes pour t'apprendre tout ce qu'il faut savoir sur l'intelligence artificielle : ce que c'est, comment l'utiliser pour te simplifier la vie, et même comment gagner de l'argent avec. La session se déroule en darija algérienne.",
       time: "2 heures",
+      badge: "Formation pour débutants",
       price: "Formation payante",
       level: "Débutants",
       audience: [
         "Les débutants qui veulent comprendre l'IA et bien l'utiliser",
         "Les étudiants et salariés qui veulent gagner du temps, et ceux qui veulent en tirer un revenu",
         "Il te faut seulement un ordinateur ou un téléphone avec une bonne connexion",
-        "Un compte Google et un compte gratuit ChatGPT, Gemini ou Claude",
+      ],
+      notFor: [
+        "Tu cherches une méthode miracle pour gagner de l'argent sans travailler",
+        "Tu as déjà beaucoup d'expérience en IA : la formation est pour les débutants",
+        "Tu veux un plan sur mesure : la session privée 1:1 te convient mieux",
       ],
       outcomes: [
         "Comprendre ce qu'est l'IA et comment elle fonctionne en coulisses, simplement",
-        "Savoir ce qu'elle peut faire ou non, et repérer ses erreurs",
-        "Écrire de bons prompts, simplement, qui marchent avec n'importe quel outil : ChatGPT, Claude et Gemini",
-        "Utiliser ces outils pour tes études, ton travail ou pour développer ton business",
+        "Savoir ce qu'elle peut faire ou non, repérer ses erreurs et les éviter",
+        "Apprendre le prompt engineering : écrire le meilleur prompt pour obtenir le meilleur résultat possible avec le moins de tokens possible",
+        "Apprendre à utiliser les outils d'IA comme Claude, ChatGPT et Gemini pour tes études, ton travail ou pour développer ton business",
+        "Découvrir les agents et comment les utiliser pour automatiser n'importe quelle tâche complexe ou répétitive, pour qu'un agent la fasse à ta place",
         "Découvrir des services que tu peux vendre grâce à l'IA et comment te lancer : graphisme, gestion des réseaux sociaux et beaucoup d'autres services numériques",
       ],
       registrationSteps: [
         "Clique sur « S'inscrire » sur la session qui te convient : notre bot Telegram s'ouvre",
-        "Envoie ton nom et ton numéro (un seul bouton), ta place est réservée 48 heures",
-        "Paie avec BaridiMob ou à la poste, puis envoie la photo du reçu dans le bot",
-        "On confirme le paiement et tu reçois le lien du groupe privé, avec tous les détails et le lien de la session",
+        "Envoie ton nom et ton numéro (un seul bouton)",
+        "Paie avec BaridiMob ou à la poste, puis envoie la photo du reçu dans le bot sur Telegram",
+        "Dès que tu envoies la photo du reçu, je confirme ton inscription en moins de 24 heures après l'avoir vérifié, et je t'ajoute au groupe avec tous les détails et le lien de la session",
       ],
       paymentMethods: [
         {
@@ -182,27 +197,28 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
           ],
         },
         {
-          title: "Comment lui parler : le prompt",
+          title: "Comment lui parler : le prompt engineering",
           duration: "30 min",
           points: [
-            "Les meilleures façons d'écrire un bon prompt pour obtenir le meilleur résultat",
+            "Les meilleures façons d'écrire un bon prompt pour obtenir le meilleur résultat possible avec le moins de tokens possible",
             "Des exemples avant et après le prompt",
-            "Pratique en direct ensemble sur des exemples du quotidien",
+            "Pratique en direct ensemble sur des exemples du quotidien dans ChatGPT et Gemini",
           ],
         },
         {
-          title: "Simplifie-toi la vie avec l'IA",
+          title: "Simplifie-toi la vie avec les agents et les automatisations",
           duration: "30 min",
           points: [
-            "Utiliser les outils pour simplifier tes tâches quotidiennes",
-            "Pour tes études, ton travail et même la gestion de ton business",
-            "Des outils gratuits qui te font gagner du temps",
+            "Une explication complète et simple des agents et de leur fonctionnement",
+            "Comment utiliser des agents pour accomplir les tâches répétitives ou complexes",
+            "Pratique en direct avec plusieurs exemples sur Claude Code et Cowork",
           ],
         },
         {
           title: "Gagner de l'argent avec",
           duration: "30 min",
           points: [
+            "Les meilleurs outils d'IA pour chaque domaine",
             "Des services que tu peux vendre (rédaction, design, vidéo...)",
             "Comment trouver ton premier client",
             "Questions et réponses",
@@ -211,9 +227,9 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
       ],
       faq: [
         {
-          question: "Pourquoi la formation est payante ?",
+          question: "Prix de la formation",
           answer:
-            "En toute transparence, le prix est symbolique : il couvre le temps et l'effort que je mets à partager ces connaissances et à aider les jeunes de mon pays à progresser.",
+            "La formation a un prix symbolique qui couvre le temps et l'effort nécessaires pour préparer la session dans les meilleures conditions, afin de partager ces connaissances avec vous et d'aider les jeunes de mon pays à progresser.",
         },
         {
           question: "Faut-il un niveau en IA ?",

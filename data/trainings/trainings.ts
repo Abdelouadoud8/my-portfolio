@@ -13,6 +13,7 @@ export const trainings: Training[] = [
     time: "ساعتين",
     // Free Google accounts cut group calls at 60 min: a 2-hour session needs Google Workspace / Google One
     platform: "Google Meet",
+    badge: "دورة للمبتدئين",
     price: "دورة مدفوعة",
     level: "مبتدئين",
     maxParticipants: "20-25",
@@ -21,13 +22,18 @@ export const trainings: Training[] = [
       "للمبتدئين: لي حاب يفهم الذكاء الإصطناعي و يستعملو صح",
       "للطلبة و الخدامين لي حابين يربحو الوقت، و لي حاب يدخل بيه دراهم",
       "تحتاج غير PC ولا تيليفون مع كونيكسيون مليحة",
-      "حساب Google و حساب مجاني في ChatGPT ولا Gemini ولا Claude",
+    ],
+    notFor: [
+      "تحوس على طريقة سحرية باش تربح الدراهم بلا ما تخدم",
+      "عندك خبرة كبيرة في الذكاء الاصطناعي: الدورة للمبتدئين",
+      "حاب خطة على حسابك: الحصة الخاصة 1:1 خير ليك",
     ],
     outcomes: [
       "تفهم واش هو الذكاء الاصطناعي وكيفاش يخدم خلف الكواليس بطريقة بسيطة",
-      "تعرف واش يقدر يدير و واش ما يقدرش، و كيفاش تشوف الأخطاء تاعو",
-      "تكتب prompt ملاح بطريقة بسيطة تخدم مع أي أداة: ChatGPT و Claude و Gemini",
-      "نعلمك كيفاه تستعمل هاذ الأدوات في القراية تاعك، الخدمة ولا كيفاش تطور البيزنس تاعك",
+      "تعرف واش يقدر يدير و واش ما يقدرش، و كيفاش تشوف الأخطاء تاعو و تتجنبها",
+      "نعلمك الـ prompt engineering و كيفاه تكتب أفضل prompt يخليك تتحصل على أفضل نتيجة ممكنة بأقل عدد من tokens.",
+      "نعلمك كيفاه تستعمل أدوات الذكاء الإصطناعي كيما claude, chatgpt, gemini... في القراية تاعك، الخدمة ولا كيفاش تطور البيزنس تاعك",
+      "نعلمك الـ agents و كيفاه تستخدمهم باش دير automation لأي مهمة معقدة و لا تتعاود و تخلي agent يديرها في بلاصتك",
       "تتعرف على خدمات تقدر تبيعها بالذكاء الاصطناعي وكيفاش تبدا (graphic design, social media management) و العديد من الخدمات الرقمية",
     ],
     // seatsLeft is the fallback: once telegramBot is set, the page shows the bot's live count (paid + held seats).
@@ -47,6 +53,8 @@ export const trainings: Training[] = [
       {
         // id = the bot's key (first planned date), kept when the date moves: never change it
         id: "2026-11-28",
+        // Website shows "باقي 12 بلاصة" whatever the bot counts (display only). Remove to show the live count again.
+        displaySeatsLeft: 12,
         date: "السبت 21 نوفمبر",
         day: "2026-11-21",
         time: "20:00 - 22:00",
@@ -58,6 +66,8 @@ export const trainings: Training[] = [
       },
       {
         id: "2026-12-12",
+        // Hidden for now: everyone is pushed to the 21 November session
+        hidden: true,
         date: "السبت 5 ديسمبر",
         day: "2026-12-05",
         time: "20:00 - 22:00",
@@ -70,9 +80,9 @@ export const trainings: Training[] = [
     // "كيفاش تسجل": the Telegram bot flow (automations/training-bot)
     registrationSteps: [
       "اضغط على «تسجيل» في الحصة اللي تناسبك: يتفتحلك البوت تاعنا في تيليغرام",
-      "ابعث اسمك و رقم التيليفون (بزر واحد)، و البلاصة تتحجزلك 48 ساعة",
-      "خلّص بـ BaridiMob ولا في مكتب البريد، و ابعث صورة الوصل في البوت",
-      "نأكدو الدفع و تاخذ رابط المجموعة الخاصة: فيها كامل التفاصيل و رابط الحصة",
+      "ابعث اسمك و رقم التيليفون (بزر واحد)",
+      "خلّص بـ BaridiMob ولا في مكتب البريد، و ابعث صورة الوصل في البوت على تيليغرام",
+      "كي تبعت صورة الوصل راح نأكد لك التسجيل في 24 ساعة بعد ما نتأكد من الوصل وندخلك في رابط المجموعة اللي فيها كامل تفاصيل ورابط الحصة",
     ],
     paymentMethods: [
       {
@@ -97,36 +107,51 @@ export const trainings: Training[] = [
         ],
       },
       {
-        title: "كيفاش تهدر معاه: الـ prompt",
+        title: "كيفاش تهدر معاه: الـ prompt engineering",
         duration: "30 دقيقة",
         points: [
-          "أفضل الطرق باش تكتب prompt مليح يوصلك لأفضل نتيجة ممكنة",
+          "أفضل الطرق باش تكتب prompt مليح يوصلك لأفضل نتيجة ممكنة بأقل عدد ممكن من tokens",
           "أمثلة قبل و بعد إستعمال البرومبت",
-          "تطبيق مباشر مع بعض على عدة أمثلة يومية",
+          "تطبيق مباشر مع بعض على عدة أمثلة يومية في ChatGPT و Gemini",
         ],
       },
       {
-        title: "سهّل حياتك بالذكاء الإصطناعي",
+        title: "سهّل حياتك بالـ agents و الـ automations",
         duration: "30 دقيقة",
         points: [
-          "كيفاش تستعمل الأدوات باش تسهل المهام اليومية تاعك",
-          "إستعمال الأدوات في الدراسة و التحضير، في تسهيل العمل و حتى تسيير البيزنس تاعك",
-          "أدوات مجانية لي تربحلك الوقت",
+          "شرح كامل و مبسط للـ agents و كيفية عملهم",
+          "كيفاش تستعمل agents باش تكمل المهام لي تتعاود و لا المعقدة",
+          "تطبيق مباشر مع عدة أمثلة على Claude Code و Cowork",
         ],
       },
       {
         title: "كيفاش تدخل بيه دراهم",
         duration: "30 دقيقة",
-        points: ["خدمات تقدر تبيعها (كتابة، تصميم، فيديو...)", "كيفاش تلقى أول زبون", "أسئلة و أجوبة"],
+        points: [
+          "أفضل أدوات الذكاء الإصطناعي لكل مجال",
+          "خدمات تقدر تبيعها (كتابة، تصميم، فيديو...)",
+          "كيفاش تلقى أول زبون",
+          "أسئلة و أجوبة",
+        ],
       },
     ],
     // Add real attendee reviews after the first session, e.g. { name: "Amine", text: "...", rating: 5 }
     reviews: [],
+    // Messages from the free session (cropped Telegram screenshots, no profile photos), best first
+    feedbackImages: [
+      { src: "/links/ai-session/feedback-1.webp", width: 900, height: 544 },
+      { src: "/links/ai-session/feedback-2.webp", width: 900, height: 542 },
+      { src: "/links/ai-session/feedback-3.webp", width: 900, height: 434 },
+      { src: "/links/ai-session/feedback-4.webp", width: 900, height: 324 },
+      { src: "/links/ai-session/feedback-5.webp", width: 900, height: 275 },
+      { src: "/links/ai-session/feedback-6.webp", width: 900, height: 275 },
+      { src: "/links/ai-session/feedback-7.webp", width: 900, height: 283 },
+    ],
     faq: [
       {
-        question: "علاش الدورة مدفوعة؟",
+        question: "سعر الدورة",
         answer:
-          "بكل شفافية هاد السعر رمزي لتغطية و تعويض الوقت و الجهد لي راني نمدوا باش نشارك معاكم هاذ المعلومات و نساعد في تطوير شباب بلادي",
+          "الدورة بسعر رمزي لتغطية الوقت والجهد باش يخليني نحضر الحصة في أبسط الظروف باش نشارك معاكم هاذ المعلومات و نساعد في تطوير شباب بلادي",
       },
       {
         question: "لازم يكون عندي مستوى في الذكاء الاصطناعي؟",
