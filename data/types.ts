@@ -226,6 +226,13 @@ type Service = {
   secondary?: { label: string; href: string };
 };
 
+// Free resource pinned at the top of /links (e.g. a Notion guide). Title stays in the guide's language.
+type FreeResource = {
+  id: string; // analytics key (free-resource-click {resource})
+  title: string;
+  href: string;
+};
+
 type LinksProfile = {
   name: string;
   tagline: string;
@@ -244,6 +251,7 @@ export type {
   FeaturedReel,
   ReelStats,
   LinksProfile,
+  FreeResource,
   CollaborationCta,
   Training,
   TrainingModule,

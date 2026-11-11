@@ -205,6 +205,11 @@ Everything is in `data/links/links.ts`:
   `training-signup-click` {training, location: session-N}.
   `components/trainings/section-nav.tsx` = sticky section links on the right (lg+) / sticky chip row on phones,
   highlights the section being read; a new section needs an `id` + an entry in the page's `sections` list.
+- Free guides (2026-11-11): `freeResources` in data/links/links.ts = cards right after the total followers block
+  (`components/links/free-resource-card.tsx`: icon + title only, title stays Arabic/RTL in every language, opens in a
+  new tab). First one: the Notion guide "تحويل أي كتاب إلى كتاب تفاعلي 3D". Click event
+  `free-resource-click` {resource, location: links}, in `LINKS_CLICK_EVENTS` (tracked even while /links is paused).
+  Empty array hides the block.
 - Total followers block under the profile (`components/links/total-followers.tsx`): sum of every visible link's
   `followers` (Instagram = live count): big number, red "Total followers" label, then the counted platforms'
   icons in a row, each a link to the profile (`links-<platform>-click`, so the Umami Links tab keeps counting them);
@@ -262,8 +267,8 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - **Tracking is paused on `/links`, `/en/links` and `/fr/links`** (2026-11-01, `DISABLE_ON_LINKS` in `umami-analytics.tsx`): Umami's Neon DB hit its free
   compute-hours cap because the steady event trickle (almost all from /links) kept the compute awake 24/7. The Umami "Links page"
   tab shows nothing new until it is set back to `false`.
-  Exception (2026-11-09): clicks on the offer card and the "منين تحب تبدا؟" rows (`training-details-click`,
-  `service-details-click`, list `LINKS_CLICK_EVENTS`) are POSTed straight to Umami's `/api/send` (no script, no page
+  Exception (2026-11-09): clicks on the offer card, the "منين تحب تبدا؟" rows and the free guides (`training-details-click`,
+  `service-details-click`, `free-resource-click`, list `LINKS_CLICK_EVENTS`) are POSTed straight to Umami's `/api/send` (no script, no page
   view; props from the link's data-umami-event-* + `source`). Only those clicks wake the Neon DB; country/device/browser
   are still recorded. Add an event name to `LINKS_CLICK_EVENTS` to track another /links link this way.
 - Umami records the hostname per visit: `/metrics?type=hostname` compares the portfolio's aliases.

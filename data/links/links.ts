@@ -1,4 +1,4 @@
-import { CollaborationCta, FeaturedReel, LinksProfile, SocialLink } from "@/data/types";
+import { CollaborationCta, FeaturedReel, FreeResource, LinksProfile, SocialLink } from "@/data/types";
 
 // Content of the /links page (link in bio). Edit this file only, the page updates itself.
 
@@ -9,6 +9,15 @@ export const linksProfile: LinksProfile = {
   // 256 px WebP (5 KB) served as is (unoptimized): no Image Optimization use on /links and its pages
   imageUrl: "/shared/avatar-256.webp",
 };
+
+// Free guides on /links, right after the follower count (newest first; empty array = section hidden)
+export const freeResources: FreeResource[] = [
+  {
+    id: "book-3d",
+    title: "تحويل أي كتاب إلى كتاب تفاعلي 3D",
+    href: "https://app.notion.com/p/41512db82f6a81ec8f30f5c093bca8be",
+  },
+];
 
 export const collaboration: CollaborationCta = {
   // Hidden for now (spam). Put the address back to show the button again.

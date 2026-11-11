@@ -5,8 +5,9 @@ import TrainingCard from "@/components/links/training-card";
 import CollaborateButton from "@/components/shared/social/collaborate-button";
 import TotalFollowers from "@/components/links/total-followers";
 import StartPaths from "@/components/links/start-paths";
+import FreeResourceCard from "@/components/links/free-resource-card";
 import SiteHeader from "@/components/links/site-header";
-import { collaboration, linksProfile, linksSocials } from "@/data/links/links";
+import { collaboration, freeResources, linksProfile, linksSocials } from "@/data/links/links";
 import { trainings } from "@/data/trainings/trainings";
 import { getVisibleSocials } from "@/lib/instagram-followers";
 import { withLiveSeats } from "@/lib/trainings";
@@ -67,6 +68,15 @@ export default async function LinksPageContent({ locale }: { locale: Locale }) {
           <LinksProfile {...linksProfile} tagline={t.links.tagline} bio={t.links.bio} />
 
           <TotalFollowers socials={socials} label={t.links.followersLabel} />
+
+          {/* Free guides, on their own after the follower count (e.g. the Notion guide shared in reels) */}
+          {freeResources.length > 0 && (
+            <div className="flex flex-col gap-3">
+              {freeResources.map((resource) => (
+                <FreeResourceCard key={resource.id} resource={resource} />
+              ))}
+            </div>
+          )}
 
           {collaboration.email && (
             <CollaborateButton

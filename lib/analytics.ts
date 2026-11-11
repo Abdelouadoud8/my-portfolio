@@ -26,6 +26,7 @@ export const EVENTS = {
   trainingQuestionClick: "training-question-click",
   serviceDetailsClick: "service-details-click",
   serviceRequestClick: "service-request-click",
+  freeResourceClick: "free-resource-click",
 } as const;
 
 // "LinkedIn" -> "linkedin", "X (Twitter)" -> "x-twitter"

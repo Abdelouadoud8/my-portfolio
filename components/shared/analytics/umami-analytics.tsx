@@ -19,7 +19,11 @@ const DISABLE_ON_LINKS = true;
 // ...except clicks on the offer card and the "منين تحب تبدا؟" rows: each one is sent straight to Umami's
 // /api/send (no script, no page view), so only a click wakes the database. Country, device and browser are
 // still recorded (Umami reads them from the request).
-const LINKS_CLICK_EVENTS = new Set<string>([EVENTS.trainingDetailsClick, EVENTS.serviceDetailsClick]);
+const LINKS_CLICK_EVENTS = new Set<string>([
+  EVENTS.trainingDetailsClick,
+  EVENTS.serviceDetailsClick,
+  EVENTS.freeResourceClick,
+]);
 
 const VISIT_SOURCE_KEY = "visit-source-tracked";
 
