@@ -18,6 +18,7 @@ import { IconTelegram } from "@/components/shared/icons/icon-telegram";
 import SectionNav, { type NavSection } from "@/components/trainings/section-nav";
 import SessionCards from "@/components/trainings/session-cards";
 import StickyRegisterBar from "@/components/trainings/sticky-register-bar";
+import RegistrationDialog from "@/components/trainings/registration-dialog";
 import { IconVideoCamera } from "@/components/shared/icons/icon-video-camera";
 import { IconTag } from "@/components/shared/icons/icon-tag";
 import { IconChartBar } from "@/components/shared/icons/icon-chart-bar";
@@ -89,6 +90,7 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
     platform,
     price,
     level,
+    hideAudience = false,
     audience = [],
     notFor = [],
     outcomes = [],
@@ -133,7 +135,6 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
   // Right-side navigation (top chips on phones): only the sections this training has
   const sections = [
     { id: "sessions", label: tt.sessions, show: sessions.length > 0 },
-    { id: "registration", label: tt.registration, show: true },
     { id: "trainer", label: tt.trainer, show: true },
     { id: "reviews", label: tt.reviews, show: feedbackImages.length > 0 || reviews.length > 0 },
     { id: "outcomes", label: tt.outcomes, show: outcomes.length > 0 },
@@ -141,7 +142,7 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
     {
       id: "audience",
       label: tt.audience,
-      show: audience.length > 0 || requirements.length > 0 || notFor.length > 0,
+      show: !hideAudience && (audience.length > 0 || requirements.length > 0 || notFor.length > 0),
     },
     { id: "faq", label: t.faq, show: faq.length > 0 },
   ]
@@ -236,26 +237,8 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
             </section>
           )}
 
-          {/* How registration works: empty until the flow is decided */}
-          <section id="registration" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
-            <SectionTitle>{tt.registration}</SectionTitle>
-            {registrationSteps.length > 0 ? (
-              <ol className="flex flex-col gap-3">
-                {registrationSteps.map((step, index) => (
-                  <li key={step} className="flex items-start gap-3 text-neutral-100">
-                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary-50 text-sm font-bold text-primary">
-                      {index + 1}
-                    </span>
-                    <span className="leading-7">{step}</span>
-                  </li>
-                ))}
-              </ol>
-            ) : (
-              <p className="rounded-xl border border-dashed border-neutral-30 p-4 text-sm leading-6 text-neutral-70">
-                {tt.registrationSoon}
-              </p>
-            )}
-          </section>
+          {/* How registration works: a button that opens the steps in a popup */}
+          <RegistrationDialog trainingId={id} steps={registrationSteps} locale={locale} />
 
           {paymentMethods.length > 0 && (
             <section id="payment" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
@@ -429,13 +412,15 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
                         <h3 dir="auto" className="text-start font-bold text-neutral-100">
                           {module.title}
                         </h3>
-                        <span className="text-xs font-medium text-primary">{module.duration}</span>
+                        {module.duration && <span className="text-xs font-medium text-primary">{module.duration}</span>}
                       </div>
-                      <ul className="flex list-disc flex-col gap-1 ps-5 text-sm leading-6 text-neutral-70">
-                        {module.points.map((point) => (
-                          <li key={point}>{point}</li>
-                        ))}
-                      </ul>
+                      {module.points.length > 0 && (
+                        <ul className="flex list-disc flex-col gap-1 ps-5 text-sm leading-6 text-neutral-70">
+                          {module.points.map((point) => (
+                            <li key={point}>{point}</li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   </li>
                 ))}
@@ -444,7 +429,7 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
           )}
 
           {/* Who it's for + what you need: one tick list, one item per line */}
-          {(audience.length > 0 || requirements.length > 0 || notFor.length > 0) && (
+          {!hideAudience && (audience.length > 0 || requirements.length > 0 || notFor.length > 0) && (
             <section id="audience" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
               <SectionTitle>{tt.audience}</SectionTitle>
               {/* Two cards side by side from sm up (one under the other on phones): who it's for | not for you if */}

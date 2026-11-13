@@ -95,8 +95,8 @@ type CollaborationCta = {
 // A training / workshop: card on /links + details page at /trainings/<id>
 type TrainingModule = {
   title: string;
-  // e.g. "30 دقيقة"
-  duration: string;
+  // e.g. "30 دقيقة"; hidden when missing
+  duration?: string;
   points: string[];
 };
 
@@ -166,6 +166,8 @@ type Training = {
   audience?: string[];
   // "ماشي ليك إذا:" card under the audience ticks
   notFor?: string[];
+  // true hides the "لمن هاد التكوين؟" section (audience + notFor + requirements) but keeps its text in the data
+  hideAudience?: boolean;
   outcomes?: string[];
   requirements?: string[];
   sessions?: TrainingSession[];

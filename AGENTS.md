@@ -61,7 +61,7 @@ app/
   trainings/[id]/page.tsx    "/trainings/:id": training details page (RTL Darja, IBM Plex Sans Arabic loaded in
                              trainings/layout.tsx, no header, shared footer), SSG from data/trainings/trainings.ts,
                              dynamicParams=false; every block (facts, outcomes, program, audience, requirements, FAQ)
-                             hidden when its field is empty; reviews show an empty-state line until the first session
+                             hidden when its field is empty (`hideAudience: true` hides "لمن هاد التكوين؟" but keeps its text, set on ai-essentials since 2026-11-13); reviews show an empty-state line until the first session
   services/[id]/page.tsx     "/services/one-to-one" (1:1 call, modelled on withrssle's /consultation) and "/services/business"
                              (AI audit + automation for companies): RTL Darja like the training page, content in
                              data/services/services.ts (each list hidden when empty), one request button = Telegram
@@ -186,7 +186,9 @@ Everything is in `data/links/links.ts`:
   "آراء المشاركين" (after the trainer card, like withrssle's feedback wall): `feedbackImages` = cropped screenshots of
   participants' messages in `public/links/ai-session/` (WebP, ~900px wide), masonry `columns-1 sm:columns-2`. Crop
   out profile photos and reaction avatars before publishing; the originals live in the git-ignored `private/` folder.
-  Details page sections after the sessions: "كيفاش تسجل" (`registrationSteps`, a "coming soon" line while empty),
+  Details page sections after the sessions: "كيفاش تسجل" = a button under the sessions that opens `registrationSteps`
+  in a popup (`components/trainings/registration-dialog.tsx`, native <dialog>, event `training-registration-help-click`
+  {training}; a "coming soon" line while empty; no section-nav entry since 2026-11-13),
   "طرق الدفع" (`paymentMethods` {kind: baridimob | post-office, title, description}). Refund rule lives in the
   FAQ. Trainer card links to Instagram (`training-instagram-click`) with the live follower count (igstats, page
   `revalidate = 43200`). "عندك سؤال؟" block after the FAQ opens `questionsHref` (Telegram username link

@@ -24,6 +24,7 @@ export const EVENTS = {
   trainingDetailsClick: "training-details-click",
   trainingSignupClick: "training-signup-click",
   trainingQuestionClick: "training-question-click",
+  trainingRegistrationHelpClick: "training-registration-help-click",
   serviceDetailsClick: "service-details-click",
   serviceRequestClick: "service-request-click",
   freeResourceClick: "free-resource-click",

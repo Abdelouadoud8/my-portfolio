@@ -45,14 +45,6 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
         "You already have a lot of experience with AI: this course is for beginners",
         "You want a plan made for you: the private 1:1 session suits you better",
       ],
-      outcomes: [
-        "Understand what AI is and how it works behind the scenes, in simple words",
-        "Know what it can and can't do, how to spot its mistakes and avoid them",
-        "Learn prompt engineering: how to write the best prompt to get the best possible result with as few tokens as possible",
-        "Learn how to use AI tools like Claude, ChatGPT and Gemini for your studies, your job or to grow your business",
-        "Learn what agents are and how to use them to automate any complex or repetitive task, so an agent does it for you",
-        "Discover services you can sell with AI and how to start: graphic design, social media management and many other digital services",
-      ],
       registrationSteps: [
         "Click “Register” on the session that suits you: our Telegram bot opens",
         "Send your name and phone number (one button)",
@@ -73,61 +65,40 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
       ],
       program: [
         {
-          title: "What is AI?",
-          duration: "30 min",
+          title: "What AI is, how it works and what it can do",
           points: [
-            "How AI tools like ChatGPT and Claude work",
-            "What it can and can't do",
-            "Its mistakes and how to check the information it gives you",
+            "Understand what AI is and how it works",
+            "Know what it can and can't do, how to spot its mistakes and avoid them",
           ],
         },
         {
-          title: "How to talk to it: prompt engineering",
-          duration: "30 min",
+          title: "How to talk to AI tools: prompt engineering",
           points: [
-            "The best ways to write a good prompt that gets the best possible result with as few tokens as possible",
-            "Examples before and after using the prompt",
+            "Learn prompt engineering: how to write the best prompt to get the best possible result",
             "Live practice together on everyday examples in ChatGPT and Gemini",
+            "Learn how to use Claude, ChatGPT and Gemini to make any task easier",
           ],
         },
         {
-          title: "Make your life easier with agents and automations",
-          duration: "30 min",
+          title: "A full walkthrough of Claude Code",
           points: [
-            "A full, simple explanation of agents and how they work",
-            "How to use agents to finish repetitive or complex tasks",
-            "Live practice with several examples in Claude Code and Cowork",
+            "How to use it for all your digital tasks (viral videos, video editing, design, writing...)",
+            "Learn to make the videos that go viral (fruit videos, educational videos, animation)",
+            "Learn how to edit videos with AI",
           ],
         },
         {
-          title: "How to earn money with it",
-          duration: "30 min",
+          title: "How to earn money with AI",
           points: [
-            "The best AI tools for each field",
-            "Services you can sell (writing, design, video...)",
-            "How to find your first client",
-            "Questions and answers",
+            "We go through several fields where you can earn money with AI together (digital services, content creation, design, video editing...)",
+            "I share my own experience in these fields: how I started, what worked for me and what didn't, and how you can start",
           ],
         },
       ],
       faq: [
         {
-          question: "Course price",
-          answer:
-            "The course has a symbolic price that covers the time and effort it takes me to prepare the session in the best conditions, so I can share this knowledge with you and help young people in my country grow.",
-        },
-        {
           question: "Do I need to know anything about AI?",
           answer: "No, the course is for beginners. If you can use a phone or a computer, that's enough.",
-        },
-        {
-          question: "What language is the course in?",
-          answer: "Algerian Darja. Technical words are explained and every complex topic is made simple.",
-        },
-        {
-          question: "How do I join on the day?",
-          answer:
-            "Once you register and pay, you get a link to a Telegram channel where we share all the course details.",
         },
         {
           question: "Why are the seats limited?",
@@ -160,14 +131,6 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
         "Tu as déjà beaucoup d'expérience en IA : la formation est pour les débutants",
         "Tu veux un plan sur mesure : la session privée 1:1 te convient mieux",
       ],
-      outcomes: [
-        "Comprendre ce qu'est l'IA et comment elle fonctionne en coulisses, simplement",
-        "Savoir ce qu'elle peut faire ou non, repérer ses erreurs et les éviter",
-        "Apprendre le prompt engineering : écrire le meilleur prompt pour obtenir le meilleur résultat possible avec le moins de tokens possible",
-        "Apprendre à utiliser les outils d'IA comme Claude, ChatGPT et Gemini pour tes études, ton travail ou pour développer ton business",
-        "Découvrir les agents et comment les utiliser pour automatiser n'importe quelle tâche complexe ou répétitive, pour qu'un agent la fasse à ta place",
-        "Découvrir des services que tu peux vendre grâce à l'IA et comment te lancer : graphisme, gestion des réseaux sociaux et beaucoup d'autres services numériques",
-      ],
       registrationSteps: [
         "Clique sur « S'inscrire » sur la session qui te convient : notre bot Telegram s'ouvre",
         "Envoie ton nom et ton numéro (un seul bouton)",
@@ -188,63 +151,41 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
       ],
       program: [
         {
-          title: "C'est quoi l'IA ?",
-          duration: "30 min",
+          title: "C'est quoi l'IA, comment elle fonctionne et ce qu'elle peut faire",
           points: [
-            "Comment fonctionnent les outils d'IA comme ChatGPT et Claude",
-            "Ce qu'elle peut faire et ce qu'elle ne peut pas faire",
-            "Ses erreurs et comment vérifier les informations qu'elle te donne",
+            "Comprendre ce qu'est l'IA et comment elle fonctionne",
+            "Savoir ce qu'elle peut faire ou non, repérer ses erreurs et les éviter",
           ],
         },
         {
-          title: "Comment lui parler : le prompt engineering",
-          duration: "30 min",
+          title: "Comment parler aux outils d'IA : le prompt engineering",
           points: [
-            "Les meilleures façons d'écrire un bon prompt pour obtenir le meilleur résultat possible avec le moins de tokens possible",
-            "Des exemples avant et après le prompt",
+            "Apprendre le prompt engineering : écrire le meilleur prompt pour obtenir le meilleur résultat possible",
             "Pratique en direct ensemble sur des exemples du quotidien dans ChatGPT et Gemini",
+            "Apprendre à utiliser Claude, ChatGPT et Gemini pour te faciliter n'importe quelle tâche",
           ],
         },
         {
-          title: "Simplifie-toi la vie avec les agents et les automatisations",
-          duration: "30 min",
+          title: "Claude Code expliqué de A à Z",
           points: [
-            "Une explication complète et simple des agents et de leur fonctionnement",
-            "Comment utiliser des agents pour accomplir les tâches répétitives ou complexes",
-            "Pratique en direct avec plusieurs exemples sur Claude Code et Cowork",
+            "Comment l'utiliser pour toutes tes tâches numériques (vidéos virales, montage vidéo, design, rédaction...)",
+            "Apprendre à faire les vidéos qui cartonnent (vidéos de fruits, éducatives, animation)",
+            "Apprendre à faire du montage vidéo avec l'IA",
           ],
         },
         {
-          title: "Gagner de l'argent avec",
-          duration: "30 min",
+          title: "Comment gagner de l'argent avec l'IA",
           points: [
-            "Les meilleurs outils d'IA pour chaque domaine",
-            "Des services que tu peux vendre (rédaction, design, vidéo...)",
-            "Comment trouver ton premier client",
-            "Questions et réponses",
+            "On voit ensemble plusieurs domaines où tu peux gagner de l'argent grâce à l'IA (services numériques, création de contenu, design, montage vidéo...)",
+            "Je te partage mon expérience dans ces domaines : comment j'ai commencé, ce qui a marché pour moi et ce qui n'a pas marché, et comment toi tu peux te lancer",
           ],
         },
       ],
       faq: [
         {
-          question: "Prix de la formation",
-          answer:
-            "La formation a un prix symbolique qui couvre le temps et l'effort nécessaires pour préparer la session dans les meilleures conditions, afin de partager ces connaissances avec vous et d'aider les jeunes de mon pays à progresser.",
-        },
-        {
           question: "Faut-il un niveau en IA ?",
           answer:
             "Non, la formation est pour les débutants. Si tu sais utiliser un téléphone ou un ordinateur, ça suffit.",
-        },
-        {
-          question: "La formation est en quelle langue ?",
-          answer:
-            "En darija algérienne. Les mots techniques sont expliqués et chaque sujet complexe est simplifié.",
-        },
-        {
-          question: "Comment je rejoins la session le jour J ?",
-          answer:
-            "Une fois inscrit et le paiement fait, tu reçois le lien d'un canal Telegram où on partage tous les détails de la formation.",
         },
         {
           question: "Pourquoi les places sont limitées ?",
