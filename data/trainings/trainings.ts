@@ -47,8 +47,8 @@ export const trainings: Training[] = [
         seats: 25,
         seatsLeft: 0,
         reservedSeats: 25,
-        price: "1500 DA",
-        oldPrice: "3000 DA",
+        price: "1000 DA",
+        oldPrice: "2000 DA",
       },
       {
         // id = the bot's key (first planned date), kept when the date moves: never change it
@@ -61,8 +61,8 @@ export const trainings: Training[] = [
         bookingOpen: true,
         seats: 25,
         seatsLeft: 25,
-        price: "1500 DA",
-        oldPrice: "3000 DA",
+        price: "1000 DA",
+        oldPrice: "2000 DA",
       },
       {
         id: "2026-12-12",
@@ -73,8 +73,8 @@ export const trainings: Training[] = [
         time: "20:00 - 22:00",
         seats: 25,
         seatsLeft: 25,
-        price: "1500 DA",
-        oldPrice: "3000 DA",
+        price: "1000 DA",
+        oldPrice: "2000 DA",
       },
     ],
     // "كيفاش تسجل": the Telegram bot flow (automations/training-bot)
