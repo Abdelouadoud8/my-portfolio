@@ -4,15 +4,15 @@
 import { copyFileSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import { web } from "./web.mjs";
 
-// Instagram followers per day (Sept 16 → Nov 8, 2026): social_stats.instagram_daily, then the app's SocialSnapshot
-const history = [1554, 1632, 2420, 2580, 4885, 5672, 6446, 7877, 8768, 9994, 11084, 11807, 12915, 13619, 14297, 15146, 15927, 20146, 21178, 22104, 23204, 23973, 24975, 26168, 26665, 27142, 27662, 28148, 28705, 29252, 33421, 35560, 36576, 37293, 37818, 38391, 39184, 41328, 43205, 43815, 44257, 44921, 45661, 48096, 65910, 73299, 77766, 80902, 81878, 85407, 87344, 90462, 92715, 93978];
+// Instagram followers per day (Sept 16 → Nov 20, 2026): social_stats.instagram_daily, then the app's SocialSnapshot
+const history = [1554, 1632, 2420, 2580, 4885, 5672, 6446, 7877, 8768, 9994, 11084, 11807, 12915, 13619, 14297, 15146, 15927, 20146, 21178, 22104, 23204, 23973, 24975, 26168, 26665, 27142, 27662, 28148, 28705, 29252, 33421, 35560, 36576, 37293, 37818, 38391, 39184, 41328, 43205, 43815, 44257, 44921, 45661, 48096, 65910, 73299, 77766, 80902, 81878, 85407, 87344, 90462, 92715, 94145, 95166, 96173, 98553, 101943, 105911, 107766, 110098, 111488, 112627, 114221, 115456, 116171];
 // Facebook followers per day, same days (app SocialSnapshot; Sept 16 = Sept 17 reading, Oct 17 interpolated)
-const fbHistory = [820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 1236, 9930, 10047, 12403, 12855, 14235, 14972, 20111, 23644, 27948, 30019, 33295, 35029, 38465, 40294, 41182, 42070, 43208, 43529, 44354, 45208, 46949, 47768, 48596, 49531, 51312, 52091, 52544, 57044, 59037, 60677, 61146, 61230, 61635, 61942, 62140, 62411, 62564];
+const fbHistory = [820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 820, 1236, 9930, 10047, 12403, 12855, 14235, 14972, 20111, 23644, 27948, 30019, 33295, 35029, 38465, 40294, 41182, 42070, 43208, 43529, 44354, 45208, 46949, 47768, 48596, 49531, 51312, 52091, 52544, 57044, 59037, 60677, 61146, 61230, 61635, 61942, 62140, 62411, 62577, 62992, 64258, 65816, 67047, 67947, 68480, 74770, 75574, 76012, 76219, 76437, 76558];
 
 const reels = [
-  { img: "DfFyWD6o7N2", views: "1.9M", likes: "80K", comments: "16.4K" },
-  { img: "DeAX6mpotb8", views: "1.1M", likes: "33.3K", comments: "5.1K" },
-  { img: "Dehq6UyITam", views: "245K", likes: "9.6K", comments: "4.4K" },
+  { img: "DfFyWD6o7N2", views: "2.2M", likes: "88.7K", comments: "19.2K" },
+  { img: "DeAX6mpotb8", views: "1.2M", likes: "34.5K", comments: "5.7K" },
+  { img: "Dehq6UyITam", views: "251K", likes: "9.8K", comments: "4.6K" },
 ];
 
 // Phosphor duotone paths, same icons as components/icons/ on the website
@@ -31,11 +31,11 @@ const socials = [
 ];
 
 function chart() {
-  const W = 330, H = 104, pad = 6, max = 100000;
+  const W = 330, H = 104, pad = 6, max = 125000;
   const pts = history.map((v, i) => [pad + (i * (W - 2 * pad)) / (history.length - 1), H - pad - (v / max) * (H - 2 * pad)]);
   const line = pts.map((p) => p.map((n) => n.toFixed(1)).join(",")).join(" ");
   const area = `M${pts[0][0]},${H - pad} L${line.replace(/ /g, " L")} L${pts.at(-1)[0]},${H - pad} Z`;
-  const grid = [25000, 50000, 75000].map((v) => {
+  const grid = [25000, 50000, 75000, 100000].map((v) => {
     const y = (H - pad - (v / max) * (H - 2 * pad)).toFixed(1);
     return `<line x1="${pad}" x2="${W - pad}" y1="${y}" y2="${y}" class="grid"/><text x="${pad}" y="${y - 3}" class="gl">${v / 1000}K</text>`;
   });
@@ -43,11 +43,11 @@ function chart() {
   return `<svg viewBox="0 0 ${W} ${H}" class="chart"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e63946" stop-opacity=".28"/><stop offset="1" stop-color="#e63946" stop-opacity="0"/></linearGradient></defs>${grid.join("")}<path d="${area}" fill="url(#g)"/><polyline points="${line}" fill="none" stroke="#e63946" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${lx}" cy="${ly}" r="4.5" fill="#e63946" stroke="#fff" stroke-width="2"/></svg>`;
 }
 
-// Age groups of Instagram followers (Meta API, Nov 8, 2026)
-const ages = [["13–17", 13], ["18–24", 37], ["25–34", 31], ["35+", 19]];
+// Age groups of Instagram followers (Meta API, Nov 20, 2026)
+const ages = [["13–17", 11], ["18–24", 38], ["25–34", 31], ["35+", 20]];
 
-// Women / men among Instagram followers (Meta API, Nov 8, 2026)
-const gender = [50, 50];
+// Women / men among Instagram followers (Meta API, Nov 20, 2026)
+const gender = [49, 51];
 
 const ltr = (s) => `<bdi dir="ltr">${s}</bdi>`;
 
@@ -63,20 +63,20 @@ const L = {
       ["My journey", "from a 17.12/20 BAC to computer science at ESI, then studying and working in France as a software engineer."],
       ["Engineer life", "my daily life as a software engineer living alone: work, gym, cooking and the discipline behind it all."],
     ],
-    s1: "Followers & growth", followers: "157K", followersLabel: "followers on Instagram + Facebook",
-    platforms: [["instagram", "94K"], ["facebook", "62.6K"]],
-    s1stats: [["+92K", "new Instagram followers in 53 days"], ["~1,740", "new followers every day"], ["×60", "Instagram growth since Sept 16"]],
-    chartTitle: "Instagram followers", chartFrom: "Sept 16 · 1.5K", chartTo: "Nov 8 · 94K",
-    s2: "Views far above my follower count", big2: "15.5M", big2Label: "views in the last 30 days", views2: [["instagram", "8.6M"], ["facebook", "6.9M"]],
-    s2stats: [["×21", "views vs followers on my top reel"], ["1.27M", "interactions in 30 days"], ["96%", "of accounts reached don't follow me yet"], ["13.5%", "engagement rate · 476K saves · 323K shares"]],
+    s1: "Followers & growth", followers: "193K", followersLabel: "followers on Instagram + Facebook",
+    platforms: [["instagram", "116K"], ["facebook", "76.6K"]],
+    s1stats: [["+115K", "new Instagram followers in 65 days"], ["~1,760", "new followers every day"], ["×75", "Instagram growth since Sept 16"]],
+    chartTitle: "Instagram followers", chartFrom: "Sept 16 · 1.5K", chartTo: "Nov 20 · 116K",
+    s2: "Views far above my follower count", big2: "14.9M", big2Label: "views in the last 30 days", views2: [["instagram", "9.2M"], ["facebook", "5.7M"]],
+    s2stats: [["×19", "views vs followers on my top reel"], ["1.53M", "interactions in 30 days"], ["97%", "of accounts reached don't follow me yet"], ["13.3%", "engagement rate · 563K saves · 408K shares"]],
     views: "views",
-    s3: "Audience", dzLabel: "of my audience is in Algeria<br>Top city: Algiers", ageTitle: "Age", ageHead: "68% are 18–34 years old", countries: [["Algeria", 82], ["Morocco & Tunisia", 6], ["Other countries", 12]],
+    s3: "Audience", dzLabel: "of my audience is in Algeria<br>Top city: Algiers", ageTitle: "Age", ageHead: "69% are 18–34 years old", countries: [["Algeria", 83], ["Morocco & Tunisia", 6], ["Other countries", 11]],
     gender: ["Women", "Men"],
     formatsTitle: "How we can collaborate",
     formats: ["Product presentation reel", "Step-by-step app tutorial", "Stories with link", "Promo code / affiliate"],
     pitch: "After studying your brand, I see many ways to collaborate where we both win.",
     cta: "Looking for collaborations",
-    note: "Data from Instagram & Facebook Insights · November 8, 2026",
+    note: "Data from Instagram & Facebook Insights · November 20, 2026",
   },
   fr: {
     lang: "fr", dir: "ltr", file: "Media-Kit-FR",
@@ -89,20 +89,20 @@ const L = {
       ["Mon parcours", "du bac à 17,12/20 à l'ESI en informatique, puis études et travail en France comme ingénieur logiciel."],
       ["Vie d'ingénieur", "mon quotidien d'ingénieur logiciel qui vit seul : travail, sport, cuisine et la discipline qui va avec."],
     ],
-    s1: "Abonnés & croissance", followers: "157K", followersLabel: "abonnés sur Instagram + Facebook",
-    platforms: [["instagram", "94K"], ["facebook", "62,6K"]],
-    s1stats: [["+92K", "nouveaux abonnés Instagram en 53 jours"], ["~1 740", "nouveaux abonnés par jour"], ["×60", "de croissance depuis le 16 sept."]],
-    chartTitle: "Abonnés Instagram", chartFrom: "16 sept. · 1,5K", chartTo: "8 nov. · 94K",
-    s2: "Des vues bien au-dessus de mon nombre d'abonnés", big2: "15,5M", big2Label: "de vues sur les 30 derniers jours", views2: [["instagram", "8,6M"], ["facebook", "6,9M"]],
-    s2stats: [["×21", "vues / abonnés sur mon meilleur reel"], ["1,27M", "interactions en 30 jours"], ["96%", "des comptes atteints ne me suivent pas encore"], ["13,5%", "d'engagement · 476K enregistrements · 323K partages"]],
+    s1: "Abonnés & croissance", followers: "193K", followersLabel: "abonnés sur Instagram + Facebook",
+    platforms: [["instagram", "116K"], ["facebook", "76,6K"]],
+    s1stats: [["+115K", "nouveaux abonnés Instagram en 65 jours"], ["~1 760", "nouveaux abonnés par jour"], ["×75", "de croissance depuis le 16 sept."]],
+    chartTitle: "Abonnés Instagram", chartFrom: "16 sept. · 1,5K", chartTo: "20 nov. · 116K",
+    s2: "Des vues bien au-dessus de mon nombre d'abonnés", big2: "14,9M", big2Label: "de vues sur les 30 derniers jours", views2: [["instagram", "9,2M"], ["facebook", "5,7M"]],
+    s2stats: [["×19", "vues / abonnés sur mon meilleur reel"], ["1,53M", "interactions en 30 jours"], ["97%", "des comptes atteints ne me suivent pas encore"], ["13,3%", "d'engagement · 563K enregistrements · 408K partages"]],
     views: "vues",
-    s3: "Audience", dzLabel: "de mon audience est en Algérie<br>1re ville : Alger", ageTitle: "Âge", ageHead: "68% ont entre 18 et 34 ans", countries: [["Algérie", 82], ["Maroc & Tunisie", 6], ["Autres pays", 12]],
+    s3: "Audience", dzLabel: "de mon audience est en Algérie<br>1re ville : Alger", ageTitle: "Âge", ageHead: "69% ont entre 18 et 34 ans", countries: [["Algérie", 83], ["Maroc & Tunisie", 6], ["Autres pays", 11]],
     gender: ["Femmes", "Hommes"],
     formatsTitle: "Comment collaborer ensemble",
     formats: ["Reel de présentation produit", "Tuto pas à pas de votre appli", "Stories avec lien", "Code promo / affiliation"],
     pitch: "Après avoir étudié votre marque, je vois de nombreuses façons de collaborer où chacun y gagne.",
     cta: "Ouvert aux collaborations",
-    note: "Données Instagram & Facebook Insights · 8 novembre 2026",
+    note: "Données Instagram & Facebook Insights · 20 novembre 2026",
   },
   dz: {
     lang: "ar-DZ", dir: "rtl", file: "Media-Kit-Darja",
@@ -115,21 +115,21 @@ const L = {
       ["المشوار تاعي", `من الباك بـ ${ltr("17.12")}، للإعلام الآلي في ${ltr("ESI")}، حتى للقراية و الخدمة في فرانسا كمهندس برمجيات.`],
       ["حياة مهندس", "يومياتي كمهندس برمجيات عايش وحدي: الخدمة، الجيم، الطياب و الانضباط اللي يلزم."],
     ],
-    s1: "المتابعين و النمو", followers: "157K", followersLabel: "متابع على Instagram و Facebook",
-    platforms: [["instagram", "94K"], ["facebook", "62.6K"]],
-    s1stats: [["+92K", "متابع جديد على Instagram في 53 يوم"], ["~1,740", "متابع جديد كل نهار"], ["×60", "زادو المتابعين من 16 سبتمبر"]],
+    s1: "المتابعين و النمو", followers: "193K", followersLabel: "متابع على Instagram و Facebook",
+    platforms: [["instagram", "116K"], ["facebook", "76.6K"]],
+    s1stats: [["+115K", "متابع جديد على Instagram في 65 يوم"], ["~1,760", "متابع جديد كل نهار"], ["×75", "زادو المتابعين من 16 سبتمبر"]],
     chartTitle: "المتابعين على Instagram",
-    chartFrom: `16 سبتمبر · ${ltr("1.5K")}`, chartTo: `8 نوفمبر · ${ltr("94K")}`,
-    s2: "المشاهدات تاعي فايتين بزاف عدد المتابعين", big2: "15.5M", big2Label: "مشاهدة في آخر 30 يوم", views2: [["instagram", "8.6M"], ["facebook", "6.9M"]],
-    s2stats: [["×21", "مشاهدات أحسن ريل مقارنة بعدد المتابعين"], ["1.27M", "تفاعل في 30 يوم"], ["96%", "من الحسابات لي وصلهم المحتوى مازال ما تابعونيش"], ["13.5%", `نسبة التفاعل · ${ltr("476K")} حفظ · ${ltr("323K")} بارطاج`]],
+    chartFrom: `16 سبتمبر · ${ltr("1.5K")}`, chartTo: `20 نوفمبر · ${ltr("116K")}`,
+    s2: "المشاهدات تاعي فايتين بزاف عدد المتابعين", big2: "14.9M", big2Label: "مشاهدة في آخر 30 يوم", views2: [["instagram", "9.2M"], ["facebook", "5.7M"]],
+    s2stats: [["×19", "مشاهدات أحسن ريل مقارنة بعدد المتابعين"], ["1.53M", "تفاعل في 30 يوم"], ["97%", "من الحسابات لي وصلهم المحتوى مازال ما تابعونيش"], ["13.3%", `نسبة التفاعل · ${ltr("563K")} حفظ · ${ltr("408K")} بارطاج`]],
     views: "مشاهدة",
-    s3: "الجمهور", dzLabel: "من الجمهور تاعي ساكن في الجزائر<br>أول مدينة: الجزائر العاصمة", ageTitle: "العمر", ageHead: `${ltr("68%")} عمرهم بين 18 و 34 سنة`, countries: [["الجزائر", 82], ["المغرب و تونس", 6], ["بلدان أخرى", 12]],
+    s3: "الجمهور", dzLabel: "من الجمهور تاعي ساكن في الجزائر<br>أول مدينة: الجزائر العاصمة", ageTitle: "العمر", ageHead: `${ltr("69%")} عمرهم بين 18 و 34 سنة`, countries: [["الجزائر", 83], ["المغرب و تونس", 6], ["بلدان أخرى", 11]],
     gender: ["نساء", "رجال"],
     formatsTitle: "كيفاش نقدرو نتعاونو",
     formats: ["ريل نقدّم فيه المنتوج تاعكم", "Tutorial خطوة بخطوة على التطبيق تاعكم", "ستوريات مع لينك", "كود برومو / أفلييت"],
     pitch: "بعد ما درست البراند تاعكم، نشوف بلي كاين بزاف طرق باش نتعاونو بطريقة لي تربح الطرفين.",
     cta: "نحوّس على تعاونات",
-    note: `الأرقام من ${ltr("Instagram & Facebook Insights")} · 8 نوفمبر 2026`,
+    note: `الأرقام من ${ltr("Instagram & Facebook Insights")} · 20 نوفمبر 2026`,
   },
 };
 

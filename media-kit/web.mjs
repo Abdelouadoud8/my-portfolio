@@ -104,8 +104,9 @@ export function web(t, { history, fbHistory, reels, ages, gender, ICONS, MAIL, L
   // One followers chart per platform; the tabs above it show one at a time.
   // The plot is a 1000×300 box stretched to its container; non-scaling strokes keep the line 2px wide
   const panel = ([id, name, H], on) => {
-    const max = Math.ceil(Math.max(...H) / 10000) * 10000;
-    const ticks = Array.from({ length: max / 10000 + 1 }, (_, k) => k * 10000);
+    const step = Math.max(...H) > 100000 ? 20000 : 10000;
+    const max = Math.ceil(Math.max(...H) / step) * step;
+    const ticks = Array.from({ length: max / step + 1 }, (_, k) => k * step);
     const y = (v) => (100 * (1 - v / max)).toFixed(2);
     const line = H.map((v, i) => `${((1000 * i) / last).toFixed(1)},${(3 * y(v)).toFixed(1)}`).join(" ");
     const area = `M0,300 L${line.replace(/ /g, " L")} L1000,300 Z`;
