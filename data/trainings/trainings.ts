@@ -63,7 +63,7 @@ export const trainings: Training[] = [
         bookingOpen: true,
         seats: 25,
         seatsLeft: 25,
-        price: "1500 DA",
+        price: "990 DA",
         oldPrice: "3000 DA",
       },
     ],
