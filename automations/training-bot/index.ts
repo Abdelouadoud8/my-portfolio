@@ -130,6 +130,13 @@ async function getActiveRegistration(userId: number) {
   return row;
 }
 
+// Follow-up "seen": the first time someone who got the follow-up (send-relance.mjs) taps its button or writes to the bot
+async function markRelanceSeen(userId: number) {
+  await sql`
+    UPDATE training_bot.registrations SET relance_seen_at = now()
+    WHERE tg_user_id = ${userId} AND relance_sent_at IS NOT NULL AND relance_seen_at IS NULL`;
+}
+
 async function setStatus(id: number, status: string) {
   await sql`UPDATE training_bot.registrations SET status = ${status}, updated_at = now() WHERE id = ${id}`;
 }
@@ -326,6 +333,8 @@ const helpText = [
   "أوامر الأدمين:",
   "/list - الحصص و المسجلين",
   "/list <session> - المسجلين في حصة",
+  "/list <session> joined | notjoined - خلصو و دخلو المجموعة / خلصو و مازال ما دخلوش",
+  "/list <session> followed | notfollowed - تبعثلهم التذكير / ما تبعثلهمش",
   "/remind <session> <رسالة> - رسالة لكل اللي خلصو",
   "/sendlinks <session> - يعاود يبعث رابط المجموعة لكل اللي خلصو",
   "/setgroup <session> - (داخل المجموعة) يربط المجموعة بالحصة",
@@ -341,7 +350,26 @@ const statusLabels: Record<string, string> = {
   cancelled: "ملغى",
 };
 
-async function handleList(chatId: number, sessionId?: string) {
+// /list <session> <filter>: joined/notjoined = paid people in or not yet in the group (joined_at is set when the bot
+// approves their join request); followed/notfollowed = got the relance or not (relance_sent_at)
+const listFilters: Record<string, { label: string; keep: (r: ListRow) => boolean }> = {
+  joined: { label: "دخلو المجموعة", keep: (r) => r.joined_at !== null },
+  notjoined: { label: "خلصو و مازال ما دخلوش المجموعة", keep: (r) => r.status === "paid" && r.joined_at === null },
+  followed: { label: "تبعثلهم التذكير", keep: (r) => r.relance_sent_at !== null },
+  notfollowed: { label: "ما تبعثلهمش التذكير", keep: (r) => r.relance_sent_at === null },
+};
+
+type ListRow = {
+  id: number;
+  name: string | null;
+  phone: string | null;
+  status: string;
+  joined_at: string | null;
+  relance_sent_at: string | null;
+  relance_seen_at: string | null;
+};
+
+async function handleList(chatId: number, sessionId?: string, filterName?: string) {
   if (!sessionId) {
     const sessions = (await sql`
       SELECT id, label, price, seats, reserved_seats, booking_open, group_chat_id, invite_link
@@ -352,25 +380,42 @@ async function handleList(chatId: number, sessionId?: string) {
       const [c] = (await sql`
         SELECT count(*) FILTER (WHERE status = 'paid')::int AS paid,
                count(*) FILTER (WHERE status = 'pending_review')::int AS review,
-               count(*) FILTER (WHERE status = 'awaiting_receipt' AND hold_expires_at > now())::int AS held
-        FROM training_bot.registrations WHERE session_id = ${s.id}`) as { paid: number; review: number; held: number }[];
+               count(*) FILTER (WHERE status = 'awaiting_receipt' AND hold_expires_at > now())::int AS held,
+               count(joined_at)::int AS joined,
+               count(relance_sent_at)::int AS relance,
+               count(relance_seen_at)::int AS seen
+        FROM training_bot.registrations WHERE session_id = ${s.id}`) as {
+        paid: number;
+        review: number;
+        held: number;
+        joined: number;
+        relance: number;
+        seen: number;
+      }[];
       lines.push(
-        `${s.label}\n${s.id}\n${s.booking_open ? "مفتوح" : "مسكّر"} · خلصو ${c.paid} · مراجعة ${c.review} · محجوز ${c.held} · باقي ${await seatsLeft(s)}/${s.seats}${s.group_chat_id ? "" : " · بلا مجموعة"}`,
+        `${s.label}\n${s.id}\n${s.booking_open ? "مفتوح" : "مسكّر"} · خلصو ${c.paid} · دخلو المجموعة ${c.joined} · مراجعة ${c.review} · محجوز ${c.held} · باقي ${await seatsLeft(s)}/${s.seats}${s.group_chat_id ? "" : " · بلا مجموعة"}${c.relance ? `\nتذكير: تبعث ${c.relance} · شافوه ${c.seen}` : ""}`,
       );
     }
     return send(chatId, lines.join("\n\n"));
   }
-  const rows = (await sql`
-    SELECT name, phone, status FROM training_bot.registrations
-    WHERE session_id = ${sessionId} AND status <> 'cancelled' ORDER BY created_at`) as {
-    name: string | null;
-    phone: string | null;
-    status: string;
-  }[];
-  if (!rows.length) return send(chatId, "حتى واحد ما سجل في هاد الحصة.");
+  const filter = filterName ? listFilters[filterName.toLowerCase()] : undefined;
+  if (filterName && !filter) return send(chatId, `فلتر غير معروف. استعمل: ${Object.keys(listFilters).join(" | ")}`);
+  const all = (await sql`
+    SELECT id, name, phone, status, joined_at, relance_sent_at, relance_seen_at FROM training_bot.registrations
+    WHERE session_id = ${sessionId} AND status <> 'cancelled' ORDER BY created_at`) as ListRow[];
+  const rows = filter ? all.filter(filter.keep) : all;
+  const joined = (r: ListRow) => (r.joined_at ? " · دخل المجموعة" : r.status === "paid" ? " · مازال ما دخلش" : "");
+  const relance = (r: ListRow) =>
+    r.relance_seen_at ? " · شاف التذكير" : r.relance_sent_at ? " · تذكير تبعث" : "";
+  if (!all.length) return send(chatId, "حتى واحد ما سجل في هاد الحصة.");
+  const title = filter ? `${filter.label}: ${rows.length}\n\n` : "";
+  if (!rows.length) return send(chatId, `${title}حتى واحد.`);
   return send(
     chatId,
-    rows.map((r, i) => `${i + 1}. ${r.name ?? "-"} · ${r.phone ?? "-"} · ${statusLabels[r.status] ?? r.status}`).join("\n"),
+    title +
+      rows
+        .map((r, i) => `${i + 1}. #${r.id} ${r.name ?? "-"} · ${r.phone ?? "-"} · ${statusLabels[r.status] ?? r.status}${joined(r)}${relance(r)}`)
+        .join("\n"),
   );
 }
 
@@ -399,7 +444,7 @@ async function handleAdminCommand(msg: Message) {
   const [command, sessionId, ...rest] = (msg.text ?? "").trim().split(/\s+/);
   switch (command.replace(/@.*$/, "")) {
     case "/list":
-      return handleList(msg.chat.id, sessionId);
+      return handleList(msg.chat.id, sessionId, rest[0]);
     case "/remind":
       if (!sessionId || !rest.length) return send(msg.chat.id, "/remind <session> <رسالة>");
       return broadcast(msg.chat.id, sessionId, () => rest.join(" "));
@@ -495,6 +540,17 @@ async function handleUpdate(update: Update) {
 
   if (update.callback_query) {
     const query = update.callback_query;
+    // "كمّل التسجيل" button of the follow-up message (send-relance.mjs): counts as seen, then resumes the flow
+    if (query.data?.startsWith("relance:")) {
+      await tg("answerCallbackQuery", { callback_query_id: query.id });
+      await markRelanceSeen(query.from.id);
+      return startSession(query.from, query.data.slice(8));
+    }
+    // "شفت الرسالة" button of a one-off follow-up to a paid participant (send-group-link.mjs): only records seen
+    if (query.data === "seen") {
+      await markRelanceSeen(query.from.id);
+      return tg("answerCallbackQuery", { callback_query_id: query.id, text: "شكرا! 🙏 ادخل للمجموعة من الرابط" });
+    }
     if (query.data?.startsWith("pick:")) {
       await tg("answerCallbackQuery", { callback_query_id: query.id });
       return startSession(query.from, query.data.slice(5));
@@ -513,6 +569,7 @@ async function handleUpdate(update: Update) {
     return;
   }
   if (msg.chat.type !== "private") return;
+  if (!isAdmin) await markRelanceSeen(msg.from.id);
 
   if (text.startsWith("/start")) return handleStart(msg, text.split(/\s+/)[1]);
   if (text === "/cancel") return handleCancel(msg);

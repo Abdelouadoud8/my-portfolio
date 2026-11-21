@@ -42,3 +42,9 @@ ALTER TABLE training_bot.sessions ADD COLUMN IF NOT EXISTS reserved_seats intege
 
 CREATE INDEX IF NOT EXISTS registrations_user_idx ON training_bot.registrations (tg_user_id);
 CREATE INDEX IF NOT EXISTS registrations_session_status_idx ON training_bot.registrations (session_id, status);
+
+-- Follow-up ("relance") to people who started but didn't pay (send-relance.mjs):
+--   relance_sent_at = the follow-up message was sent; relance_seen_at = first sign they saw it: they tapped its
+--   "كمّل التسجيل" button or wrote to the bot after it (Telegram gives bots no read receipts)
+ALTER TABLE training_bot.registrations ADD COLUMN IF NOT EXISTS relance_sent_at timestamptz;
+ALTER TABLE training_bot.registrations ADD COLUMN IF NOT EXISTS relance_seen_at timestamptz;

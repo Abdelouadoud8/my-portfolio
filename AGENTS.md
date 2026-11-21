@@ -373,7 +373,12 @@ texts in `media-kit/build.mjs`, run `./media-kit/render.sh`, commit `public/medi
 - Scripts (read `.env.local`, never print secrets): `node setup-db.mjs` (tables + role, writes TRAINING_BOT_DATABASE_URL and
   TELEGRAM_WEBHOOK_SECRET), `node sync-sessions.mjs` (copies sessions from data/trainings/trainings.ts: run after editing
   them), `./deploy.sh` (env: token, webhook secret, admin id, payment details, DB URL), `node telegram-setup.mjs admin |
-  webhook | info`. Session ids are stable keys, not dates: when a session moves, change only `date` (2026-11-28 is now on 21 Nov, 2026-12-12 on 5 Dec).
+  webhook | info`. Follow-up ("relance", 2026-11-13): `node send-relance.mjs <session> --test | --dry | --send` sends
+  a message with a "كمّل التسجيل" button (callback `relance:<session>`, resumes the flow) to everyone who started but
+  didn't pay (skips paid/under review, the admin, and anyone already followed up); columns `relance_sent_at` and
+  `relance_seen_at` on registrations (seen = tapped the button or wrote to the bot after it: Telegram gives bots no
+  read receipts); `/list` shows the counts. Filters: `/list <session> joined | notjoined` (paid and in the group, from `joined_at` set when the bot approves the join request / paid but not in yet) and `followed | notfollowed` (`relance_sent_at`); rows show `#<registration id>`. `send-relance.mjs … --send --skip=6,10` leaves registration ids out. `--again` also includes people already followed up (for a second, different message; resets relance_seen_at). The message text lives in the script: edit it before reusing. Paid but not in the group: `node send-group-link.mjs <registration id> --test | --send` sends the group link with a "✅ شفت الرسالة" button (callback `seen`, only records relance_seen_at; bots get no read receipts).
+  Session ids are stable keys, not dates: when a session moves, change only `date` (2026-11-28 is now on 21 Nov, closed and shown full; 2026-12-12 is back on 12 Dec, open).
 
 ## Automations: security (igstats + fbstats, 2026-10-17)
 - **Least-privilege DB role `stats_automation`** (London DB): the functions log in with it, never as `neondb_owner`.
