@@ -45,24 +45,22 @@ export const trainings: Training[] = [
       {
         // id = the bot's key (first planned date), kept when the date moves: never change it
         id: "2026-11-28",
-        // Website shows "باقي 12 بلاصة" whatever the bot counts (display only). Remove to show the live count again.
-        displaySeatsLeft: 12,
+        // Closed and shown as full ("مكتملة") on the website since the session took place (2026-11-21)
+        displaySeatsLeft: 0,
         date: "السبت 21 نوفمبر",
         day: "2026-11-21",
         time: "20:00 - 22:00",
-        bookingOpen: true,
         seats: 25,
         seatsLeft: 25,
-        price: "1000 DA",
+        price: "990 DA",
         oldPrice: "2000 DA",
       },
       {
         id: "2026-12-12",
-        // Hidden for now: everyone is pushed to the 21 November session
-        hidden: true,
-        date: "السبت 5 ديسمبر",
-        day: "2026-12-05",
+        date: "السبت 12 ديسمبر",
+        day: "2026-12-12",
         time: "20:00 - 22:00",
+        bookingOpen: true,
         seats: 25,
         seatsLeft: 25,
         price: "1500 DA",
