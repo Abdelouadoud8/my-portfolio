@@ -57,6 +57,8 @@ export const trainings: Training[] = [
       },
       {
         id: "2026-12-12",
+        // Shown on the website only (2026-11-23); the bot keeps its real count and never shows it
+        displaySeatsLeft: 14,
         date: "السبت 12 ديسمبر",
         day: "2026-12-12",
         time: "20:00 - 22:00",
