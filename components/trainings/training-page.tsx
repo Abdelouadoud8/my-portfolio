@@ -11,10 +11,9 @@ import { localizeSessions, localizeTraining } from "@/lib/localize";
 import { languageAlternates, localeMeta, localePath, localePaths, ui, type Locale } from "@/lib/i18n";
 import SiteHeader from "@/components/links/site-header";
 import BookingBox from "@/components/trainings/booking-box";
-import { DYNAMIC_EVENTS, EVENTS, eventAttributes } from "@/lib/analytics";
+import { DYNAMIC_EVENTS, eventAttributes } from "@/lib/analytics";
 import { cn, formatCompact } from "@/lib/utils";
 import { platformIcons } from "@/components/shared/social/social-link-button";
-import { IconTelegram } from "@/components/shared/icons/icon-telegram";
 import SectionNav, { type NavSection } from "@/components/trainings/section-nav";
 import SessionCards from "@/components/trainings/session-cards";
 import StickyRegisterBar from "@/components/trainings/sticky-register-bar";
@@ -100,9 +99,9 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
     program = [],
     reviews = [],
     feedbackImages = [],
+    reviewsCount,
     faq = [],
     signupHref,
-    questionsHref,
     telegramBot,
   } = training;
 
@@ -291,8 +290,8 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
                   <div className="mt-3 flex flex-wrap gap-2">
                     {trainerSocials.map((social) => {
                       const Icon = platformIcons[social.platform];
-                      // Instagram shows its @handle, Facebook its name (the page name is too long)
-                      const name = social.platform === "instagram" ? social.handle : social.label;
+                      // Instagram: icon + count only (no @handle since 2026-11-23); Facebook keeps its name
+                      const name = social.platform === "instagram" ? undefined : social.label;
                       return (
                         <a
                           key={social.platform}
@@ -307,12 +306,14 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
                           })}
                         >
                           <Icon width={18} height={18} />
-                          <bdi dir="ltr" className="hidden sm:inline">
-                            {name}
-                          </bdi>
+                          {name && (
+                            <bdi dir="ltr" className="hidden sm:inline">
+                              {name}
+                            </bdi>
+                          )}
                           {social.followers ? (
-                            <span className="sm:font-normal sm:text-neutral-70">
-                              <span className="hidden sm:inline">· </span>
+                            <span className={name ? "sm:font-normal sm:text-neutral-70" : undefined}>
+                              {name && <span className="hidden sm:inline">· </span>}
                               <bdi dir="ltr">{formatCompact(social.followers)}</bdi> {t.followers}
                             </span>
                           ) : null}
@@ -329,7 +330,17 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
           {(feedbackImages.length > 0 || reviews.length > 0) && (
             <section id="reviews" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
               <div className="flex flex-col gap-1">
-                <SectionTitle>{tt.reviews}</SectionTitle>
+                <SectionTitle>
+                  {tt.reviews}
+                  {reviewsCount && (
+                    <>
+                      {" "}
+                      <bdi dir="ltr" className="text-primary">
+                        ({reviewsCount})
+                      </bdi>
+                    </>
+                  )}
+                </SectionTitle>
                 {feedbackImages.length > 0 && (
                   <p className="text-sm leading-6 text-neutral-70">{tt.reviewsIntro}</p>
                 )}
@@ -481,26 +492,6 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
                   </details>
                 ))}
               </div>
-            </section>
-          )}
-
-          {/* Questions: direct chat (Telegram) */}
-          {questionsHref && (
-            <section className="flex flex-col items-start gap-4 rounded-2xl bg-primary-50 p-5 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h2 className="text-lg font-bold text-neutral-100">{tt.questionTitle}</h2>
-                <p className="mt-1 text-sm leading-6 text-neutral-70">{t.askOnTelegramText}</p>
-              </div>
-              <a
-                href={questionsHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
-                {...eventAttributes(EVENTS.trainingQuestionClick, { training: id })}
-              >
-                <IconTelegram width={20} height={20} />
-                {tt.questionButton}
-              </a>
             </section>
           )}
         </div>

@@ -13,6 +13,11 @@ export const linksProfile: LinksProfile = {
 // Free guides on /links, right after the follower count (newest first; empty array = section hidden)
 export const freeResources: FreeResource[] = [
   {
+    id: "style-analysis",
+    title: "برومبت style analysis باطل ب chatgpt",
+    href: "https://app.notion.com/p/42012db82f6a814fadebe2e6e0f385b2",
+  },
+  {
     id: "book-3d",
     title: "تحويل أي كتاب إلى كتاب تفاعلي 3D",
     href: "https://app.notion.com/p/41512db82f6a81ec8f30f5c093bca8be",

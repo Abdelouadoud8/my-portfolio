@@ -6,7 +6,7 @@ import { Training } from "@/data/types";
 export const trainings: Training[] = [
   {
     id: "ai-essentials",
-    title: "أتعلم أساسيات الذكاء الإصطناعي مع ودود في ساعتين",
+    title: "من الصفر للإحتراف في إستعمال الذكاء الإصطناعي مع ودود في ساعتين",
     description:
       "ساعتين كاملين راح نعلمك فيهم كامل واش تحتاج تعرف على الذكاء الإصطناعي، واش هو الذكاء الإصطناعي؟ كيفاش تستخدمو باش تسهل حياتك؟ و حتى كيفاش تدخل بيه دراهم",
     date: "ثلاث حصص مفتوحة",
@@ -123,6 +123,7 @@ export const trainings: Training[] = [
     // Add real attendee reviews after the first session, e.g. { name: "Amine", text: "...", rating: 5 }
     reviews: [],
     // Messages from the free session (cropped Telegram screenshots, no profile photos), best first
+    reviewsCount: "+40",
     feedbackImages: [
       { src: "/links/ai-session/feedback-1.webp", width: 900, height: 544 },
       { src: "/links/ai-session/feedback-2.webp", width: 900, height: 542 },
@@ -131,6 +132,13 @@ export const trainings: Training[] = [
       { src: "/links/ai-session/feedback-5.webp", width: 900, height: 275 },
       { src: "/links/ai-session/feedback-6.webp", width: 900, height: 275 },
       { src: "/links/ai-session/feedback-7.webp", width: 900, height: 283 },
+      { src: "/links/ai-session/feedback-8.webp", width: 900, height: 252 },
+      { src: "/links/ai-session/feedback-9.webp", width: 859, height: 197 },
+      { src: "/links/ai-session/feedback-10.webp", width: 900, height: 184 },
+      { src: "/links/ai-session/feedback-11.webp", width: 900, height: 189 },
+      { src: "/links/ai-session/feedback-12.webp", width: 900, height: 115 },
+      { src: "/links/ai-session/feedback-13.webp", width: 900, height: 368 },
+      { src: "/links/ai-session/feedback-14.webp", width: 900, height: 301 },
     ],
     faq: [
       {

@@ -179,6 +179,8 @@ type Training = {
   // Screenshots of participants' messages (public/links/<…>/), shown as a masonry grid in "آراء المشاركين".
   // Crop out profile photos before adding one (originals stay in the git-ignored private/ folder).
   feedbackImages?: { src: string; width: number; height: number }[];
+  // Shown after the "آراء المشاركين" title, e.g. "+40" (total messages received, not just the screenshots shown)
+  reviewsCount?: string;
   faq?: TrainingFaq[];
   // "عندك سؤال؟" button (Telegram/WhatsApp chat link); block hidden when missing
   questionsHref?: string;

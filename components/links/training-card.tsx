@@ -10,8 +10,9 @@ import { IconClock } from "@/components/shared/icons/icon-clock";
 import { IconVideoCamera } from "@/components/shared/icons/icon-video-camera";
 import { IconUsers } from "@/components/shared/icons/icon-users";
 
-// Offer card on /links: badges, title, the next session (date, place, places left), price with the old one struck
-// through, and one button to the details page. `sessions` already carry the bot's live seats (lib/trainings).
+// Offer card on /links: badges, title, the next session (date, time, place; "full" only once it is full), price with
+// the old one struck through, and one button to the details page. The description and the places-left count are
+// hidden here on purpose (2026-11-23); the details page still shows both. `sessions` already carry the bot's live seats (lib/trainings).
 export default function TrainingCard({
   training,
   sessions,
@@ -23,22 +24,17 @@ export default function TrainingCard({
   locale?: Locale;
 }) {
   const t = ui[locale];
-  const { id, title, description, platform, price } = training;
+  const { id, title, platform, price } = training;
   const session = nextSession(training, sessions);
   const discount = session && discountPercent(session);
   const full = !session || isFull(session);
 
-  // 2×2: date | time, place | places left
+  // Date | time, place (+ "full" when no place is left)
   const details = [
     session && { key: "date", Icon: IconCalendar, text: session.date },
     session?.time && { key: "time", Icon: IconClock, text: session.time, ltr: true },
     platform && { key: "platform", Icon: IconVideoCamera, text: platform },
-    session && {
-      key: "seats",
-      Icon: IconUsers,
-      text: full ? t.full : t.seatsLeft(session.seatsLeft, session.seats),
-      strong: !full,
-    },
+    full && { key: "seats", Icon: IconUsers, text: t.full },
   ].filter(Boolean) as {
     key: string;
     Icon: typeof IconCalendar;
@@ -61,9 +57,6 @@ export default function TrainingCard({
             -{discount}%
           </span>
         ) : null}
-        <span className="rounded-full bg-neutral-5 px-2.5 py-0.5 text-xs font-medium text-neutral-70">
-          {t.links.beginners}
-        </span>
       </div>
 
       <div className="flex items-center gap-3">
@@ -74,12 +67,6 @@ export default function TrainingCard({
           {title}
         </h3>
       </div>
-
-      {description && (
-        <p dir="auto" className="text-start text-sm leading-6 text-neutral-70">
-          {description}
-        </p>
-      )}
 
       {details.length > 0 && (
         <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm text-neutral-70">

@@ -37,6 +37,7 @@ const FEW_SEATS = 5;
 // "الحصص" section of the training page: date, details (participants, places left, duration, price), price tag,
 // register button; badges on the top edge for the next session and the discount.
 // Shown in data order (keep `sessions` sorted by date); the first open one gets the filled button and border, full ones are muted.
+// Full (finished) sessions show only their date and time: no participants, places, duration or price (2026-11-23).
 export default function SessionCards({
   trainingId,
   sessions,
@@ -111,7 +112,7 @@ export default function SessionCards({
           <>
             <div className="flex min-w-0 flex-1 flex-col gap-4 sm:gap-3">
               <SessionDate session={session} />
-              <Details session={session} duration={duration} t={t} locale={locale} row />
+              {!full && <Details session={session} duration={duration} t={t} locale={locale} row />}
             </div>
             {(anyButton || soonButton) && (
               <div
@@ -129,7 +130,7 @@ export default function SessionCards({
         ) : (
           <>
             <SessionDate session={session} />
-            <Details session={session} duration={duration} t={t} locale={locale} />
+            {!full && <Details session={session} duration={duration} t={t} locale={locale} />}
             {(button || soonButton) && <div className="mt-auto">{button || soonButton}</div>}
           </>
         )}

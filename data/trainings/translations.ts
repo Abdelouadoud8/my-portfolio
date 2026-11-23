@@ -28,7 +28,7 @@ type TrainingText = Partial<
 export const trainingTranslations: Record<PrefixedLocale, Record<string, TrainingText>> = {
   en: {
     "ai-essentials": {
-      title: "Learn the basics of AI with Ouadoud in 2 hours",
+      title: "From zero to pro with AI, with Ouadoud in 2 hours",
       description:
         "Two full hours where I teach you everything you need to know about AI: what it is, how to use it to make your life easier, and even how to earn money with it. The session is taught in Algerian Darja.",
       time: "2 hours",
@@ -114,7 +114,7 @@ export const trainingTranslations: Record<PrefixedLocale, Record<string, Trainin
   },
   fr: {
     "ai-essentials": {
-      title: "Apprends les bases de l'IA avec Ouadoud en 2 heures",
+      title: "De zéro à pro avec l'IA, avec Ouadoud en 2 heures",
       description:
         "Deux heures complètes pour t'apprendre tout ce qu'il faut savoir sur l'intelligence artificielle : ce que c'est, comment l'utiliser pour te simplifier la vie, et même comment gagner de l'argent avec. La session se déroule en darija algérienne.",
       time: "2 heures",
