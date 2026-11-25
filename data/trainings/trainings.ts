@@ -59,6 +59,8 @@ export const trainings: Training[] = [
         id: "2026-12-12",
         // Shown on the website only (2026-11-23); the bot keeps its real count and never shows it
         displaySeatsLeft: 14,
+      // 990 DA offer ends Saturday 28 Nov at 01:00 Algiers time (countdown on the website, set 2026-11-25)
+      offerEndsAt: "2026-11-28T01:00:00+01:00",
         date: "السبت 12 ديسمبر",
         day: "2026-12-12",
         time: "20:00 - 22:00",

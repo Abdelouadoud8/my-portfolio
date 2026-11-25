@@ -20,19 +20,11 @@ import StickyRegisterBar from "@/components/trainings/sticky-register-bar";
 import RegistrationDialog from "@/components/trainings/registration-dialog";
 import { IconVideoCamera } from "@/components/shared/icons/icon-video-camera";
 import { IconTag } from "@/components/shared/icons/icon-tag";
-import { IconChartBar } from "@/components/shared/icons/icon-chart-bar";
 import { IconCheckCircle } from "@/components/shared/icons/icon-check-circle";
 import { IconStar } from "@/components/shared/icons/icon-star";
 import { IconGraduationCap } from "@/components/shared/icons/icon-graduation-cap";
 import { IconDeviceMobile } from "@/components/shared/icons/icon-device-mobile";
-import { IconMailbox } from "@/components/shared/icons/icon-mailbox";
-import type { TrainingPaymentMethod } from "@/data/types";
 import { IconXCircle } from "@/components/shared/icons/icon-x-circle";
-
-const paymentIcons: Record<TrainingPaymentMethod["kind"], typeof IconMailbox> = {
-  baridimob: IconDeviceMobile,
-  "post-office": IconMailbox,
-};
 
 // Metadata of /trainings/<id> in one language (Darja, /en/…, /fr/…)
 export function trainingMetadata(id: string, locale: Locale): Metadata {
@@ -88,7 +80,6 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
     time,
     platform,
     price,
-    level,
     hideAudience = false,
     audience = [],
     notFor = [],
@@ -128,7 +119,8 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
       oldValue: pushedSession?.oldPrice,
       Icon: IconTag,
     },
-    { label: tt.level, value: level, Icon: IconChartBar },
+    // Payment methods replaced the level here (2026-11-25); shown only when the training lists payment methods
+    { label: tt.payment, value: paymentMethods.length > 0 ? tt.paymentFact : undefined, Icon: IconDeviceMobile },
   ].filter((fact) => fact.value);
 
   // Right-side navigation (top chips on phones): only the sections this training has
@@ -239,36 +231,7 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
           {/* How registration works: a button that opens the steps in a popup */}
           <RegistrationDialog trainingId={id} steps={registrationSteps} locale={locale} />
 
-          {paymentMethods.length > 0 && (
-            <section id="payment" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
-              <SectionTitle>{tt.payment}</SectionTitle>
-              {/* Phones: one under the other; sm+: side by side. In each: icon on the right, title with the description under it */}
-              <ul className="grid gap-3 sm:grid-cols-2">
-                {paymentMethods.map((method) => {
-                  const Icon = paymentIcons[method.kind];
-                  return (
-                    <li
-                      key={method.kind}
-                      className="flex items-start gap-2.5 rounded-xl border border-neutral-20 bg-white p-3 sm:items-center sm:gap-3 sm:p-4"
-                    >
-                      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary sm:size-11">
-                        <Icon width={22} height={22} />
-                      </span>
-                      <div className="min-w-0 text-start">
-                        {/* bdi: the Latin title stays right-aligned in the RTL card */}
-                        <p className="text-sm font-bold text-neutral-100 sm:text-base">
-                          <bdi>{method.title}</bdi>
-                        </p>
-                        <p className="text-xs leading-5 text-neutral-70 sm:text-sm sm:leading-6">
-                          {method.description}
-                        </p>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          )}
+          {/* The "طرق الدفع" section was removed on 2026-11-25: the payment methods are a key fact on top now */}
 
           {/* Trainer */}
           <section id="trainer" className="flex scroll-mt-20 flex-col gap-4 lg:scroll-mt-8">
@@ -285,13 +248,11 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
               <div className="min-w-0">
                 <p className="font-bold text-neutral-100">{t.trainerName}</p>
                 <p className="mt-1 text-sm leading-6 text-neutral-70">{t.trainerBio}</p>
-                {/* Instagram + Facebook chips with the live follower counts (phones: icon + count only) */}
+                {/* Instagram + Facebook chips, same look: platform icon + live follower count (no names since 2026-11-25) */}
                 {trainerSocials.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {trainerSocials.map((social) => {
                       const Icon = platformIcons[social.platform];
-                      // Instagram: icon + count only (no @handle since 2026-11-23); Facebook keeps its name
-                      const name = social.platform === "instagram" ? undefined : social.label;
                       return (
                         <a
                           key={social.platform}
@@ -306,14 +267,8 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
                           })}
                         >
                           <Icon width={18} height={18} />
-                          {name && (
-                            <bdi dir="ltr" className="hidden sm:inline">
-                              {name}
-                            </bdi>
-                          )}
                           {social.followers ? (
-                            <span className={name ? "sm:font-normal sm:text-neutral-70" : undefined}>
-                              {name && <span className="hidden sm:inline">· </span>}
+                            <span>
                               <bdi dir="ltr">{formatCompact(social.followers)}</bdi> {t.followers}
                             </span>
                           ) : null}
@@ -506,6 +461,7 @@ export default async function TrainingPageContent({ id, locale }: { id: string; 
             time={pushedSession.time}
             price={pushedSession.price}
             oldPrice={pushedSession.oldPrice}
+            offerEndsAt={pushedSession.offerEndsAt}
             targetId="sessions"
             locale={locale}
           />

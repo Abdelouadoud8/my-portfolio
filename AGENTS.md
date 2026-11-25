@@ -189,7 +189,8 @@ Everything is in `data/links/links.ts`:
   Details page sections after the sessions: "كيفاش تسجل" = a button under the sessions that opens `registrationSteps`
   in a popup (`components/trainings/registration-dialog.tsx`, native <dialog>, event `training-registration-help-click`
   {training}; a "coming soon" line while empty; no section-nav entry since 2026-11-13),
-  "طرق الدفع" (`paymentMethods` {kind: baridimob | post-office, title, description}). Refund rule lives in the
+  `paymentMethods` {kind, title, description}: no section since 2026-11-25, only a "طرق الدفع" key fact on top
+  (`paymentFact` in lib/i18n.ts, shown while the list is not empty; replaced the level fact). Refund rule lives in the
   FAQ. Trainer card links to Instagram (`training-instagram-click`) with the live follower count (igstats, page
   `revalidate = 43200`). The "عندك سؤال؟" block after the FAQ was removed on 2026-11-23 (`questionsHref` stays in the
   data, unused; if it comes back: Telegram username link t.me/abdelouadoud_mahdaoui, never a t.me/+<phone> link, which
@@ -206,6 +207,11 @@ Everything is in `data/links/links.ts`:
   signupHref, else the Telegram bot for `bookingOpen` sessions when the training has `telegramBot`, else the training's
   signupHref; sessions need a stable `id`); phones also show a greyed "تسجيل" before it opens; click event
   `training-signup-click` {training, location: session-N}.
+  Offer countdown (2026-11-25): a session's `offerEndsAt` (ISO with time zone) shows a red chip
+  (`components/trainings/offer-countdown.tsx`, client-only): "ينتهي بعد 2 يوم 10 ساعة" on /links, "تخفيض ينتهي بعد …
+  دقيقة" on the training page (price box, session card, sticky bar). Fixed deadline, hidden once passed, never restarts;
+  website only (the bot ignores it). The open session cards and the /links offer card are clickable as a whole
+  (stretched link: the button's ::after covers the card; no transform on the link itself).
   `components/trainings/section-nav.tsx` = sticky section links on the right (lg+) / sticky chip row on phones,
   highlights the section being read; a new section needs an `id` + an entry in the page's `sections` list.
 - Free guides (2026-11-11): `freeResources` in data/links/links.ts = cards right after the total followers block

@@ -9,6 +9,7 @@ import { IconCalendar } from "@/components/shared/icons/icon-calendar";
 import { IconClock } from "@/components/shared/icons/icon-clock";
 import { IconVideoCamera } from "@/components/shared/icons/icon-video-camera";
 import { IconUsers } from "@/components/shared/icons/icon-users";
+import OfferCountdown from "@/components/trainings/offer-countdown";
 
 // Offer card on /links: badges, title, the next session (date, time, place; "full" only once it is full), price with
 // the old one struck through, and one button to the details page. The description and the places-left count are
@@ -46,7 +47,8 @@ export default function TrainingCard({
   return (
     <article
       dir={localeMeta[locale].dir}
-      className="flex flex-col gap-4 rounded-2xl border border-primary/30 bg-white p-5 shadow-[0_6px_20px_color-mix(in_srgb,var(--color-primary)_10%,transparent)]"
+      // The whole card opens the details page: the button's ::after covers it (stretched link)
+      className="relative flex cursor-pointer flex-col gap-4 rounded-2xl border border-primary/30 bg-white p-5 shadow-[0_6px_20px_color-mix(in_srgb,var(--color-primary)_10%,transparent)] transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-primary hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--color-primary)_16%,transparent)]"
     >
       <div className="flex flex-wrap items-center gap-1.5">
         <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-bold text-white">
@@ -57,6 +59,7 @@ export default function TrainingCard({
             -{discount}%
           </span>
         ) : null}
+        {!full && <OfferCountdown endsAt={session?.offerEndsAt} locale={locale} />}
       </div>
 
       <div className="flex items-center gap-3">
@@ -107,7 +110,8 @@ export default function TrainingCard({
         <Link
           prefetch={false}
           href={localePath(locale, `/trainings/${id}`)}
-          className="flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-primary px-5 font-semibold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-primary-600"
+          // No transform on the link itself, or its ::after would shrink back to the button
+          className="flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-primary px-5 font-semibold text-white transition-colors duration-200 ease-out after:absolute after:inset-0 after:rounded-2xl after:content-[''] hover:bg-primary-600"
           {...eventAttributes(EVENTS.trainingDetailsClick, { training: id, location: "links" })}
         >
           {t.links.courseDetails}

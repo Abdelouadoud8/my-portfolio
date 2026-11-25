@@ -4,7 +4,7 @@ import { CollaborationCta, FeaturedReel, FreeResource, LinksProfile, SocialLink 
 
 export const linksProfile: LinksProfile = {
   name: "Abdelouadoud Mahdaoui",
-  tagline: "Content Creator",
+  tagline: "AI & Tech Content Creator",
   bio: "Salem 👋 Ana Ouadoud, a software engineer living in France and a tech & AI content creator.",
   // 256 px WebP (5 KB) served as is (unoptimized): no Image Optimization use on /links and its pages
   imageUrl: "/shared/avatar-256.webp",

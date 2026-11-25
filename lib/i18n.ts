@@ -64,6 +64,11 @@ const ar = {
   full: "مكتملة",
   register: "تسجيل",
   bookingSoon: "التسجيل يتفتح قريبا",
+  // Countdown to a session's offerEndsAt
+  offerEndsIn: "ينتهي بعد",
+  // Longer label on the training page (detailed countdown)
+  discountEndsIn: "تخفيض ينتهي بعد",
+  countdownUnits: { d: "يوم", h: "ساعة", m: "دقيقة" },
   nextSession: "الحصة الجاية",
   // "باقي 12 من 25 بلاصة": places left out of the session's total
   seatsLeft: (n: number, total: number) => `باقي ${n} من ${total} بلاصة`,
@@ -79,7 +84,7 @@ const ar = {
     menu: "القائمة",
   },
   links: {
-    tagline: "Content Creator",
+    tagline: "AI & Tech Content Creator",
     bio: "Salem 👋 Ana Ouadoud, a software engineer living in France and a tech & AI content creator.",
     followersLabel: "Followers across all platforms",
     trainings: "الدورات",
@@ -99,6 +104,8 @@ const ar = {
     sessions: "الحصص",
     registration: "كيفاش تسجل",
     payment: "طرق الدفع",
+    // Key fact on top of the training page (replaced the level on 2026-11-25)
+    paymentFact: "BaridiMob أو Algérie Poste",
     trainer: "المكوّن",
     outcomes: "واش راح تتعلم",
     program: "البرنامج",
@@ -148,6 +155,9 @@ const en: UiStrings = {
   full: "Full",
   register: "Register",
   bookingSoon: "Registration opens soon",
+  offerEndsIn: "Ends in",
+  discountEndsIn: "Discount ends in",
+  countdownUnits: { d: "d", h: "h", m: "min" },
   nextSession: "Next session",
   seatsLeft: (n, total) => `${n} of ${total} seats left`,
   fewSeats: (n) => `Only ${n} left!`,
@@ -162,7 +172,7 @@ const en: UiStrings = {
     menu: "Menu",
   },
   links: {
-    tagline: "Content Creator",
+    tagline: "AI & Tech Content Creator",
     bio: "Hi 👋 I'm Ouadoud, a software engineer living in France and a tech & AI content creator.",
     followersLabel: "Followers across all platforms",
     trainings: "Training",
@@ -182,6 +192,7 @@ const en: UiStrings = {
     sessions: "Sessions",
     registration: "How to register",
     payment: "Payment methods",
+    paymentFact: "BaridiMob or Algérie Poste",
     trainer: "Your trainer",
     outcomes: "What you'll learn",
     program: "Program",
@@ -228,6 +239,9 @@ const fr: UiStrings = {
   full: "Complet",
   register: "S'inscrire",
   bookingSoon: "Inscriptions bientôt ouvertes",
+  offerEndsIn: "Se termine dans",
+  discountEndsIn: "La réduction se termine dans",
+  countdownUnits: { d: "j", h: "h", m: "min" },
   nextSession: "Prochaine session",
   seatsLeft: (n, total) => `${n} sur ${total} libres`,
   fewSeats: (n) => `Plus que ${n} places !`,
@@ -242,7 +256,7 @@ const fr: UiStrings = {
     menu: "Menu",
   },
   links: {
-    tagline: "Créateur de contenu",
+    tagline: "Créateur de contenu IA & Tech",
     bio: "Salut 👋 Moi c'est Ouadoud, ingénieur logiciel installé en France et créateur de contenu tech & IA.",
     followersLabel: "Abonnés sur toutes les plateformes",
     trainings: "Formation",
@@ -265,6 +279,7 @@ const fr: UiStrings = {
     sessions: "Sessions",
     registration: "Comment s'inscrire",
     payment: "Moyens de paiement",
+    paymentFact: "BaridiMob ou Algérie Poste",
     trainer: "Ton formateur",
     outcomes: "Ce que tu vas apprendre",
     program: "Programme",

@@ -8,6 +8,7 @@ import { IconUsers } from "@/components/shared/icons/icon-users";
 import { IconCheckCircle } from "@/components/shared/icons/icon-check-circle";
 import { IconClock } from "@/components/shared/icons/icon-clock";
 import { IconTag } from "@/components/shared/icons/icon-tag";
+import OfferCountdown from "@/components/trainings/offer-countdown";
 
 type SessionCardsProps = {
   trainingId: string;
@@ -92,6 +93,9 @@ export default function SessionCards({
             ? "border-primary shadow-[0_6px_20px_color-mix(in_srgb,var(--color-primary)_12%,transparent)]"
             : "border-neutral-20",
           full && "bg-neutral-5",
+          // Whole card clickable while booking is open (the register link's ::after covers the card)
+          href &&
+            "cursor-pointer transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-primary hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--color-primary)_16%,transparent)]",
         )}
       >
         <div className="absolute -top-3 start-4 flex gap-1.5">
@@ -113,6 +117,7 @@ export default function SessionCards({
             <div className="flex min-w-0 flex-1 flex-col gap-4 sm:gap-3">
               <SessionDate session={session} />
               {!full && <Details session={session} duration={duration} t={t} locale={locale} row />}
+              {!full && <OfferCountdown detailed endsAt={session.offerEndsAt} locale={locale} />}
             </div>
             {(anyButton || soonButton) && (
               <div
@@ -131,6 +136,7 @@ export default function SessionCards({
           <>
             <SessionDate session={session} />
             {!full && <Details session={session} duration={duration} t={t} locale={locale} />}
+            {!full && <OfferCountdown detailed endsAt={session.offerEndsAt} locale={locale} />}
             {(button || soonButton) && <div className="mt-auto">{button || soonButton}</div>}
           </>
         )}
@@ -275,7 +281,9 @@ function RegisterButton({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "flex min-h-11 w-full items-center justify-center rounded-lg px-3 py-3 text-sm font-semibold transition-all duration-200 ease-out hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+        // after:inset-0 stretches the link over the whole card (the article is relative); no transform on the link
+        // itself, or the ::after would shrink back to the button
+        "flex min-h-11 w-full items-center justify-center rounded-lg px-3 py-3 text-sm font-semibold transition-colors duration-200 ease-out after:absolute after:inset-0 after:rounded-xl after:content-[''] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
         emphasis
           ? "bg-primary text-white hover:bg-primary-600"
           : "border border-primary text-primary hover:bg-primary-50",

@@ -125,6 +125,9 @@ type TrainingSession = {
   price: string;
   // Price before the discount, shown struck through next to `price`
   oldPrice?: string;
+  // End of the session's offer (ISO date with time zone, e.g. "2026-11-28T23:59:00+01:00"): a countdown shows on the
+  // website until then, then disappears. A real, fixed deadline: it never restarts on its own.
+  offerEndsAt?: string;
   // Places left shown on the website instead of the bot's live count (display only: the bot keeps its real count)
   displaySeatsLeft?: number;
   // Not shown on the website (cards, /links, price box) while true; the bot keeps it (closed unless bookingOpen)

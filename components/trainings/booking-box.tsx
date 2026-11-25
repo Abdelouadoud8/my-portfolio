@@ -5,6 +5,7 @@ import { discountPercent, isFull, sessionSignupHref } from "@/lib/trainings";
 import { ui, type Locale } from "@/lib/i18n";
 import { IconCalendar } from "@/components/shared/icons/icon-calendar";
 import { IconUsers } from "@/components/shared/icons/icon-users";
+import OfferCountdown from "@/components/trainings/offer-countdown";
 
 type BookingBoxProps = {
   training: Pick<Training, "id" | "telegramBot" | "signupHref">;
@@ -75,6 +76,8 @@ export default function BookingBox({ training, session, totalFollowers, locale =
             )}
           </span>
         </div>
+
+        {!full && <OfferCountdown detailed endsAt={session.offerEndsAt} locale={locale} className="self-center" />}
 
         {href ? (
           <a

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ui, type Locale } from "@/lib/i18n";
+import OfferCountdown from "@/components/trainings/offer-countdown";
 
 type StickyRegisterBarProps = {
   // Next session that still has places
@@ -10,6 +11,8 @@ type StickyRegisterBarProps = {
   time?: string;
   price: string;
   oldPrice?: string;
+  // Session's offerEndsAt: a short countdown replaces the date line until then
+  offerEndsAt?: string;
   // id of the sessions section: the button scrolls there, and the bar hides while it is on screen
   targetId: string;
   locale?: Locale;
@@ -22,6 +25,7 @@ export default function StickyRegisterBar({
   time,
   price,
   oldPrice,
+  offerEndsAt,
   targetId,
   locale = "ar",
 }: StickyRegisterBarProps) {
@@ -74,6 +78,7 @@ export default function StickyRegisterBar({
                 </s>
               )}
             </div>
+            <OfferCountdown detailed endsAt={offerEndsAt} locale={locale} />
             <p className="whitespace-nowrap text-xs text-neutral-70">
               <span className="hidden sm:inline">{t.nextSession}: </span>
               {date}
