@@ -8,6 +8,7 @@ C="${CHROME:-}"
 if [ -z "$C" ]; then
   for c in "$HOME"/Library/Caches/ms-playwright/chromium-*/chrome-mac*/Chromium.app/Contents/MacOS/Chromium(N) \
            "$HOME"/Library/Caches/ms-playwright/chromium-*/chrome-mac*/Google\ Chrome\ for\ Testing.app/Contents/MacOS/Google\ Chrome\ for\ Testing(N) \
+           "$HOME"/Library/Caches/ms-playwright/chromium_headless_shell-*/chrome-mac*/headless_shell(N) \
            "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"; do
     [ -x "$c" ] && C="$c"
   done
